@@ -1,0 +1,3 @@
+source ~/.exports
+source ~/.prompt
+
