@@ -16,4 +16,5 @@ ln -sfhv "$DOTFILES_DIR/.exports" ~
 ln -sfhv "$DOTFILES_DIR/.gitconfig" ~
 ln -sfhv "$DOTFILES_DIR/.inputrc" ~
 ln -sfhv "$DOTFILES_DIR/.prompt" ~
+ln -sfhv "$DOTFILES_DIR/.vimrc" ~
 
