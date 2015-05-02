@@ -1,9 +1,14 @@
 #!/bin/sh
 
+# This script sets up all the dotfiles.
+
+# make variable for this dotfiles directory
 export DOTFILES_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+# update
 git pull origin master
 
+# set symbolic links
 ln -sfhv "$DOTFILES_DIR/.aliases" ~
 ln -sfhv "$DOTFILES_DIR/.bash_profile" ~
 ln -sfhv "$DOTFILES_DIR/.bashrc" ~

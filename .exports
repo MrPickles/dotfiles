@@ -1,4 +1,11 @@
+# Auxiliary dotfile for environment variables.
+
+# set vim as main editor
 export EDITOR='vim'
+
+# allow terminal colors
 export CLICOLOR=1
+
+# allow colors for search
 export GREP_OPTIONS='—color=auto'
 

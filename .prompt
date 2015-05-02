@@ -1,2 +1,5 @@
+# Auxiliary dotfile for setting the prompt format.
+
+# format prompt to be traditonal Ubuntu style
 PS1='\u@\H:\w$ '
 
