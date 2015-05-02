@@ -1,5 +1,4 @@
 # This is Git's per-user configuration file.
-[core]
-# Please adapt and uncomment the following lines:
-#	user = Andrew Liu
-#	email = aliu1@umd.edu 
+[user]
+	name = Andrew Liu
+	email = aliu1@umd.edu
