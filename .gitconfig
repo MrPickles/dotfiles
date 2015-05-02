@@ -2,3 +2,5 @@
 [user]
 	name = Andrew Liu
 	email = aliu1@umd.edu
+[push]
+	default = simple
