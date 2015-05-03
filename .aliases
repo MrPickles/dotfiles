@@ -1,2 +1,17 @@
 # This file stores all the aliases.
 
+# add color to ls on linux
+if [ $(uname) == 'Linux' ]; then
+    alias ls="ls --color"
+fi
+
+# linux aliases
+alias ll="ls -alF"
+alias la="ls -A"
+alias l="ls -CF"
+
+# grep aliases
+alias grep="grep --color=auto"
+alias fgrep="fgrep --color=auto"
+alias egrep="egrep --color=auto"
+
