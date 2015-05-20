@@ -1,5 +1,5 @@
 ZSH=$HOME/.oh-my-zsh
-ZSH_THEME="rbates"
+ZSH_THEME="dpoggi"
 
 plugins=(git bundler brew gem rbates)
 
