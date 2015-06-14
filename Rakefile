@@ -6,7 +6,12 @@ task :install do
   install_oh_my_zsh
   switch_to_zsh
   replace_all = false
-  files = Dir['*'] - %w[Rakefile README.rdoc LICENSE oh-my-zsh]
+  if File.exist?(File.join(ENV['PWD'], "tmux.conf"))
+    system %Q{rm -f $PWD/tmux.conf}
+  end
+  system %Q{cp $PWD/tmux/.tmux.config $PWD/tmux.conf}
+  system %Q{chmod 444 $PWD/tmux.conf} # force user to edit submodule
+  files = Dir['*'] - %w[Rakefile README.md LICENSE oh-my-zsh tmux]
   files << "oh-my-zsh/custom/plugins/rbates"
   files << "oh-my-zsh/custom/rbates.zsh-theme"
   files.each do |file|
