@@ -6,7 +6,9 @@ task :install do
   install_oh_my_zsh
   switch_to_zsh
   replace_all = false
-  system %Q{git pull && git submodule init && git submodule update}
+  unless File.exist?(File.join(ENV['PWD'], "tmux/.tmux.config"))
+    system %Q{git submodule init && git submodule update}
+  end
   if File.exist?(File.join(ENV['PWD'], "tmux.conf"))
     system %Q{rm -f $PWD/tmux.conf}
   end
