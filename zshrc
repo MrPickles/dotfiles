@@ -13,4 +13,5 @@ if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 
 export LSCOLORS='ExFxBxDxCxegedabagacad'
 bindkey -v # vi mode for shell
+setopt correct
 
