@@ -46,6 +46,18 @@ task :install do
   end
 end
 
+desc "remove dotfile links"
+task :clean do
+  system %Q{unlink ~/.gemrc}
+  system %Q{unlink ~/.gitignore}
+  system %Q{unlink ~/.gvimrc}
+  system %Q{unlink ~/.irbrc}
+  system %Q{unlink ~/.tmux.conf}
+  system %Q{unlink ~/.vim}
+  system %Q{unlink ~/.vimrc}
+  system %Q{unlink ~/.zshrc}
+end
+
 def replace_file(file)
   system %Q{rm -rf "$HOME/.#{file.sub(/\.erb$/, '')}"}
   link_file(file)
