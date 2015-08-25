@@ -9,7 +9,7 @@ task :install do
   switch_to_zsh
   replace_all = false
   unless File.exist?(File.join(ENV['PWD'], "tmux/.tmux.config")) &&
-         File.exist?(File.join(ENV['PWD'], "dircolors-solarized"))
+         File.exist?(File.join(ENV['PWD'], "dircolors-solarized/dircolors.256dark"))
     system %Q{git submodule init && git submodule update}
   end
   if File.exist?(File.join(ENV['PWD'], "tmux.conf"))
