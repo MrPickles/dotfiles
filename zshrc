@@ -11,7 +11,7 @@ source $ZSH/oh-my-zsh.sh
 # for Homebrew installed rbenv
 if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 
-export LSCOLORS='ExFxBxDxCxegedabagacad'
+if [[ "$(uname -s)" == "Linux" ]]; then eval `dircolors ~/.dircolors`; fi
 bindkey -v # vi mode for shell
 setopt correct
 
