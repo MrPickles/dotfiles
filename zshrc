@@ -20,3 +20,6 @@ bindkey -v # vi mode for shell
 setopt correct
 setopt rmstarsilent # silence rm * confirmation
 
+# Use 256 color for tmux.
+alias tmux="tmux -2"
+
