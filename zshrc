@@ -1,7 +1,7 @@
 ZSH=$HOME/.oh-my-zsh
 ZSH_THEME="dpoggi"
 
-plugins=(git bundler brew gem rbates)
+plugins=(git bundler brew gem rbates history-substring-search)
 
 export PATH="/usr/local/bin:$PATH"
 export EDITOR='vim'
@@ -16,7 +16,12 @@ if [[ "$(uname -s)" == "Linux" ]]; then
 else
   export LSCOLORS='ExFxBxDxCxegedabagacad'
 fi
+
 bindkey -v # vi mode for shell
+# key bindings for history search
+bindkey '\e[3~' delete-char
+bindkey '^R' history-incremental-search-backward
+
 setopt correct
 setopt rmstarsilent # silence rm * confirmation
 
