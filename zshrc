@@ -26,5 +26,7 @@ setopt correct
 setopt rmstarsilent # silence rm * confirmation
 
 # Use 256 color for tmux.
-alias tmux="tmux -2"
+alias tmux="TERM=screen-256color-bce tmux"
 
+# Set terminal to use 256 color
+export TERM=xterm-256color
