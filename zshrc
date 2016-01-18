@@ -28,5 +28,6 @@ setopt rmstarsilent # silence rm * confirmation
 # Use 256 color for tmux.
 alias tmux="TERM=screen-256color-bce tmux"
 
-# Set terminal to use 256 color
-export TERM=xterm-256color
+# Explicity bind home and end keys (in case of terminal compatibility issues)
+bindkey "${terminfo[khome]}" beginning-of-line
+bindkey "${terminfo[kend]}" end-of-line
