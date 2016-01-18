@@ -15,6 +15,8 @@ rake install
 
 After installing, open a new terminal window to see the effects.
 
+The terminal emulation should have its TERM variable as xterm-256color, and its tmux session should have TERM set as screen-256color.
+
 Feel free to customize the .zshrc file to match your preference.
 
 
