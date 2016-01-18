@@ -8,19 +8,7 @@ task :install do
   install_oh_my_zsh
   switch_to_zsh
   replace_all = false
-  unless File.exist?(File.join(ENV['PWD'], "tmux/.tmux.config")) &&
-         File.exist?(File.join(ENV['PWD'], "dircolors-solarized/dircolors.256dark"))
-    system %Q{git submodule init && git submodule update}
-  end
-  if File.exist?(File.join(ENV['PWD'], "tmux.conf"))
-    system %Q{rm -f $PWD/tmux.conf}
-  end
-  if File.exist?(File.join(ENV['PWD'], "dircolors"))
-    system %Q{rm -f $PWD/dircolors}
-  end
-  system %Q{cp $PWD/tmux/.tmux.config $PWD/tmux.conf}
-  system %Q{cp $PWD/dircolors-solarized/dircolors.256dark $PWD/dircolors}
-  files = Dir['*'] - %w[Rakefile README.md LICENSE oh-my-zsh tmux dircolors-solarized]
+  files = Dir['*'] - %w[Rakefile README.md LICENSE oh-my-zsh]
   files << "oh-my-zsh/custom/plugins/rbates"
   files << "oh-my-zsh/custom/rbates.zsh-theme"
   files.each do |file|

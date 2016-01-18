@@ -8,7 +8,7 @@ These are config files to set up a system the way I like it. It uses [Oh My ZSH]
 Run the following commands in your terminal. It will prompt you before it does anything destructive. Check out the [Rakefile](https://github.com/ryanb/dotfiles/blob/custom-bash-zsh/Rakefile) to see exactly what it does.
 
 ```terminal
-git clone --recursive git@github.com:MrPickles/dotfiles ~/.dotfiles
+git clone git@github.com:MrPickles/dotfiles ~/.dotfiles
 cd ~/.dotfiles
 rake install
 ```
