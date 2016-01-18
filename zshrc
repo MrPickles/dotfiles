@@ -31,3 +31,7 @@ alias tmux="TERM=screen-256color-bce tmux"
 # Explicity bind home and end keys (in case of terminal compatibility issues)
 bindkey "${terminfo[khome]}" beginning-of-line
 bindkey "${terminfo[kend]}" end-of-line
+
+if [[ -z "$TMUX" ]]; then
+  export TERM="xterm-256color"
+fi
