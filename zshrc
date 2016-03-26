@@ -6,6 +6,7 @@ plugins=(git bundler brew gem history-substring-search)
 export PATH="/usr/local/bin:$PATH"
 export EDITOR='vim'
 
+DISABLE_UPDATE_PROMPT=true
 source $ZSH/oh-my-zsh.sh
 
 # for Homebrew installed rbenv
