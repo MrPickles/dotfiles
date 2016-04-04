@@ -10,10 +10,15 @@ prompt_setup_pickles() {
     NCOLOR="green";
   fi
 
-  local return_code="%(?..%{$fg[red]%}%? ↵%{$reset_color%})"
+  POSTCOLOR="green"
+  if [[ -n $SSH_CONNECTION ]]; then
+    name_prompt='%{$fg[$NCOLOR]%}%n%{$reset_color%}@%{$fg[cyan]%}%m%{$reset_color%}:'
+    POSTCOLOR="red"
+  fi
 
-  base_prompt='%{$fg[$NCOLOR]%}%n%{$reset_color%}@%{$fg[cyan]%}%m%{$reset_color%}:%{$fg[magenta]%}%~'
-  post_prompt='%{$fg[red]%}%(!.#.»)%{$reset_color%} '
+  dir_prompt='%{$fg[magenta]%}%~'
+  base_prompt=$name_prompt$dir_prompt
+  post_prompt='%{$fg[$POSTCOLOR]%}%(!.#.»)%{$reset_color%} '
 
   base_prompt_nocolor=$(echo "$base_prompt" | perl -pe "s/%\{[^}]+\}//g")
   post_prompt_nocolor=$(echo "$post_prompt" | perl -pe "s/%\{[^}]+\}//g")
@@ -33,9 +38,10 @@ prompt_pickles_precmd() {
   fi
 
   PROMPT="$base_prompt$gitinfo$nl$post_prompt"
-  PROMPT2='%{$fg[red]%}\ %{$reset_color%}'
-  RPS1='${return_code}'
 }
 
 prompt_setup_pickles
+local return_code="%(?..%{$fg[red]%}%? ↵%{$reset_color%})"
+PROMPT2='%{$fg[red]%}\ %{$reset_color%}'
+RPS1='${return_code}'
 
