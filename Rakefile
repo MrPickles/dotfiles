@@ -9,6 +9,7 @@ task :install do
   switch_to_zsh
   replace_all = false
   files = Dir['*'] - %w[Rakefile README.md LICENSE oh-my-zsh]
+  files << "oh-my-zsh/custom/pickles.zsh-theme" # personal theme based off dpoggi
   # Uncomment these two lines if you want the rbates plugin
   # files << "oh-my-zsh/custom/plugins/rbates"
   # files << "oh-my-zsh/custom/rbates.zsh-theme"

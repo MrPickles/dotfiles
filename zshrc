@@ -1,5 +1,5 @@
 ZSH=$HOME/.oh-my-zsh
-ZSH_THEME="dpoggi"
+ZSH_THEME="pickles"
 
 plugins=(git bundler brew gem history-substring-search)
 
