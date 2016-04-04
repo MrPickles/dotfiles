@@ -10,15 +10,14 @@ prompt_setup_pickles() {
     NCOLOR="green";
   fi
 
-  POSTCOLOR="green"
+  name_prompt='%{$fg[green]%}➜ '
   if [[ -n $SSH_CONNECTION ]]; then
-    name_prompt='%{$fg[$NCOLOR]%}%n%{$reset_color%}@%{$fg[cyan]%}%m%{$reset_color%}:'
-    POSTCOLOR="red"
+    name_prompt='%{$fg[$NCOLOR]%}%n%{$reset_color%}@%{$fg[cyan]%}%m%{$reset_color%} '
   fi
 
   dir_prompt='%{$fg[magenta]%}%~'
   base_prompt=$name_prompt$dir_prompt
-  post_prompt='%{$fg[$POSTCOLOR]%}%(!.#.»)%{$reset_color%} '
+  post_prompt='%{$fg[yellow]%}::%{$reset_color%} '
 
   base_prompt_nocolor=$(echo "$base_prompt" | perl -pe "s/%\{[^}]+\}//g")
   post_prompt_nocolor=$(echo "$post_prompt" | perl -pe "s/%\{[^}]+\}//g")
