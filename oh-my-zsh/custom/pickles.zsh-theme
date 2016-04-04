@@ -1,23 +1,30 @@
 prompt_setup_pickles() {
+  # Set git prompts.
   ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[yellow]%}("
   ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[green]%}○%{$reset_color%}"
   ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}⚡%{$reset_color%}"
   ZSH_THEME_GIT_PROMPT_SUFFIX="%{$fg[yellow]%})%{$reset_color%}"
 
+  # Make username red if root.
   if [ $UID -eq 0 ]; then
     NCOLOR="red";
   else
     NCOLOR="green";
   fi
 
-  name_prompt='%{$fg[green]%}➜ '
-  if [[ -n $SSH_CONNECTION ]]; then
-    name_prompt='%{$fg[$NCOLOR]%}%n%{$reset_color%}@%{$fg[cyan]%}%m%{$reset_color%} '
+  # Set the user@hostname part. If the environment variable HUSH_LOCALHOST is
+  # defined, this part will be ignored to non-SSH logins.
+  name_prompt=' '
+  if [[ -z $HUSH_LOCALHOST || -n $SSH_CONNECTION ]]; then
+    name_prompt='%{$fg[$NCOLOR]%}%n%{$reset_color%}@%{$fg[cyan]%}%m%{$reset_color%}%{$fg[red]%}:'
   fi
 
+  # Combine the name part of the prompt with the directory part.
   dir_prompt='%{$fg[magenta]%}%~'
   base_prompt=$name_prompt$dir_prompt
-  post_prompt='%{$fg[yellow]%}::%{$reset_color%} '
+
+  # Set the post prompt (the part after the git status).
+  post_prompt='%{$fg[yellow]%}%(!.#.»)%{$reset_color%} '
 
   base_prompt_nocolor=$(echo "$base_prompt" | perl -pe "s/%\{[^}]+\}//g")
   post_prompt_nocolor=$(echo "$post_prompt" | perl -pe "s/%\{[^}]+\}//g")
