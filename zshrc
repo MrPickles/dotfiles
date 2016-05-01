@@ -19,6 +19,7 @@ else
 fi
 
 bindkey -v # vi mode for shell
+bindkey -e # enable C-x-e for shell editor
 # key bindings for history search
 bindkey '\e[3~' delete-char
 bindkey '^R' history-incremental-search-backward
