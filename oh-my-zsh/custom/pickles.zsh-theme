@@ -14,9 +14,11 @@ prompt_setup_pickles() {
 
   # Set the user@hostname part. If the environment variable HUSH_LOCALHOST is
   # defined, this part will be ignored to non-SSH logins.
-  name_prompt=' '
-  if [[ -z $HUSH_LOCALHOST || -n $SSH_CONNECTION ]]; then
-    name_prompt='%{$fg[$NCOLOR]%}%n%{$reset_color%}@%{$fg[cyan]%}%m%{$reset_color%}%{$fg[red]%}:'
+  name_prompt='%{$fg[$NCOLOR]%}%n%{$reset_color%}@%{$fg[cyan]%}%m%{$reset_color%}%{$fg[red]%}:'
+  if [[ -n $SSH_CONNECTION ]]; then
+    name_prompt='%{$fg[yellow]%}[%{$fg[$NCOLOR]%}%n@%{$fg[cyan]%}%m%{$fg[yellow]%}]%{$fg[red]%}:'
+  elif [[ -n $HUSH_LOCALHOST ]]; then
+    name_prompt=' '
   fi
 
   # Combine the name part of the prompt with the directory part.
