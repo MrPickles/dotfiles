@@ -63,7 +63,7 @@ if has("autocmd")
     \ endif
 
   " Automatically load .vimrc source when saved
-  autocmd BufWritePost .vimrc source $MYVIMRC
+  autocmd BufWritePost .vimrc nested source $MYVIMRC
 
   augroup END
 
@@ -206,10 +206,12 @@ function! OpenURL()
   let s:uri = matchstr(getline("."), '[a-z]*:\/\/[^ >,;:]*')
   echo s:uri
   if s:uri != ""
-	  exec "!open \"" . s:uri . "\""
+    exec "!open \"" . s:uri . "\""
   else
-	  echo "No URI found in line."
+    echo "No URI found in line."
   endif
 endfunction
 map <Leader>w :call OpenURL()<CR>
+
+set rtp+=~/.powerline/powerline/bindings/vim
 

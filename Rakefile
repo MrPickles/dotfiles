@@ -5,6 +5,7 @@ task default: %w[install]
 
 desc "install the dot files into user's home directory"
 task :install do
+  install_powerline
   install_oh_my_zsh
   switch_to_zsh
   replace_all = false
@@ -100,6 +101,23 @@ def install_oh_my_zsh
       exit
     else
       puts "skipping oh-my-zsh, you will need to change ~/.zshrc"
+    end
+  end
+end
+
+def install_powerline
+  if File.exist?(File.join(ENV['HOME'], ".powerline"))
+    puts "found ~/.powerline"
+  else
+    print "install powerline? [ynq] "
+    case $stdin.gets.chomp
+    when 'y'
+      puts "installing powerline"
+      system %Q{git clone https://github.com/powerline/powerline.git "$HOME/.powerline"}
+    when 'q'
+      exit
+    else
+      puts "skipping powerline, you will need to change ~/.zshrc"
     end
   end
 end

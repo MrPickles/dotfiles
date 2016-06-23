@@ -1,9 +1,10 @@
 ZSH=$HOME/.oh-my-zsh
-ZSH_THEME="pickles"
+ZSH_THEME="agnoster"
 
 plugins=(git bundler brew gem history-substring-search)
 
-export PATH="/usr/local/bin:$PATH"
+export PATH="/usr/local/bin:$PATH:$HOME/.powerline/scripts"
+
 export EDITOR='vim'
 
 DISABLE_UPDATE_PROMPT=true
@@ -37,3 +38,8 @@ bindkey "${terminfo[kend]}" end-of-line
 if [[ -z "$TMUX" ]]; then
   export TERM="xterm-256color"
 fi
+
+if [[ -f ~/.zshrc.local ]]; then
+  source ~/.zshrc.local
+fi
+
