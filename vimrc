@@ -159,11 +159,6 @@ imap <C-L> <Space>=><Space>
 command! Rroutes :e config/routes.rb
 command! Rschema :e db/schema.rb
 
-" Local config
-if filereadable(".vimrc.local")
-  source .vimrc.local
-endif
-
 " Use Ack instead of Grep when available
 if executable("ack")
   set grepprg=ack\ -H\ --nogroup\ --nocolor\ --ignore-dir=tmp\ --ignore-dir=coverage
@@ -214,4 +209,9 @@ endfunction
 map <Leader>w :call OpenURL()<CR>
 
 set rtp+=~/.powerline/powerline/bindings/vim
+
+" Local config
+if filereadable(glob("~/.vimrc.local"))
+  source ~/.vimrc.local
+endif
 
