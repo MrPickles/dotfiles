@@ -1,7 +1,7 @@
 ZSH=$HOME/.oh-my-zsh
 ZSH_THEME="agnoster"
 
-plugins=(git bundler brew gem history-substring-search)
+plugins=(git bundler brew gem history-substring-search colored-man-pages)
 
 export PATH="/usr/local/bin:$PATH:$HOME/.powerline/scripts"
 
