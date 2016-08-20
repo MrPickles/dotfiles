@@ -208,6 +208,10 @@ function! OpenURL()
 endfunction
 map <Leader>w :call OpenURL()<CR>
 
+if exists("&wildignorecase")
+  set wildignorecase
+endif
+
 set rtp+=~/.powerline/powerline/bindings/vim
 
 " Local config
