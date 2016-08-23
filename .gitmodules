@@ -1,3 +1,9 @@
 [submodule "powerline"]
 	path = powerline
 	url = git@github.com:powerline/powerline.git
+[submodule "new_machine/gnome-terminal-colors-solarized"]
+	path = new_machine/gnome-terminal-colors-solarized
+	url = git@github.com:Anthony25/gnome-terminal-colors-solarized.git
+[submodule "new_machine/fonts"]
+	path = new_machine/fonts
+	url = git@github.com:powerline/fonts.git
