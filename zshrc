@@ -3,7 +3,9 @@ ZSH_THEME="agnoster"
 
 plugins=(git bundler brew gem history-substring-search colored-man-pages)
 
-export PATH="/usr/local/bin:$PATH:$HOME/.dotfiles/powerline/scripts"
+export PATH="/usr/local/bin:$PATH"
+export PATH="$PATH:$HOME/.dotfiles/powerline/scripts"
+export PATH="$PATH:$HOME/.dotfiles/git/bin"
 
 export EDITOR='vim'
 
