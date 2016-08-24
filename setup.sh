@@ -13,6 +13,11 @@ print_error() {
   printf "\e[0;31m  [✖] $1 $2\e[0m\n"
 }
 
+print_question() {
+  # Print output in yellow
+  printf "\e[0;33m  [?] $1\e[0m"
+}
+
 execute() {
   $1 &> /dev/null
   print_result $? "${2:-$1}"
@@ -44,6 +49,7 @@ install_zsh () {
   if [ -f /bin/zsh -o -f /usr/bin/zsh ]; then
     # Install Oh My Zsh if it isn't already present
     if [[ ! -d $HOME/.oh-my-zsh/ ]]; then
+      echo "Switching to oh-my-zsh. Please re-run this script afterwards!"
       sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
     fi
     # Set the default shell to zsh if it isn't currently set to zsh

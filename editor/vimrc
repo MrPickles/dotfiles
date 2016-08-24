@@ -171,7 +171,7 @@ if exists("&wildignorecase")
   set wildignorecase
 endif
 
-set rtp+=~/.dotfiles/powerline/powerline/bindings/vim
+set rtp+=~/.powerline/powerline/bindings/vim
 
 " Local config
 if filereadable(glob("~/.vimrc.local"))
