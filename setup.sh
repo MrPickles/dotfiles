@@ -82,7 +82,9 @@ declare -a FILES_TO_SYMLINK=(
   'editor/vim'
   'editor/vimrc'
 
+  'git/gitattributes'
   'git/gitconfig'
+  'git/gitignore'
 
   'shell/dircolors.256dark'
   'shell/tmux.conf'

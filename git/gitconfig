@@ -7,6 +7,8 @@
 [core]
   editor = vim 
   autocrlf = input
+  attributesfile = ~/.gitattributes
+  excludesfile = ~/.gitignore
 [apply]
   whitespace = nowarn
 [format]
