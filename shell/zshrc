@@ -1,5 +1,5 @@
 ZSH=$HOME/.oh-my-zsh
-ZSH_THEME="agnoster"
+ZSH_THEME="pickles"
 
 plugins=(git bundler brew gem history-substring-search colored-man-pages)
 

@@ -51,3 +51,7 @@ for i in ${FILES_TO_UNLINK[@]}; do
   fi
 done
 
+# Unlink custom zsh theme.
+targetFile="$HOME/.oh-my-zsh/custom/pickles.zsh-theme"
+execute "unlink $targetFile" "$targetFile"
+
