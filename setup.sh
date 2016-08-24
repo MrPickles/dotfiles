@@ -94,9 +94,12 @@ declare -a FILES_TO_SYMLINK=(
   'powerline'
 )
 
-ask_for_confirmation "Switch to zsh and oh-my-zsh?"
-if answer_is_yes; then
-  install_zsh
+# Prompt to switch to zsh and oh-my-zsh if not active on terminal.
+if [ ! -f /bin/zsh -a ! -f /usr/bin/zsh -o ! -d $HOME/.oh-my-zsh/ ]; then
+  ask_for_confirmation "Switch to zsh and oh-my-zsh?"
+  if answer_is_yes; then
+    install_zsh
+  fi
 fi
 
 for i in ${FILES_TO_SYMLINK[@]}; do
