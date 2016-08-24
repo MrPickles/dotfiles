@@ -1,0 +1,10 @@
+# This is an example of a local gitconfig file. It should include your identity
+# and any secret tokens pertaining to git. This file should go in your home
+# directory as ~/.gitconfig.local.
+
+[user]
+	name = John Doe
+	email = johndoe@email.com
+[github]
+	user = GithubNameHere
+	token = API_SECRET_HERE
