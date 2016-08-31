@@ -34,7 +34,13 @@ The dotfiles are best used with the solarized dark solorscheme.
 ### Solarized on Linux
 
 0. Create a new profile on the terminal emulator.
+
+![Creating a new terminal profile](images/newprofile.png)
+
 0. Set that profile to be the default profile upon terminal open.
+
+![Using solarized as the default terminal](images/newterminal.png)
+
 0. Run the setup script for solarized.
 
 ```bash
