@@ -18,7 +18,7 @@ are files in the `new_machine` directory that can be used to set those up.
 ```bash
 git clone https://github.com/MrPickles/dotfiles.git --recursive ~/.dotfiles
 cd ~/.dotfiles
-`./setup.sh`
+./setup.sh
 ```
 
 If you forgot to clone the submodules, you can run `git submodule update --init`
