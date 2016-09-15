@@ -35,6 +35,7 @@ declare -a FILES_TO_UNLINK=(
   'git/gitignore'
 
   'shell/dircolors.256dark'
+  'shell/gdbinit'
   'shell/tmux.conf'
   'shell/zshrc'
 
