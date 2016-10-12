@@ -3,3 +3,5 @@
 " your home directory as ~/.vimrc.local.
 
 set colorcolumn=80 " Set a line at 80 characters.
+
+" set mouse=a " Enable mouse.
