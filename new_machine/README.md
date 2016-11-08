@@ -48,3 +48,14 @@ The dotfiles are best used with the solarized dark solorscheme.
   ./set_dark.sh
   ```
 
+## Enable Copy/Paste in Tmux on OSX
+On Macs, `pbcopy` and `pbpaste` don't natively work in tmux. Luckly there's a
+[Homebrew](http://brew.sh/) formula to fix that.
+
+```bash
+brew install reattach-to-user-namespace
+```
+
+The tmux configuration will do the rest for you. Note that this only applies to
+machines running OSX.
+
