@@ -108,11 +108,12 @@ prompt_pickles_main() {
 
 prompt_pickles_precmd() {
   vcs_info
-  PROMPT=$'%{%f%b%k%}$(prompt_pickles_main) '
+  PROMPT=$'%{%f%b%k%}$(prompt_pickles_main)'
   # Begin prompt on next line if segment is long.
   if [[ $(pwd | wc -m) -ge 30 ]]; then
-    PROMPT=$'%{%f%b%k%}$(prompt_pickles_main)\n%F{magenta}»%f '
+    PROMPT+=$'\n%F{magenta}»%f'
   fi
+  PROMPT+=$' '
 }
 
 prompt_pickles_setup() {
