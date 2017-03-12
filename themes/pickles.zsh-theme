@@ -76,9 +76,22 @@ prompt_git() {
   fi
 }
 
+_fishy_collapsed_wd() {
+  echo $(pwd | perl -pe '
+    BEGIN {
+      binmode STDIN,  ":encoding(UTF-8)";
+      binmode STDOUT, ":encoding(UTF-8)";
+    }; s|^$ENV{HOME}|~|g; s|/([^/.])[^/]*(?=/)|/$1|g; s|/\.([^/])[^/]*(?=/)|/.$1|g
+  ')
+}
+
 # Dir: current working directory
 prompt_dir() {
   prompt_segment blue $PRIMARY_FG ' %~ '
+}
+
+prompt_dir_fish() {
+  prompt_segment blue $PRIMARY_FG " $(_fishy_collapsed_wd) "
 }
 
 # Status:
@@ -106,11 +119,29 @@ prompt_pickles_main() {
   prompt_end
 }
 
+prompt_pickles_main_fish() {
+  RETVAL=$?
+  CURRENT_BG='NONE'
+  prompt_status
+  prompt_context
+  prompt_git
+  prompt_dir_fish
+  prompt_end
+}
+
 prompt_pickles_precmd() {
   vcs_info
-  PROMPT=$'%{%f%b%k%}$(prompt_pickles_main)'
-  # Begin prompt on next line if segment is long.
-  if [[ $(pwd | wc -m) -ge 30 ]]; then
+  PROMPT=$'%{%f%b%k%}'
+  local dir_length=$(print -P %~ | wc -m)
+  # Use fish-style prompt for long directory names.
+  if [[ $dir_length -ge 45 ]]; then
+    dir_length=`echo $(_fishy_collapsed_wd) | wc -m`
+    PROMPT+=$'$(prompt_pickles_main_fish)'
+  else
+    PROMPT+=$'$(prompt_pickles_main)'
+  fi
+  # Begin prompt on next line if segment is still long.
+  if [[ $dir_length -ge 20 ]]; then
     PROMPT+=$'\n%F{magenta}»%f'
   fi
   PROMPT+=$' '
