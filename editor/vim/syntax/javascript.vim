@@ -33,7 +33,7 @@ syntax match   jsParensError    /[)}\]]/
 " Program Keywords
 syntax keyword jsStorageClass   const var let skipwhite skipempty nextgroup=jsDestructuringBlock,jsDestructuringArray,jsVariableDef
 syntax match   jsVariableDef    contained /\k\+/ skipwhite skipempty nextgroup=jsFlowDefinition
-syntax keyword jsOperator       async await delete instanceof typeof void new in of skipwhite skipempty nextgroup=@jsExpression
+syntax keyword jsOperator       async delete instanceof typeof void new in of skipwhite skipempty nextgroup=@jsExpression
 syntax match   jsOperator       /[\!\|\&\+\-\<\>\=\%\/\*\~\^]\{1}/ skipwhite skipempty nextgroup=@jsExpression
 syntax match   jsOperator       /::/ skipwhite skipempty nextgroup=@jsExpression
 syntax keyword jsBooleanTrue    true
@@ -113,7 +113,7 @@ syntax keyword jsTry                    try            skipwhite skipempty nextg
 syntax keyword jsFinally      contained finally        skipwhite skipempty nextgroup=jsFinallyBlock
 syntax keyword jsCatch        contained catch          skipwhite skipempty nextgroup=jsParenCatch
 syntax keyword jsException              throw
-syntax keyword jsAsyncKeyword           async await
+syntax keyword jsAsyncKeyword           await
 syntax match   jsSwitchColon   contained /::\@!/       skipwhite skipempty nextgroup=jsSwitchBlock
 
 " Keywords
