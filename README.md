@@ -11,18 +11,28 @@ font that supports powerline.
 
 ## Installation
 Installation is as simple as cloning the repo and running the setup script. The
-script will fetch oh-my-zsh and symlink the dotfiles to your home directory. You
-will need to set up solarized and compatible fonts beforehand, however. There
-are files in the `new_machine` directory that can be used to set those up.
+script will fetch oh-my-zsh and symlink the dotfiles to your home directory.
 
 ```bash
 git clone https://github.com/MrPickles/dotfiles.git --recursive ~/.dotfiles
-cd ~/.dotfiles
-./setup.sh
+cd ~/.dotfiles/new_machine
 ```
 
 If you forgot to clone the submodules, you can run `git submodule update --init`
 to get them after cloning the main repo.
+
+You will need to set up solarized and compatible fonts before running the setup
+script. There are files in the `new_machine` directory that can be used to set
+up these prerequisites. See the [README](new_machine/README.md) in the that
+directory for instructions. This part is optional if these dotfiles are being
+reinstalled.
+
+Installing the dotfiles is as simple as running the setup script.
+
+```bash
+cd ~/.dotfiles
+./setup.sh
+```
 
 ## Customizing
 You can customize vim, git, and zsh for each specific machine. Just put any
