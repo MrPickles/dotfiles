@@ -6,9 +6,34 @@ Solarized colorscheme. This configuration uses a zsh theme similar to Agnoster.
 It also uses Powerline for vim and tmux. As a result, you'll need to install
 patched fonts that support Powerline.
 
+## MacOS
+
+### Installing Powerline-compatible Fonts
+
+There is a `fonts` directory that contains several fonts that work with
+Powerline. You can install them by running the installation script in that
+subdirectory.
+
+```bash
+cd ~/.dotfiles/new_machine/fonts
+./install.sh
+```
+
+Next you will want to change the fonts in your iTerm profile. Go to the `Text`
+tab in your current profile and pick an appropriate font.
+
+### Solarized on iTerm
+
+Import `Solarized Dark.itermcolors` as a colorscheme for iTerm. In the `Colors`
+section of your profile, use the `Solarized Dark` preset. To get the directory
+colors to work, you'll need to uncheck the `Draw bold text in bright colors`
+setting.
+
+  ![Solarized on iTerm](images/boldoption.png)
+
 ## Linux
 
-### Powerline Fonts
+### Patching the Font to be Powerline-compatible
 
 Follow these commands to patch the font.
 
@@ -21,7 +46,7 @@ fc-cache -vf ~/.fonts/
 cp 10-powerline-symbols.conf ~/.config/fontconfig/conf.d
 ```
 
-### Solarized on Linux
+### Solarized on Ubuntu Terminal
 
 Create a new profile on the terminal emulator.
 
