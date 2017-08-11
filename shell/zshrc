@@ -17,12 +17,6 @@ DISABLE_UPDATE_PROMPT=true
 # for Homebrew installed rbenv
 if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 
-if [[ "$(uname -s)" == "Linux" ]]; then
-  eval `dircolors ~/.dircolors.256dark`;
-else
-  export LSCOLORS_MACOS='ExFxBxDxCxegedabagacad'
-fi
-
 bindkey -v # vi mode for shell
 bindkey -e # enable C-x-e for shell editor
 # key bindings for history search
@@ -49,7 +43,8 @@ fi
 
 source $ZSH/oh-my-zsh.sh
 
-# Export MacOS ls colors, since sourcing OMZ resets the variable.
-if [[ LSCOLORS_MACOS ]]; then
-  export LSCOLORS=$LSCOLORS_MACOS
+if [[ "$(uname -s)" == "Linux" ]]; then
+  eval `dircolors ~/.dircolors.256dark`;
+else
+  export LSCOLORS='ExFxBxDxCxegedabagacad'
 fi
