@@ -74,3 +74,7 @@ brew install reattach-to-user-namespace
 The tmux configuration will do the rest for you. Note that this only applies to
 machines running OSX.
 
+## Enable Mouse Wheel Scrolling in Vim on OSX
+If using iTerm, setting `Scroll wheel sends arrow keys when in alternate screen
+mode.` to `Yes` will allow trackpad scrolling while in Vim. The setting can be
+found in the advanced preferences.
