@@ -1,5 +1,3 @@
-# Based off the agnoster zsh theme.
-
 CURRENT_BG='NONE'
 PRIMARY_FG=black
 
@@ -76,6 +74,7 @@ prompt_git() {
   fi
 }
 
+# Fish-style directory with abbreviations.
 _fishy_collapsed_wd() {
   echo $(pwd | perl -pe '
     BEGIN {
@@ -87,11 +86,13 @@ _fishy_collapsed_wd() {
 
 # Dir: current working directory
 prompt_dir() {
-  prompt_segment blue $PRIMARY_FG ' %~ '
-}
-
-prompt_dir_fish() {
-  prompt_segment blue $PRIMARY_FG " $(_fishy_collapsed_wd) "
+  local dir_length=$(print -P %~ | wc -m)
+  # Use fish-style prompt for long directory names.
+  if [[ $dir_length -ge 45 ]]; then
+    prompt_segment blue $PRIMARY_FG " $(_fishy_collapsed_wd) "
+  else
+    prompt_segment blue $PRIMARY_FG ' %~ '
+  fi
 }
 
 # Status:
@@ -119,29 +120,13 @@ prompt_pickles_main() {
   prompt_end
 }
 
-prompt_pickles_main_fish() {
-  RETVAL=$?
-  CURRENT_BG='NONE'
-  prompt_status
-  prompt_context
-  prompt_git
-  prompt_dir_fish
-  prompt_end
-}
-
 prompt_pickles_precmd() {
   vcs_info
   PROMPT=$'%{%f%b%k%}'
-  local dir_length=$(print -P %~ | wc -m)
-  # Use fish-style prompt for long directory names.
-  if [[ $dir_length -ge 45 ]]; then
-    dir_length=`echo $(_fishy_collapsed_wd) | wc -m`
-    PROMPT+=$'$(prompt_pickles_main_fish)'
-  else
-    PROMPT+=$'$(prompt_pickles_main)'
-  fi
-  # Begin prompt on next line if segment is still long.
-  if [[ $dir_length -ge 20 ]]; then
+  PROMPT+=$'$(prompt_pickles_main)'
+  local dir_length=$(print -P $PROMPT | wc -m)
+  # Begin prompt on next line if segment is long.
+  if [[ $dir_length -ge 100 ]]; then
     PROMPT+=$'\n%F{magenta}»%f'
   fi
   PROMPT+=$' '
