@@ -3,3 +3,4 @@
 # your home directory as ~/.zshrc.local.
 
 DEFAULT_USER="foobar" # Set default username.
+alias tmux="tmux a -d || tmux" # Tmux tries to attach to existing sessions.
