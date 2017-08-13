@@ -31,7 +31,7 @@ declare -a FILES_TO_UNLINK=(
   'editor/vimrc'
 
   'git/gitattributes'
-  'git/gitconfig'
+  'git/gitconfig.static'
   'git/gitignore'
 
   'shell/dircolors.256dark'

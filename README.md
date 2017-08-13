@@ -36,8 +36,9 @@ cd ~/.dotfiles
 
 ## Customizing
 You can customize vim, git, and zsh for each specific machine. Just put any
-additional configurations in `~/.zshrc.local`, `~/.gitconfig.local`, and
-`~/.vimrc.local`. Sample local configs are included in this repo.
+additional configurations in `~/.zshrc.local` or `~/.vimrc.local`. Sample local
+configs are included in this repo. Custom git configurations can just be placed
+in `.gitconfig`.
 
 ## Teardown
 To clean up the dotfiles, run the teardown script. It will remove all symlinks,

@@ -76,7 +76,7 @@ declare -a FILES_TO_SYMLINK=(
   'editor/vimrc'
 
   'git/gitattributes'
-  'git/gitconfig'
+  'git/gitconfig.static'
   'git/gitignore'
 
   'shell/dircolors.256dark'
@@ -87,6 +87,8 @@ declare -a FILES_TO_SYMLINK=(
   'bin'
   'powerline'
 )
+
+git config --global include.path ~/.gitconfig.static
 
 for i in ${FILES_TO_SYMLINK[@]}; do
   sourceFile="$(pwd)/$i"
