@@ -4,14 +4,41 @@
 # The only argument to this script should be "build" or "clean". The first
 # option will symlink all of the dotfiles and attempt to install oh-my-zsh.
 # Otherwise, the script will simply remove all symlinks.
-#
-# Usage:
-#
-#   ./configure build
-#
-# or
-#
-#   ./configure clean
+
+usage="Usage: $0 [-h] [-t <build|clean>]"
+
+if [[ "$#" -lt 1 ]]; then
+  echo $usage
+  exit
+fi
+
+while getopts :ht: option; do
+  case $option in
+    h)
+      echo $usage
+      echo
+      echo "OPTIONS"
+      echo "-h            Output verbose usage message"
+      echo "-t build      Set up dotfile symlinks and configure oh-my-zsh"
+      echo "-t clean      Remove all existing dotfiles symlinks"
+      exit;;
+    t)
+      if [[ "build" =~ ^${OPTARG} ]]; then
+        BUILD=true
+      elif [[ "clean" =~ ^${OPTARG} ]]; then
+        BUILD=
+      else
+        echo $usage >&2
+        exit 1
+      fi;;
+    \?)
+      echo "Unknown option: -$OPTARG" >&2;
+      exit 1;;
+    :)
+      echo "Missing option argument for -$OPTARG" >&2;
+      exit 1;;
+  esac
+done
 
 declare -a FILES_TO_SYMLINK=(
   'editor/vim'
@@ -29,15 +56,6 @@ declare -a FILES_TO_SYMLINK=(
   'bin'
   'powerline'
 )
-
-# Check if the argument begins with "build" or "clean".
-if [[ "$#" -ne 1 || ! ("build" =~ ^$1 || "clean" =~ ^$1) ]]; then
-  echo "Usage: $0 [build|clean]"
-  exit 1
-fi
-if [[ "build" =~ ^$1 ]]; then
-  BUILD="true"
-fi
 
 print_success() {
   if [[ $BUILD ]]; then
