@@ -53,7 +53,7 @@ declare -a FILES_TO_SYMLINK=(
   'shell/tmux.conf'
   'shell/zshrc'
 
-  'bin'
+  'bin/diff-so-fancy'
 )
 
 print_success() {
@@ -138,6 +138,12 @@ install_zsh() {
 for i in ${FILES_TO_SYMLINK[@]}; do
   sourceFile="$(pwd)/$i"
   targetFile="$HOME/.$(printf "%s" "$i" | sed "s/.*\/\(.*\)/\1/g")"
+
+  # Send binaries to ~/.local/bin
+  if [[ $i =~ ^bin/ ]]; then
+    mkdir -p ~/.local/bin
+    targetFile="$HOME/.local/bin/$(printf "%s" "$i" | sed "s/.*\/\(.*\)/\1/g")"
+  fi
 
   if [[ $BUILD ]]; then
     if [ ! -e "$targetFile" ]; then
