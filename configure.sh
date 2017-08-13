@@ -54,7 +54,6 @@ declare -a FILES_TO_SYMLINK=(
   'shell/zshrc'
 
   'bin'
-  'powerline'
 )
 
 print_success() {

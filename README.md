@@ -5,9 +5,9 @@ These are my personal dotfiles.
 These dotfiles are best used with zsh,
 [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh), and the
 [solarized](http://ethanschoonover.com/solarized) colorscheme. The configuration
-has [powerline](https://github.com/powerline/powerline) active for vim and tmux,
-and uses a custom zsh theme similar to agnoster. Thus you'll need to patch to a
-font that supports powerline.
+has powerline-based fonts status bars for vim and tmux, and uses a custom zsh
+theme similar to agnoster. Thus you'll need to patch to a font that supports
+powerline.
 
 ## Installation
 Installation is as simple as cloning the repo and running the configuration
