@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Configuration script to symlink the dotfiles or clean up the symlinks.
-# The only argument to this script should be "build" or "clean". The first
-# option will symlink all of the dotfiles and attempt to install oh-my-zsh.
-# Otherwise, the script will simply remove all symlinks.
+# The script should take a target flag stating whether "build" or "clean". The
+# first option will symlink all of the dotfiles and attempt to install
+# oh-my-zsh. Otherwise, the script will simply remove all symlinks.
 
 usage="Usage: $0 [-h] [-t <build|clean>]"
 
@@ -32,10 +32,10 @@ while getopts :ht: option; do
         exit 1
       fi;;
     \?)
-      echo "Unknown option: -$OPTARG" >&2;
+      echo "Unknown option: -$OPTARG" >&2
       exit 1;;
     :)
-      echo "Missing option argument for -$OPTARG" >&2;
+      echo "Missing argument for -$OPTARG" >&2
       exit 1;;
   esac
 done
