@@ -10,8 +10,9 @@ and uses a custom zsh theme similar to agnoster. Thus you'll need to patch to a
 font that supports powerline.
 
 ## Installation
-Installation is as simple as cloning the repo and running the setup script. The
-script will fetch oh-my-zsh and symlink the dotfiles to your home directory.
+Installation is as simple as cloning the repo and running the configuration
+script with the `build` argument. The script will fetch oh-my-zsh and symlink
+the dotfiles to your home directory.
 
 ```bash
 git clone https://github.com/MrPickles/dotfiles.git --recursive ~/.dotfiles
@@ -41,8 +42,8 @@ configs are included in this repo. Custom git configurations can just be placed
 in `.gitconfig`.
 
 ## Teardown
-To clean up the dotfiles, run the teardown script. It will remove all symlinks,
-but zsh and oh-my-zsh will be untouched.
+To clean up the dotfiles, run the configuration script with the `clean`
+argument. It will remove all symlinks, but zsh and oh-my-zsh will be untouched.
 
 ```bash
 cd ~/.dotfiles
@@ -50,11 +51,3 @@ cd ~/.dotfiles
 rm -rf ~/.oh-my-zsh # optionally remove oh-my-zsh
 chsh -s `which bash` # optionally change shell back to bash
 ```
-
-## Other dotfiles
-Here are some repos that I cherry-pick useful stuff from. :)
-* [Unofficial Dotfile Guide](http://dotfiles.github.io/)
-* [Nick's Dotfiles](https://github.com/nicksp/dotfiles)
-* [Ryan's Dotfiles](https://github.com/ryanb/dotfiles)
-* [YADR](https://github.com/skwp/dotfiles)
-
