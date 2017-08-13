@@ -31,7 +31,7 @@ Installing the dotfiles is as simple as running the setup script.
 
 ```bash
 cd ~/.dotfiles
-./setup.sh
+./configure.sh build
 ```
 
 ## Customizing
@@ -46,7 +46,7 @@ but zsh and oh-my-zsh will be untouched.
 
 ```bash
 cd ~/.dotfiles
-./teardown.sh
+./configure.sh clean
 rm -rf ~/.oh-my-zsh # optionally remove oh-my-zsh
 chsh -s `which bash` # optionally change shell back to bash
 ```
