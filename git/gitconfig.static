@@ -1,5 +1,8 @@
 [alias]
   co = checkout
+  ci = commit
+  di = diff
+  st = status
 [color]
   diff = auto
   status = auto
