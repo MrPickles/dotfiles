@@ -43,3 +43,6 @@
 [submodule "editor/vim/pack/plugins/start/vim-jsx-improve"]
 	path = editor/vim/pack/plugins/start/vim-jsx-improve
 	url = https://github.com/neoclide/vim-jsx-improve.git
+[submodule "new_machine/diff-so-fancy"]
+	path = new_machine/diff-so-fancy
+	url = https://github.com/so-fancy/diff-so-fancy.git

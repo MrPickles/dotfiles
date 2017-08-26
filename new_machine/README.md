@@ -64,7 +64,7 @@ cd ~/.dotfiles/new_machine/gnome-terminal-colors-solarized
 ./set_dark.sh
 ```
 
-## Enable Copy/Paste in Tmux on OSX
+## Enable Copy/Paste in Tmux on MacOs
 On Macs, `pbcopy` and `pbpaste` don't natively work in tmux. Luckly there's a
 [Homebrew](http://brew.sh/) formula to fix that.
 
@@ -73,9 +73,35 @@ brew install reattach-to-user-namespace
 ```
 
 The tmux configuration will do the rest for you. Note that this only applies to
-machines running OSX.
+machines running MacOS.
 
-## Enable Mouse Wheel Scrolling in Vim on OSX
+## Enable Mouse Wheel Scrolling in Vim on MacOS
 If using iTerm, setting `Scroll wheel sends arrow keys when in alternate screen
 mode.` to `Yes` will allow trackpad scrolling while in Vim. The setting can be
 found in the advanced preferences.
+
+# Using diff-so-fancy on Linux and MacOS
+Setting [diff-so-fancy](https://github.com/so-fancy/diff-so-fancy) as the
+diffing tool gives a more aesthetic diff than the git default. To get the tool,
+install it via a package manager or copy the file to your path. It is available
+through NPM, Homebrew, and as an Arch Linux package.
+
+On MacOS, the recommended method is to use Homebrew.
+```bash
+brew install diff-so-fancy
+```
+
+On Arch Linux, you can use your native package manager.
+```bash
+pacman -S diff-so-fancy
+```
+
+If you have NPM installed, you can install diff-so-fancy as a global module.
+```bash
+npm install -g diff-so-fancy
+```
+
+The final option is to put a local copy of the tool in your path.
+```bash
+cp diff-so-fancy/third_party/build_fatpack/diff-so-fancy ~/.local/bin
+```
