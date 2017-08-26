@@ -80,7 +80,7 @@ If using iTerm, setting `Scroll wheel sends arrow keys when in alternate screen
 mode.` to `Yes` will allow trackpad scrolling while in Vim. The setting can be
 found in the advanced preferences.
 
-# Using diff-so-fancy on Linux and MacOS
+## Using diff-so-fancy on Linux and MacOS
 Setting [diff-so-fancy](https://github.com/so-fancy/diff-so-fancy) as the
 diffing tool gives a more aesthetic diff than the git default. To get the tool,
 install it via a package manager or copy the file to your path. It is available
