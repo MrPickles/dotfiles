@@ -19,6 +19,6 @@
 [push]
   default = simple
 [pager]
-  # Use diff-so-fancy
-  diff = diff-so-fancy | less --tabs=4
-  show = diff-so-fancy | less --tabs=4
+  # Use diff-so-fancy if available
+  diff = type diff-so-fancy &> /dev/null && diff-so-fancy | less --tabs=4 || less
+  show = type diff-so-fancy &> /dev/null && diff-so-fancy | less --tabs=4 || less
