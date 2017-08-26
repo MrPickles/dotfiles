@@ -9,6 +9,21 @@ has powerline-based fonts status bars for vim and tmux, and uses a custom zsh
 theme similar to agnoster. Thus you'll need to patch to a font that supports
 powerline.
 
+## Prequisites
+These dotfies contain the following software dependencies:
+* Linux or MacOS
+* Vim 8.0+
+* Perl 5.8+
+
+There currently is no Windows support. However MacOS and most flavors of Linux
+should work fine.
+
+These dotfiles use Vim's new [native package manager][vim8] in order to
+distribute modules in an organized fashion.
+
+You will need Perl in order to run
+[diff-so-fancy](https://github.com/so-fancy/diff-so-fancy).
+
 ## Installation
 Installation is as simple as cloning the repo and running the configuration
 script with the `build` argument. The script will fetch oh-my-zsh and symlink
@@ -51,3 +66,5 @@ cd ~/.dotfiles
 rm -rf ~/.oh-my-zsh # optionally remove oh-my-zsh
 chsh -s `which bash` # optionally change shell back to bash
 ```
+
+[version8]: <https://github.com/vim/vim/blob/753289f9bf71c0528f00d803a39d017184640e9d/runtime/doc/version8.txt>

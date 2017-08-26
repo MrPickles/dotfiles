@@ -24,10 +24,11 @@ tab in your current profile and pick an appropriate font.
 
 ### Solarized on iTerm
 
-Import `Solarized Dark.itermcolors` as a colorscheme for iTerm. In the `Colors`
-section of your profile, use the `Solarized Dark` preset. To get the directory
-colors to work, you'll need to uncheck the `Draw bold text in bright colors`
-setting.
+Import `Solarized Dark.itermcolors` as a colorscheme for iTerm. A copy of the
+file can be found in the `solarized/iterm2-colors-solarized` submodule. In the
+`Colors` section of your profile, use the `Solarized Dark` preset. To get the
+directory colors to work, you'll need to uncheck the `Draw bold text in bright
+colors` setting.
 
   ![Solarized on iTerm](images/boldoption.png)
 
@@ -40,10 +41,10 @@ Follow these commands to patch the font.
 ```bash
 cd ~/.dotfiles/new_machine
 mkdir -p ~/.fonts/
-cp PowerlineSymbols.otf ~/.fonts/
+cp powerline/font/PowerlineSymbols.otf ~/.fonts/
 mkdir -p ~/.config/fontconfig/conf.d
 fc-cache -vf ~/.fonts/
-cp 10-powerline-symbols.conf ~/.config/fontconfig/conf.d
+cp powerline/font/10-powerline-symbols.conf ~/.config/fontconfig/conf.d
 ```
 
 ### Solarized on Ubuntu Terminal
