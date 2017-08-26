@@ -1,6 +1,6 @@
 # pickles.zsh-theme
 
-This is my custom zsh theme. It's based off the
+[This is my custom zsh theme.](pickles.zsh-theme) It's based off the
 [Agnoster](https://github.com/agnoster/agnoster-zsh-theme) theme with a few
 cosmetic tweaks. In order for this theme to render correctly, you'll need to
 have powerline-patched fonts.
