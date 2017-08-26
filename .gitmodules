@@ -37,3 +37,9 @@
 [submodule "editor/vim/pack/plugins/start/vim-colors-solarized"]
 	path = editor/vim/pack/plugins/start/vim-colors-solarized
 	url = https://github.com/altercation/vim-colors-solarized.git
+[submodule "new_machine/powerline"]
+	path = new_machine/powerline
+	url = https://github.com/powerline/powerline.git
+[submodule "new_machine/solarized"]
+	path = new_machine/solarized
+	url = https://github.com/altercation/solarized.git
