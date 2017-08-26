@@ -4,3 +4,36 @@
 [submodule "new_machine/fonts"]
 	path = new_machine/fonts
 	url = https://github.com/powerline/fonts.git
+[submodule "editor/vim/pack/plugins/start/vim-airline"]
+	path = editor/vim/pack/plugins/start/vim-airline
+	url = https://github.com/vim-airline/vim-airline.git
+[submodule "editor/vim/pack/plugins/start/nerdtree"]
+	path = editor/vim/pack/plugins/start/nerdtree
+	url = https://github.com/scrooloose/nerdtree.git
+[submodule "editor/vim/pack/plugins/start/vim-solidity"]
+	path = editor/vim/pack/plugins/start/vim-solidity
+	url = https://github.com/tomlion/vim-solidity.git
+[submodule "editor/vim/pack/plugins/start/vim-javascript"]
+	path = editor/vim/pack/plugins/start/vim-javascript
+	url = https://github.com/pangloss/vim-javascript.git
+[submodule "editor/vim/pack/plugins/start/vim-coffee-script"]
+	path = editor/vim/pack/plugins/start/vim-coffee-script
+	url = https://github.com/kchmck/vim-coffee-script.git
+[submodule "editor/vim/pack/plugins/start/vim-vue"]
+	path = editor/vim/pack/plugins/start/vim-vue
+	url = https://github.com/posva/vim-vue.git
+[submodule "editor/vim/pack/plugins/start/vim-pug"]
+	path = editor/vim/pack/plugins/start/vim-pug
+	url = https://github.com/digitaltoad/vim-pug.git
+[submodule "editor/vim/pack/plugins/start/vim-jsx"]
+	path = editor/vim/pack/plugins/start/vim-jsx
+	url = https://github.com/mxw/vim-jsx.git
+[submodule "editor/vim/pack/plugins/start/vim-fugitive"]
+	path = editor/vim/pack/plugins/start/vim-fugitive
+	url = https://github.com/tpope/vim-fugitive.git
+[submodule "editor/vim/pack/plugins/start/vim-protobuf"]
+	path = editor/vim/pack/plugins/start/vim-protobuf
+	url = https://github.com/uarun/vim-protobuf.git
+[submodule "editor/vim/pack/plugins/start/vim-colors-solarized"]
+	path = editor/vim/pack/plugins/start/vim-colors-solarized
+	url = https://github.com/altercation/vim-colors-solarized.git
