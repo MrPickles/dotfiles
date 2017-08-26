@@ -59,6 +59,10 @@ additional configurations in `~/.zshrc.local` or `~/.vimrc.local`. Sample local
 configs are included in this repo. Custom git configurations can just be placed
 in `.gitconfig`.
 
+With oh-my-zsh, you can also include zsh themes. I've included my own [custom
+theme](themes/pickles.zsh-theme) by default. You can read more about it in the
+[README](themes/README.md) in the `themes/` directory.
+
 ## Teardown
 To clean up the dotfiles, run the configuration script with the `clean`
 argument. It will remove all symlinks, but zsh and oh-my-zsh will be untouched.
