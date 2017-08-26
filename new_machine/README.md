@@ -30,7 +30,7 @@ file can be found in the `solarized/iterm2-colors-solarized` submodule. In the
 directory colors to work, you'll need to uncheck the `Draw bold text in bright
 colors` setting.
 
-  ![Solarized on iTerm](images/boldoption.png)
+  ![Solarized on iTerm](../.images/bold_option.png)
 
 ## Linux
 
@@ -51,11 +51,11 @@ cp powerline/font/10-powerline-symbols.conf ~/.config/fontconfig/conf.d
 
 Create a new profile on the terminal emulator.
 
-  ![Creating a new terminal profile](images/newprofile.png)
+  ![Creating a new terminal profile](../.images/new_profile.png)
 
 Set that profile to be the default profile upon terminal open.
 
-  ![Using solarized as the default terminal](images/newterminal.png)
+  ![Using solarized as the default terminal](../.images/new_terminal.png)
 
 Run the setup script for solarized.
 
