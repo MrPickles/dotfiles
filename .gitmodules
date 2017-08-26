@@ -25,9 +25,6 @@
 [submodule "editor/vim/pack/plugins/start/vim-pug"]
 	path = editor/vim/pack/plugins/start/vim-pug
 	url = https://github.com/digitaltoad/vim-pug.git
-[submodule "editor/vim/pack/plugins/start/vim-jsx"]
-	path = editor/vim/pack/plugins/start/vim-jsx
-	url = https://github.com/mxw/vim-jsx.git
 [submodule "editor/vim/pack/plugins/start/vim-fugitive"]
 	path = editor/vim/pack/plugins/start/vim-fugitive
 	url = https://github.com/tpope/vim-fugitive.git
@@ -43,3 +40,6 @@
 [submodule "new_machine/solarized"]
 	path = new_machine/solarized
 	url = https://github.com/altercation/solarized.git
+[submodule "editor/vim/pack/plugins/start/vim-jsx-improve"]
+	path = editor/vim/pack/plugins/start/vim-jsx-improve
+	url = https://github.com/neoclide/vim-jsx-improve.git
