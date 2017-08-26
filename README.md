@@ -18,8 +18,9 @@ These dotfies contain the following software dependencies:
 There currently is no Windows support. However MacOS and most flavors of Linux
 should work fine.
 
-These dotfiles use Vim's new [native package manager][vim8] in order to
-distribute modules in an organized fashion.
+These dotfiles use Vim's new
+[native package manager](https://github.com/vim/vim/blob/753289f9bf71c0528f00d803a39d017184640e9d/runtime/doc/version8.txt)
+in order to distribute modules in an organized fashion.
 
 You will need Perl in order to run
 [diff-so-fancy](https://github.com/so-fancy/diff-so-fancy).
@@ -67,4 +68,3 @@ rm -rf ~/.oh-my-zsh # optionally remove oh-my-zsh
 chsh -s `which bash` # optionally change shell back to bash
 ```
 
-[version8]: <https://github.com/vim/vim/blob/753289f9bf71c0528f00d803a39d017184640e9d/runtime/doc/version8.txt>
