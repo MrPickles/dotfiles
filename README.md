@@ -13,13 +13,15 @@ powerline.
 These dotfies contain the following software dependencies:
 * Linux or MacOS
 * Vim 8.0+
-* Perl 5.8+
+* Perl 5.8+ (optional)
 
 There currently is no Windows support. However MacOS and most flavors of Linux
 should work fine. These dotfiles use Vim's new
 [native package manager](https://github.com/vim/vim/blob/753289f9bf71c0528f00d803a39d017184640e9d/runtime/doc/version8.txt)
-in order to distribute modules in an organized fashion. You will need Perl in
-order to run [diff-so-fancy](https://github.com/so-fancy/diff-so-fancy).
+in order to distribute modules in an organized fashion, so versions of Vim
+before 8 will not function properly. You will need Perl in order to run
+[diff-so-fancy](https://github.com/so-fancy/diff-so-fancy). However, this is
+optional, and you can use the normal diffing tool instead.
 
 ## Installation
 Installation is as simple as cloning the repo and running the configuration
