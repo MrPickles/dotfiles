@@ -99,8 +99,6 @@ cmap <C-P> <C-R>=expand("%:p:h") . "/" <CR>
 nmap <F1> <Esc>
 " Press ^F from insert mode to insert the current file name
 imap <C-F> <C-R>=expand("%")<CR>
-" Maps autocomplete to tab
-imap <Tab> <C-N>
 
 " Use Ack instead of Grep when available
 if executable("ack")
