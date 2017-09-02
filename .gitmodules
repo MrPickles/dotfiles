@@ -1,9 +1,3 @@
-[submodule "new_machine/gnome-terminal-colors-solarized"]
-	path = new_machine/gnome-terminal-colors-solarized
-	url = https://github.com/Anthony25/gnome-terminal-colors-solarized.git
-[submodule "new_machine/fonts"]
-	path = new_machine/fonts
-	url = https://github.com/powerline/fonts.git
 [submodule "editor/vim/pack/plugins/start/vim-airline"]
 	path = editor/vim/pack/plugins/start/vim-airline
 	url = https://github.com/vim-airline/vim-airline.git
@@ -34,18 +28,9 @@
 [submodule "editor/vim/pack/plugins/start/vim-colors-solarized"]
 	path = editor/vim/pack/plugins/start/vim-colors-solarized
 	url = https://github.com/altercation/vim-colors-solarized.git
-[submodule "new_machine/powerline"]
-	path = new_machine/powerline
-	url = https://github.com/powerline/powerline.git
-[submodule "new_machine/solarized"]
-	path = new_machine/solarized
-	url = https://github.com/altercation/solarized.git
 [submodule "editor/vim/pack/plugins/start/vim-jsx-improve"]
 	path = editor/vim/pack/plugins/start/vim-jsx-improve
 	url = https://github.com/neoclide/vim-jsx-improve.git
-[submodule "new_machine/diff-so-fancy"]
-	path = new_machine/diff-so-fancy
-	url = https://github.com/so-fancy/diff-so-fancy.git
 [submodule "editor/vim/pack/plugins/start/ctrlp.vim"]
 	path = editor/vim/pack/plugins/start/ctrlp.vim
 	url = https://github.com/ctrlpvim/ctrlp.vim.git
