@@ -55,7 +55,7 @@ In the `Colors` section of your iTerm profile, use the `Solarized Dark` preset.
 To get the directory colors to work, you'll need to uncheck the `Draw bold text
 in bright colors` setting.
 
-![Solarized on iTerm](../.images/bold_option.png)
+![Solarized on iTerm](.images/bold_option.png)
 
 #### Enable Copy/Paste in Tmux
 On Macs, `pbcopy` and `pbpaste` don't natively work in tmux.
@@ -83,14 +83,11 @@ You need [10-powerline-symbols.conf][symbols-conf] and
 Follow the commands below to patch the font.
 
 ```bash
-mkdir -p ~/.fonts/
-cd ~/.fonts/
-wget https://raw.githubusercontent.com/powerline/powerline/5a24eceae9b61b89b34794fea18b8c51da823a6c/font/PowerlineSymbols.otf
-mkdir -p ~/.config/fontconfig/conf.d
-cd ~/.config/fontconfig/conf.d
+mkdir -p ~/.fonts/ && cd ~/.fonts/
+wget https://raw.githubusercontent.com/powerline/powerline/master/font/PowerlineSymbols.otf
+mkdir -p ~/.config/fontconfig/conf.d && cd ~/.config/fontconfig/conf.d
 fc-cache -vf ~/.fonts/
-cp powerline/font/10-powerline-symbols.conf ~/.config/fontconfig/conf.d
-wget https://raw.githubusercontent.com/powerline/powerline/5a24eceae9b61b89b34794fea18b8c51da823a6c/font/10-powerline-symbols.conf
+wget https://raw.githubusercontent.com/powerline/powerline/master/font/10-powerline-symbols.conf
 ```
 
 #### Solarized on Ubuntu Terminal
@@ -101,11 +98,11 @@ color scheme.
 
 Start by creating a new profile on the terminal emulator.
 
-![Creating a new terminal profile](../.images/new_profile.png)
+![Creating a new terminal profile](.images/new_profile.png)
 
 Set that profile to be the default profile upon terminal open.
 
-![Using solarized as the default terminal](../.images/new_terminal.png)
+![Using solarized as the default terminal](.images/new_terminal.png)
 
 Finally clone the
 [gnome-terminal-colors-solarized repo][gnome-terminal-colors-solarized] and
