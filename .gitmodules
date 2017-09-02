@@ -46,3 +46,6 @@
 [submodule "new_machine/diff-so-fancy"]
 	path = new_machine/diff-so-fancy
 	url = https://github.com/so-fancy/diff-so-fancy.git
+[submodule "editor/vim/pack/plugins/start/ctrlp.vim"]
+	path = editor/vim/pack/plugins/start/ctrlp.vim
+	url = https://github.com/ctrlpvim/ctrlp.vim.git
