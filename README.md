@@ -27,7 +27,7 @@ You will need Perl in order to run [diff-so-fancy][diff-so-fancy].
 However, this is optional, and you can use the normal diffing tool instead.
 
 ## Setting up your Local Machine
-*[Go to the next section](#Installation) if you have already configured these
+*[Go to the next section](#installation) if you have already configured these
 dotfiles on your machine once, or if you are SSHing into another machine.
 These setup instructions only need to be done once on a local machine.*
 
