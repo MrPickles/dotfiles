@@ -31,6 +31,3 @@
 [submodule "editor/vim/pack/plugins/start/vim-jsx-improve"]
 	path = editor/vim/pack/third_party/start/vim-jsx-improve
 	url = https://github.com/neoclide/vim-jsx-improve.git
-[submodule "editor/vim/pack/plugins/start/ctrlp.vim"]
-	path = editor/vim/pack/third_party/start/ctrlp.vim
-	url = https://github.com/ctrlpvim/ctrlp.vim.git

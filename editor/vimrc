@@ -86,6 +86,11 @@ else
   set autoindent
 endif " has("autocmd")
 
+if executable('fzf')
+  " Remap ctrl-P to execute fzf :)
+  nnoremap <silent> <C-p> :FZF<CR>
+endif
+
 if executable('ag')
   " Use ag over grep and ack if available.
   set grepprg=ag\ --nogroup\ --nocolor
