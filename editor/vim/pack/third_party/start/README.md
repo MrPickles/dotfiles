@@ -4,6 +4,8 @@ The vim add-ons in this directory are all third party plugins.
 Below are where the original repositories can be found:
 
 * [ctrlp.vim](https://github.com/ctrlpvim/ctrlp.vim)
+* [fzf](https://github.com/junegunn/fzf)
+* [fzf.vim](https://github.com/junegunn/fzf.vim)
 * [nerdtree](https://github.com/scrooloose/nerdtree)
 * [nerdtree-git-plugin](https://github.com/Xuyuanp/nerdtree-git-plugin)
 * [vim-airline](https://github.com/vim-airline/vim-airline)
