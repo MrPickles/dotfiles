@@ -122,23 +122,28 @@ The Silver Searcher (`ag`) is a faster alternative over `grep`.
 You should install them independently of this dotfile repo.
 
 ## Installation
-Installation is as simple as cloning the repo and running the configuration
-script with the `build` argument.
-The script will fetch oh-my-zsh and symlink the dotfiles to your home directory.
+Installation is as simple as downloading and running the install script.
+The install script will run the configuration script, which fetches oh-my-zsh
+and symlinks the dotfiles to your home directory.
 
 ```bash
-git clone https://github.com/MrPickles/dotfiles.git --recursive ~/.dotfiles
-cd ~/.dotfiles/new_machine
+curl -sL https://raw.githubusercontent.com/MrPickles/dotfiles/master/install.sh | sh
 ```
 
-If you forgot to clone the submodules, you can run `git submodule update --init`
-to get them after cloning the main repo.
-
-Installing the dotfiles is as simple as running the setup script.
+Alternatively, you can manually clone the repository and run the `configure.sh`
+script.
 
 ```bash
+git clone --depth=1 https://github.com/MrPickles/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
 ./configure.sh -t build
+```
+
+You will also likely need to manually change your shell to `zsh` if you are
+currently using a different shell.
+
+```bash
+chsh -s $(which zsh)
 ```
 
 ## Customizing
