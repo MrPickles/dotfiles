@@ -72,6 +72,11 @@ if _has fzf && _has ag; then
   export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
 fi
 
+# Source fzf-cd plugin.
+if [[ -f ~/.zsh-interactive-cd.plugin.zsh ]]; then
+  source ~/.zsh-interactive-cd.plugin.zsh
+fi
+
 # Source local version of zshrc.
 if [[ -f ~/.zshrc.local ]]; then
   source ~/.zshrc.local
