@@ -3,6 +3,7 @@
 The vim add-ons in this directory are all third party plugins.
 Below are where the original repositories can be found:
 
+* [ack.vim](https://github.com/mileszs/ack.vim)
 * [fzf](https://github.com/junegunn/fzf)
 * [fzf.vim](https://github.com/junegunn/fzf.vim)
 * [nerdtree](https://github.com/scrooloose/nerdtree)
