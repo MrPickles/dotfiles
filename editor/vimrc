@@ -27,6 +27,12 @@ set completeopt=longest,menu
 set wildmode=list:longest,list:full
 set complete=.,t
 
+" Remap :w and :q to allow the capital letter versions.
+command! Q q
+command! W w
+command! WQ wq
+command! Wq wq
+
 " case only matters with mixed case expressions
 set ignorecase
 set smartcase
