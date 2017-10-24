@@ -119,6 +119,8 @@ It is recommended but optional to install [diff-so-fancy][diff-so-fancy] and
 [ag][ag] on your machine.
 Diff-so-fancy is a diffing tool that gives a nicer diff than the git default.
 The Silver Searcher (`ag`) is a faster alternative over `grep`.
+Additionally with `ag`, it is recommended to use [fzf][fzf] as your default
+fuzzy finder.
 You should install them independently of this dotfile repo.
 
 ## Installation
@@ -182,6 +184,7 @@ chsh -s `which bash` # optionally change shell back to bash
 [powerline]: <https://github.com/powerline/powerline>
 [solarized-repo]: <https://github.com/altercation/solarized>
 [ag]: <https://github.com/ggreer/the_silver_searcher>
+[fzf]: <https://github.com/junegunn/fzf>
 
 [itermcolors]: <https://raw.githubusercontent.com/altercation/solarized/e40cd4130e2a82f9b03ada1ca378b7701b1a9110/iterm2-colors-solarized/Solarized%20Dark.itermcolors>
 [symbols-conf]: <https://raw.githubusercontent.com/powerline/powerline/5a24eceae9b61b89b34794fea18b8c51da823a6c/font/10-powerline-symbols.conf>

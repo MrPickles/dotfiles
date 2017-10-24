@@ -3,8 +3,27 @@ ZSH_THEME="pickles"
 
 plugins=(git bundler brew gem history-substring-search colored-man-pages)
 
-export PATH="/usr/local/bin:$PATH"
-export PATH="$HOME/.local/bin:$PATH"
+# Returns whether the given command is executable or aliased.
+_has() {
+  return $(whence $1 >/dev/null)
+}
+
+# Prepend a directory to path, if it exists and isn't already in the path.
+_prepend_to_path() {
+  if [ -d $1 -a -z ${path[(r)$1]} ]; then
+    path=($1 $path);
+  fi
+}
+
+# Append a directory to path, if it exists and isn't already in the path.
+_append_to_path() {
+  if [ -d $1 -a -z ${path[(r)$1]} ]; then
+    path=($path $1);
+  fi
+}
+
+_prepend_to_path /usr/local/bin
+_prepend_to_path $HOME/.local/bin
 
 export EDITOR='vim'
 
@@ -33,14 +52,35 @@ if [[ -z "$TMUX" ]]; then
   export TERM="xterm-256color"
 fi
 
-if [[ -f ~/.zshrc.local ]]; then
-  source ~/.zshrc.local
+# fzf via Homebrew
+if [ -e /usr/local/opt/fzf/shell/completion.zsh ]; then
+  source /usr/local/opt/fzf/shell/key-bindings.zsh
+  source /usr/local/opt/fzf/shell/completion.zsh
 fi
 
-source $ZSH/oh-my-zsh.sh
+# fzf via local installation
+if [ -e ~/.fzf ]; then
+  _append_to_path ~/.fzf/bin
+  source ~/.fzf/shell/key-bindings.zsh
+  source ~/.fzf/shell/completion.zsh
+fi
+
+# Use ag for fzf.
+if _has fzf && _has ag; then
+  export FZF_DEFAULT_COMMAND='ag -g ""'
+  export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+  export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
+fi
 
 if [[ "$(uname -s)" == "Linux" ]]; then
   eval `dircolors ~/.dircolors.256dark`;
 else
   export LSCOLORS='ExFxBxDxCxegedabagacad'
 fi
+
+# Source local version of zshrc.
+if [[ -f ~/.zshrc.local ]]; then
+  source ~/.zshrc.local
+fi
+
+source $ZSH/oh-my-zsh.sh
