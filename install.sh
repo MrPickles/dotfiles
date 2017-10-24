@@ -2,8 +2,6 @@
 
 { # This ensures the entire script is downloaded.
 
-  set -e
-
   basedir=$HOME/.dotfiles
   repourl=git://github.com/MrPickles/dotfiles.git
 
