@@ -72,15 +72,16 @@ if _has fzf && _has ag; then
   export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
 fi
 
-if [[ "$(uname -s)" == "Linux" ]]; then
-  eval `dircolors ~/.dircolors.256dark`;
-else
-  export LSCOLORS='ExFxBxDxCxegedabagacad'
-fi
-
 # Source local version of zshrc.
 if [[ -f ~/.zshrc.local ]]; then
   source ~/.zshrc.local
 fi
 
 source $ZSH/oh-my-zsh.sh
+
+# Dircolors must be set last, since oh-my-zsh seems to rewrite those values.
+if [[ "$(uname -s)" == "Linux" ]]; then
+  eval `dircolors ~/.dircolors.256dark`;
+else
+  export LSCOLORS='ExFxBxDxCxegedabagacad'
+fi
