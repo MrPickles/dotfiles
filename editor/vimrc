@@ -86,12 +86,16 @@ else
   set autoindent
 endif " has("autocmd")
 
+if executable('fzf')
+  " Remap ctrl-P to execute fzf :)
+  nnoremap <silent> <C-p> :FZF<CR>
+endif
+
 if executable('ag')
   " Use ag over grep and ack if available.
   set grepprg=ag\ --nogroup\ --nocolor
-  " Use ag in CtrlP for listing files.
-  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-  let g:ctrlp_use_caching = 0
+  " Use ag in ack.vim
+  let g:ackprg = 'ag --vimgrep'
 elseif executable("ack")
   " Use ack instead of grep if available
   set grepprg=ack\ -H\ --nogroup\ --nocolor\ --ignore-dir=tmp\ --ignore-dir=coverage
