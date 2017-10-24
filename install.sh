@@ -3,7 +3,7 @@
 { # This ensures the entire script is downloaded.
 
   basedir=$HOME/.dotfiles
-  repourl=git://github.com/MrPickles/dotfiles.git
+  repourl=git@github.com:MrPickles/dotfiles.git
 
   if ! which git >/dev/null ; then
     echo "Error: Git is not installed!"
