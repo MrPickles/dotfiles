@@ -12,6 +12,7 @@ Below are where the original repositories can be found:
 * [vim-coffee-script](https://github.com/kchmck/vim-coffee-script)
 * [vim-colors-solarized](https://github.com/altercation/vim-colors-solarized)
 * [vim-fugitive](https://github.com/tpope/vim-fugitive)
+* [vim-gitgutter](https://github.com/airblade/vim-gitgutter)
 * [vim-javascript](https://github.com/pangloss/vim-javascript)
 * [vim-jsx-improve](https://github.com/neoclide/vim-jsx-improve)
 * [vim-protobuf](https://github.com/uarun/vim-protobuf)
