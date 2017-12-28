@@ -6,3 +6,6 @@
 
 # Attempt to take over existing sessions before creating a new tmux session.
 # alias tmux="tmux a -d 2> /dev/null || tmux"
+
+# Get the nth line from your output.
+# function line() { head -n$1 $2 | tail -n1 }
