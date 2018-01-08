@@ -67,8 +67,6 @@ if has("autocmd")
   autocmd FileType text,markdown,html,xhtml,eruby setlocal wrap linebreak nolist
   " Set default tab width to 4 spaces in python
   au Filetype python setl et ts=4 sw=4
-  " Do not automatically create single lined "//" comments.
-  au FileType * setlocal comments-=:// comments+=f://
   " Set shell script syntax highlighting for zsh-theme files
   au BufRead,BufNewFile *.zsh-theme set syntax=sh
   " For Haml
