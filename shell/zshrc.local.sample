@@ -7,5 +7,11 @@
 # Attempt to take over existing sessions before creating a new tmux session.
 # alias tmux="tmux a -d 2> /dev/null || tmux"
 
+# Go environment variables for homebrew installation.
+# export GOPATH=$HOME/.golang
+# export GOROOT=/usr/local/opt/go/libexec
+# _append_to_path $GOPATH/bin
+# _append_to_path $GOROOT/bin
+
 # Get the nth line from your output.
-# function line() { head -n$1 $2 | tail -n1 }
+# function line() { sed "$1q;d" $2 }
