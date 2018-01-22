@@ -151,9 +151,9 @@ chsh -s $(which zsh)
 ## Customizing
 You can customize vim, git, tmux, and zsh for each specific machine.
 Just put any additional configurations in `~/.zshrc.local`, `~/.tmux.conf.local`
-or `~/.vimrc.local`.
+`~/.gitconfig.local` or `~/.vimrc.local`.
 Sample local configs are included in this repo.
-Custom git configurations should just be placed in `.gitconfig`.
+Custom git configurations can also be placed in `.gitconfig`.
 
 With oh-my-zsh, you can also include zsh themes.
 I've included my own [custom theme](themes/pickles.zsh-theme) by default.
