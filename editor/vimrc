@@ -32,6 +32,11 @@ command! Q q
 command! W w
 command! WQ wq
 command! Wq wq
+command! QA qa
+command! Qa qa
+command! Wqa wqa
+command! WQa wqa
+command! WQA wqa
 
 " case only matters with mixed case expressions
 set ignorecase
