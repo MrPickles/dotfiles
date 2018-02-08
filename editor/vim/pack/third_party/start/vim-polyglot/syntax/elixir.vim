@@ -64,9 +64,10 @@ syn match elixirVariable '&\d\+'
 
 syn keyword elixirPseudoVariable __FILE__ __DIR__ __MODULE__ __ENV__ __CALLER__
 
-syn match elixirNumber '\<\d\(_\?\d\)*\(\.[^[:space:][:digit:]]\@!\(_\?\d\)*\)\?\([eE][-+]\?\d\(_\?\d\)*\)\?\>'
-syn match elixirNumber '\<0[xX][0-9A-Fa-f]\+\>'
-syn match elixirNumber '\<0[bB][01]\+\>'
+syn match elixirNumber '\<-\?\d\(_\?\d\)*\(\.[^[:space:][:digit:]]\@!\(_\?\d\)*\)\?\([eE][-+]\?\d\(_\?\d\)*\)\?\>'
+syn match elixirNumber '\<-\?0[xX][0-9A-Fa-f]\+\>'
+syn match elixirNumber '\<-\?0[oO][0-7]\+\>'
+syn match elixirNumber '\<-\?0[bB][01]\+\>'
 
 syn match elixirRegexEscape            "\\\\\|\\[aAbBcdDefGhHnrsStvVwW]\|\\\d\{3}\|\\x[0-9a-fA-F]\{2}" contained
 syn match elixirRegexEscapePunctuation "?\|\\.\|*\|\\\[\|\\\]\|+\|\\^\|\\\$\|\\|\|\\(\|\\)\|\\{\|\\}" contained
@@ -120,10 +121,10 @@ syn region elixirSigil matchgroup=elixirSigilDelimiter start=+\~\a\z('''\)+ end=
 " Documentation
 if exists('g:elixir_use_markdown_for_docs') && g:elixir_use_markdown_for_docs
   syn include @markdown syntax/markdown.vim
-  syn cluster elixirDocStringContained contains=@markdown,@Spell
+  syn cluster elixirDocStringContained contains=@markdown,@Spell,elixirInterpolation
 else
   let g:elixir_use_markdown_for_docs = 0
-  syn cluster elixirDocStringContained contains=elixirDocTest,elixirTodo,@Spell
+  syn cluster elixirDocStringContained contains=elixirDocTest,elixirTodo,@Spell,elixirInterpolation
 
   " doctests
   syn region elixirDocTest start="^\s*\%(iex\|\.\.\.\)\%((\d*)\)\?>\s" end="^\s*$" contained
@@ -142,6 +143,8 @@ syn region elixirDocString matchgroup=elixirSigilDelimiter  start=+\%(@\w*doc\s\
 " Defines
 syn match elixirDefine              '\<def\>\(:\)\@!'             nextgroup=elixirFunctionDeclaration    skipwhite skipnl
 syn match elixirPrivateDefine       '\<defp\>\(:\)\@!'            nextgroup=elixirFunctionDeclaration    skipwhite skipnl
+syn match elixirGuard               '\<defguard\>\(:\)\@!'        nextgroup=elixirFunctionDeclaration    skipwhite skipnl
+syn match elixirPrivateGuard        '\<defguardp\>\(:\)\@!'       nextgroup=elixirFunctionDeclaration    skipwhite skipnl
 syn match elixirModuleDefine        '\<defmodule\>\(:\)\@!'       nextgroup=elixirModuleDeclaration      skipwhite skipnl
 syn match elixirProtocolDefine      '\<defprotocol\>\(:\)\@!'     nextgroup=elixirProtocolDeclaration    skipwhite skipnl
 syn match elixirImplDefine          '\<defimpl\>\(:\)\@!'         nextgroup=elixirImplDeclaration        skipwhite skipnl
@@ -176,6 +179,8 @@ syn match  elixirExUnitAssert "\(^\s*\)\@<=\<\(catch_exit\|catch_throw\|flunk\|r
 hi def link elixirBlockDefinition        Keyword
 hi def link elixirDefine                 Define
 hi def link elixirPrivateDefine          Define
+hi def link elixirGuard                  Define
+hi def link elixirPrivateGuard           Define
 hi def link elixirModuleDefine           Define
 hi def link elixirProtocolDefine         Define
 hi def link elixirImplDefine             Define

@@ -5,7 +5,7 @@ set -E
 DIRS="syntax indent compiler autoload ftplugin after/syntax after/indent after/ftplugin"
 DIRS_BASIC="syntax compiler indent after/syntax after/indent"
 DIRS_ALL="syntax indent compiler autoload ftplugin after"
-DIRS_SYNTAX="syntax after/syntax"
+DIRS_SYNTAX="syntax indent after/syntax after/indent"
 DIRS_JAVASCRIPT="${DIRS} extras"
 DIRS_RM="$DIRS_JAVASCRIPT"
 
@@ -52,6 +52,13 @@ extract() {
       fi
     done
 
+    output "${subdirs##, })\n"
+
+    if (echo "julia coffee-script elixir fish git plantuml scala swift"  | fgrep -q "$name"); then
+	echo "Skipping ftdetect installation of $name"
+	continue
+    fi
+
     for f in ${dir}/ftdetect/*; do
       (
         echo "augroup filetypedetect";
@@ -62,7 +69,6 @@ extract() {
       ) >> tmp/polyglot.vim;
     done
 
-    output "${subdirs##, })\n"
   done
 
   mv tmp/polyglot.vim ftdetect/
@@ -80,7 +86,7 @@ extract() {
 }
 
 copy_dir() {
-  for file in $(find "$1/$2" -name '*.vim'); do
+  for file in $(find "$1/$2" -name '*.vim' -o -name '*.vital'); do
     file_path="$(dirname "${file##$1/}")"
     mkdir -p "$file_path"
     touch "$file_path/$(basename "$file")"
@@ -118,8 +124,10 @@ PACKS="
   c++11:octol/vim-cpp-enhanced-highlight
   c/c++:vim-jp/vim-cpp
   caddyfile:isobit/vim-caddyfile
+  carp:hellerve/carp-vim
   cjsx:mtscout6/vim-cjsx
   clojure:guns/vim-clojure-static
+  cmake:pboettch/vim-cmake-syntax
   coffee-script:kchmck/vim-coffee-script
   cryptol:victoredwardocallaghan/cryptol.vim
   crystal:rhysd/vim-crystal
@@ -136,7 +144,6 @@ PACKS="
   fsharp:fsharp/vim-fsharp:_BASIC
   git:tpope/vim-git
   gmpl:maelvalais/gmpl.vim
-  openscad:sirtaj/vim-openscad
   glsl:tikhomirov/vim-glsl
   gnuplot:vim-scripts/gnuplot-syntax-highlighting
   go:fatih/vim-go:_BASIC
@@ -151,9 +158,10 @@ PACKS="
   javascript:pangloss/vim-javascript:_JAVASCRIPT
   jenkins:martinda/Jenkinsfile-vim-syntax
   json:elzr/vim-json
+  json5:GutenYe/json5.vim
   jst:briancollins/vim-jst
   jsx:mxw/vim-jsx:_ALL
-  julia:dcjones/julia-minimalist-vim
+  julia:JuliaEditorSupport/julia-vim
   kotlin:udalov/kotlin-vim
   latex:LaTeX-Box-Team/LaTeX-Box
   less:groenewege/vim-less
@@ -165,7 +173,7 @@ PACKS="
   mathematica:rsmenon/vim-mathematica
   nginx:chr4/nginx.vim
   nim:zah/nim.vim:_BASIC
-  nix:spwhitt/vim-nix
+  nix:LnL7/vim-nix
   objc:b4winckler/vim-objc
   ocaml:jrk/vim-ocaml
   octave:vim-scripts/octave.vim--
@@ -179,8 +187,9 @@ PACKS="
   pug:digitaltoad/vim-pug
   puppet:voxpupuli/vim-puppet
   purescript:purescript-contrib/purescript-vim
-  python:mitsuhiko/vim-python-combined
+  python:vim-python/python-syntax
   python-compiler:aliev/vim-compiler-python
+  python-ident:Vimjas/vim-python-pep8-indent
   qml:peterhoeg/vim-qml
   r-lang:vim-scripts/R.vim
   racket:wlangstroth/vim-racket
@@ -193,6 +202,7 @@ PACKS="
   scala:derekwyatt/vim-scala
   scss:cakebaker/scss-syntax.vim
   slim:slim-template/vim-slim
+  slime:slime-lang/vim-slime-syntax
   solidity:tomlion/vim-solidity
   stylus:wavded/vim-stylus
   swift:keith/swift.vim
