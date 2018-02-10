@@ -11,8 +11,10 @@ if exists('b:current_syntax') && b:current_syntax == 'coffee'
 endif
 
 " Include JavaScript for coffeeEmbed.
-syn include @coffeeJS syntax/javascript.vim
-silent! unlet b:current_syntax
+" Unfortunately, we need to disable inline JS to avoid incorrect script tags.
+" (see https://github.com/posva/vim-vue/issues/69)
+" syn include @coffeeJS syntax/javascript.vim
+" silent! unlet b:current_syntax
 
 " Highlight long strings.
 syntax sync fromstart
