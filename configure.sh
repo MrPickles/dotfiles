@@ -128,9 +128,9 @@ install_zsh() {
   if [[ ! $(echo $SHELL) == $(which zsh) ]]; then
     chsh -s $(which zsh)
   fi
-  # Install Oh My Zsh if it isn't already present
+  # Clone Oh My Zsh if it isn't already present
   if [[ ! -d $HOME/.oh-my-zsh/ ]]; then
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+    git clone --depth=1 https://github.com/robbyrussell/oh-my-zsh.git $HOME/.oh-my-zsh
   fi
 }
 
@@ -164,9 +164,6 @@ sourceFile="$(pwd)/themes/pickles.zsh-theme"
 targetFile="$HOME/.oh-my-zsh/custom/pickles.zsh-theme"
 
 if [[ $BUILD ]]; then
-  # Link custom zsh theme.
-  execute "ln -fs $sourceFile $targetFile" "$targetFile → $sourceFile"
-
   # Prompt to switch to zsh and oh-my-zsh if not active on terminal.
   if [ ! -f /bin/zsh -a ! -f /usr/bin/zsh -o ! -d $HOME/.oh-my-zsh/ ]; then
     ask_for_confirmation "Switch to zsh and oh-my-zsh?"
@@ -174,6 +171,9 @@ if [[ $BUILD ]]; then
       install_zsh
     fi
   fi
+
+  # Link custom zsh theme.
+  execute "ln -fs $sourceFile $targetFile" "$targetFile → $sourceFile"
 
   # Link static gitignore.
   git config --global include.path ~/.gitconfig.static
