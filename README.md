@@ -136,7 +136,7 @@ Alternatively, you can manually clone the repository and run the `configure.sh`
 script.
 
 ```bash
-git clone --depth=1 https://github.com/MrPickles/dotfiles.git ~/.dotfiles
+git clone --depth=1 git@github.com:MrPickles/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
 ./configure.sh -t build
 ```
