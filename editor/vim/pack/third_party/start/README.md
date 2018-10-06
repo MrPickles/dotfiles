@@ -13,3 +13,4 @@ Below are where the original repositories can be found:
 * [vim-fugitive](https://github.com/tpope/vim-fugitive)
 * [vim-gitgutter](https://github.com/airblade/vim-gitgutter)
 * [vim-polyglot](https://github.com/sheerun/vim-polyglot)
+* [vim-tmux-navigator](https://github.com/christoomey/vim-tmux-navigator)
