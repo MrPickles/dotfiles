@@ -48,7 +48,6 @@ declare -a FILES_TO_SYMLINK=(
   'git/main.gitconfig'
   'git/gitignore'
 
-  'shell/dircolors.256dark'
   'shell/ignore'
   'shell/tmux.conf'
   'shell/zshrc'
@@ -172,7 +171,7 @@ unlink_file() {
   fi
 }
 
-# Symlink (or unlink) the dotfiles.
+# Symlink (or unlink) the root dotfiles.
 for i in "${FILES_TO_SYMLINK[@]}"; do
   sourceFile="$(pwd)/$i"
   targetFile="$HOME/.$(printf "%s" "$i" | sed "s/.*\/\(.*\)/\1/g")"
@@ -184,6 +183,7 @@ for i in "${FILES_TO_SYMLINK[@]}"; do
   fi
 done
 
+# Symlink (or unlink) the non-root dotfiles.
 for i in "${FULL_PATH_FILES_TO_SYMLINK[@]}"; do
   sourceFile="$(pwd)/$i"
   targetFile="$HOME/.$i"
@@ -195,6 +195,18 @@ for i in "${FULL_PATH_FILES_TO_SYMLINK[@]}"; do
     unlink_file $sourceFile $targetFile
   fi
 done
+
+# Symlink (or unlink) the dircolors files.
+if [[ $BUILD ]]; then
+  sourceFile="$(pwd)/shell/dircolors.256dark"
+  link_file $sourceFile "$HOME/.dircolors"
+  link_file $sourceFile "$HOME/.dir_colors"
+else
+  # Unlink the dircolors files.
+  sourceFile="$(pwd)/shell/dircolors.256dark"
+  unlink_file $sourceFile "$HOME/.dircolors"
+  unlink_file $sourceFile "$HOME/.dir_colors"
+fi
 
 if [[ $BUILD ]]; then
   # Install zsh (if not available) and oh-my-zsh and p10k.
