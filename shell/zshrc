@@ -52,29 +52,31 @@ if [[ -z "$TMUX" ]]; then
   export TERM="xterm-256color"
 fi
 
-# fzf via Homebrew
-if [ -e /usr/local/opt/fzf/shell/completion.zsh ]; then
-  source /usr/local/opt/fzf/shell/key-bindings.zsh
-  source /usr/local/opt/fzf/shell/completion.zsh
-fi
+# Configure fzf (if available).
+if _has fzf; then
+  # Source fzf key bindings and auto-completion.
+  if [ -e /usr/local/opt/fzf/shell/completion.zsh ]; then
+    # Source fzf scripts via Homebrew.
+    source /usr/local/opt/fzf/shell/key-bindings.zsh
+    source /usr/local/opt/fzf/shell/completion.zsh
+  elif [ -e ~/.fzf ]; then
+    # Source fzf scripts via via local installation.
+    _append_to_path ~/.fzf/bin
+    source ~/.fzf/shell/key-bindings.zsh
+    source ~/.fzf/shell/completion.zsh
+  fi
 
-# fzf via local installation
-if [ -e ~/.fzf ]; then
-  _append_to_path ~/.fzf/bin
-  source ~/.fzf/shell/key-bindings.zsh
-  source ~/.fzf/shell/completion.zsh
-fi
+  # Use ag for fzf.
+  if _has ag; then
+    export FZF_DEFAULT_COMMAND='ag -g ""'
+    export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+    export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
+  fi
 
-# Use ag for fzf.
-if _has fzf && _has ag; then
-  export FZF_DEFAULT_COMMAND='ag -g ""'
-  export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-  export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
-fi
-
-# Source fzf-cd plugin.
-if [[ -f ~/.zsh-interactive-cd.plugin.zsh ]]; then
-  source ~/.zsh-interactive-cd.plugin.zsh
+  # Source fzf-cd plugin.
+  if [[ -f ~/.zsh-interactive-cd.plugin.zsh ]]; then
+    source ~/.zsh-interactive-cd.plugin.zsh
+  fi
 fi
 
 # Source local version of zshrc.
