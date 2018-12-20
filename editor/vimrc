@@ -72,8 +72,8 @@ if has("autocmd")
   autocmd BufNewFile,BufRead *.txt setfiletype text
   " Enable soft-wrapping for text files
   autocmd FileType text,markdown,html,xhtml,eruby setlocal wrap linebreak nolist
-  " Set default tab width to 4 spaces in python
-  au Filetype python setl et ts=4 sw=4
+  " Set default tab width to 4 spaces in Python and Bazel
+  au Filetype python,bzl setl et ts=4 sw=4
   " Set shell script syntax highlighting for zsh-theme files
   au BufRead,BufNewFile *.zsh-theme set syntax=sh
   " For Haml
