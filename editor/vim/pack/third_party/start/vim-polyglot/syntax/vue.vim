@@ -60,6 +60,10 @@ syn keyword htmlSpecialTagName  contained template transition transition-group c
 syn keyword htmlArg             contained scoped ts
 syn match   htmlArg "[@v:][-:.0-9_a-z]*\>" contained
 
+" Keep HTML tag brace colors consistent.
+hi! htmlTag cterm=NONE term=NONE ctermfg=14 ctermbg=NONE
+hi! htmlEndTag cterm=NONE term=NONE ctermfg=14 ctermbg=NONE
+
 let b:current_syntax = "vue"
 
 endif
