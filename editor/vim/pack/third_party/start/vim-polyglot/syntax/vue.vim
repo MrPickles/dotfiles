@@ -56,7 +56,7 @@ if !exists("g:vue_disable_pre_processors") || !g:vue_disable_pre_processors
 endif
 
 syn region  vueSurroundingTag   contained start=+<\(script\|style\|template\)+ end=+>+ fold contains=htmlTagN,htmlString,htmlArg,htmlValue,htmlTagError,htmlEvent
-syn keyword htmlSpecialTagName  contained template
+syn keyword htmlSpecialTagName  contained template transition transition-group component slot
 syn keyword htmlArg             contained scoped ts
 syn match   htmlArg "[@v:][-:.0-9_a-z]*\>" contained
 
