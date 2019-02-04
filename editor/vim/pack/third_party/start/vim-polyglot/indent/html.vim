@@ -427,6 +427,33 @@ fun! HtmlIndentGet(lnum)
         let ind = ind - 1
     endif
 
+    " Hack/path to correctly indent broken opening tags w/attributes.
+    "
+    " GOOD:
+    " ```
+    " <div
+    "   attr1
+    "   attr2
+    " >
+    "   <div></div>
+    " </div>
+    " ```
+    "
+    " BAD:
+    " ```
+    " <div
+    "   attr1
+    "   attr2
+    "   >
+    "   <div></div>
+    " </div>
+    " ```
+    if getline(a:lnum) =~ '^\s*>'
+      let ind = ind - 1
+    elseif getline(a:lnum - 1) =~ '^\s*>'
+      let ind = ind + 1
+    endif
+
     let lind = indent(lnum)
 
     " for tags in s:omittable
