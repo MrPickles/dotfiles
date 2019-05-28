@@ -52,6 +52,14 @@ if [[ -z "$TMUX" ]]; then
   export TERM="xterm-256color"
 fi
 
+# Source local version of zshrc.
+if [[ -f ~/.zshrc.local ]]; then
+  source ~/.zshrc.local
+fi
+
+# Source Oh-My-ZSH.
+source $ZSH/oh-my-zsh.sh
+
 # Configure fzf (if available).
 if _has fzf; then
   # Source fzf key bindings and auto-completion.
@@ -69,8 +77,6 @@ if _has fzf; then
   # Use ag for fzf.
   if _has ag; then
     export FZF_DEFAULT_COMMAND='ag -g ""'
-    export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-    export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
   fi
 
   # Source fzf-cd plugin.
@@ -78,13 +84,6 @@ if _has fzf; then
     source ~/.zsh-interactive-cd.plugin.zsh
   fi
 fi
-
-# Source local version of zshrc.
-if [[ -f ~/.zshrc.local ]]; then
-  source ~/.zshrc.local
-fi
-
-source $ZSH/oh-my-zsh.sh
 
 # Dircolors must be set last, since oh-my-zsh seems to rewrite those values.
 if [[ "$(uname -s)" == "Linux" ]]; then
