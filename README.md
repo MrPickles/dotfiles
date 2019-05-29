@@ -13,6 +13,7 @@ With all of the configuration set up, the terminal looks something like this:
 ![Terminal Screenshot](.images/screenshot.png)
 
 ## Prequisites
+
 These dotfies contain the following software dependencies:
 * Linux or MacOS
 * Vim 8.0+
@@ -27,6 +28,7 @@ You will need Perl in order to run [diff-so-fancy][diff-so-fancy].
 However, this is optional, and you can use the normal diffing tool instead.
 
 ## Setting up your Local Machine
+
 *[Go to the next section](#installation) if you have already configured these
 dotfiles on your machine once, or if you are SSHing into another machine.
 These setup instructions only need to be done once on a local machine.*
@@ -41,6 +43,7 @@ As a result, you'll need to install patched fonts that support Powerline.
 ### MacOS
 
 #### Installing Powerline-compatible Fonts
+
 To install fonts on your Mac go to the Powerline
 [fonts repository][powerline-fonts] and follow the installation instructions.
 
@@ -48,6 +51,7 @@ Next you will want to change the fonts in your iTerm profile.
 Go to the `Text` tab in your current profile and pick an appropriate font.
 
 #### Solarized on iTerm
+
 The Solarized colors for iTerm can be found in its
 [official repository][solarized-repo].
 Import [`Solarized Dark.itermcolors`][itermcolors] as a colorscheme for iTerm.
@@ -58,6 +62,7 @@ in bright colors` setting.
 ![Solarized on iTerm](.images/bold_option.png)
 
 #### Enable Copy/Paste in Tmux
+
 On Macs, `pbcopy` and `pbpaste` don't natively work in tmux.
 Luckly there's a [Homebrew][homebrew] formula to fix that.
 
@@ -69,6 +74,7 @@ The tmux configuration will do the rest for you.
 Note that this only applies to machines running MacOS.
 
 #### Enable Mouse Wheel Scrolling in Vim on iTerm
+
 If using iTerm, setting `Scroll wheel sends arrow keys when in alternate screen
 mode.` to `Yes` will allow trackpad scrolling while in Vim.
 The setting can be found in the advanced preferences.
@@ -76,6 +82,7 @@ The setting can be found in the advanced preferences.
 ### Linux
 
 #### Patching the Font to be Powerline-compatible
+
 In Linux machines, you need to patch the current font to support
 [Powerline][powerline] characters.
 You need [10-powerline-symbols.conf][symbols-conf] and
@@ -91,6 +98,7 @@ wget https://raw.githubusercontent.com/powerline/powerline/master/font/10-powerl
 ```
 
 #### Solarized on Ubuntu Terminal
+
 To get Solarized on the Ubuntu Terminal, you will want to create a new profile.
 Then you will follow the instructions in
 [gnome-terminal-colors-solarized][gnome-terminal-colors-solarized] to set the
@@ -115,15 +123,27 @@ cd gnome-terminal-colors-solarized
 ```
 
 ### Other optional tools
-It is recommended but optional to install [diff-so-fancy][diff-so-fancy] and
-[ag][ag] on your machine.
-Diff-so-fancy is a diffing tool that gives a nicer diff than the git default.
-The Silver Searcher (`ag`) is a faster alternative over `grep`.
-Additionally with `ag`, it is recommended to use [fzf][fzf] as your default
-fuzzy finder.
-You should install them independently of this dotfile repo.
+
+There are a few recommended (but optional) tools you can install to improve your
+shell experience in general.
+
+* [`diff-so-fancy`][diff-so-fancy]: Diff-so-fancy is a diffing tool that gives a
+  nicer diff than the git default.
+* [`ag`][ag]: The Silver Searcher si a faster alternative over `grep`. It was made
+  especially to search through source code more efficiently.
+* [`fzf`][fzf]: Fzf is a general purpose fuzzy funder.
+* `tree`: This will display the directory structure as a tree. We use it to
+  improve the output of `ALT-C` from `fzf`.
+* [`highlight`][highlight]: This adds coloring to output. We also use it to
+  improve the output of `CTRL-T` from `fzf`.
+
+You should install all of these independently of this dotfile repo.
+(This also includes figuring out how to install them.)
+Most of these are Homebrew packages on MacOS (or a target in most Linux package
+managers).
 
 ## Installation
+
 Installation is as simple as downloading and running the install script.
 The install script will run the configuration script, which fetches oh-my-zsh
 and symlinks the dotfiles to your home directory.
@@ -149,6 +169,7 @@ chsh -s $(which zsh)
 ```
 
 ## Customizing
+
 You can customize vim, git, tmux, and zsh for each specific machine.
 Just put any additional configurations in `~/.zshrc.local`, `~/.tmux.conf.local`
 `~/.gitconfig.local` or `~/.vimrc.local`.
@@ -161,6 +182,7 @@ You can read more about it in the [README](themes/README.md) in the `themes/`
 directory.
 
 ## Teardown
+
 To clean up the dotfiles, run the configuration script with the `clean`
 argument.
 It will remove all symlinks, but zsh and oh-my-zsh will be untouched.
@@ -185,6 +207,7 @@ chsh -s `which bash` # optionally change shell back to bash
 [solarized-repo]: <https://github.com/altercation/solarized>
 [ag]: <https://github.com/ggreer/the_silver_searcher>
 [fzf]: <https://github.com/junegunn/fzf>
+[highlight]: <http://www.andre-simon.de/doku/highlight/en/highlight.html>
 
 [itermcolors]: <https://raw.githubusercontent.com/altercation/solarized/e40cd4130e2a82f9b03ada1ca378b7701b1a9110/iterm2-colors-solarized/Solarized%20Dark.itermcolors>
 [symbols-conf]: <https://raw.githubusercontent.com/powerline/powerline/5a24eceae9b61b89b34794fea18b8c51da823a6c/font/10-powerline-symbols.conf>
