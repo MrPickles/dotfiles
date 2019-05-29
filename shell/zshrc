@@ -83,6 +83,15 @@ if _has fzf; then
   if [[ -f ~/.zsh-interactive-cd.plugin.zsh ]]; then
     source ~/.zsh-interactive-cd.plugin.zsh
   fi
+
+  # Display source tree and file preview for CTRL-T and ALT-C.
+  if _has tree; then
+    # Show subdir tree for directories.
+    export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
+    # Show previews for files and directories.
+    # Having `highlight` installed will have syntax highlighting for files.
+    export FZF_CTRL_T_OPTS="--preview '(highlight -O ansi -l {} 2> /dev/null || cat {} || tree -C {}) 2> /dev/null | head -200'"
+  fi
 fi
 
 # Dircolors must be set last, since oh-my-zsh seems to rewrite those values.
