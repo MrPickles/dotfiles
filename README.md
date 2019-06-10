@@ -134,6 +134,7 @@ shell experience in general.
 * [`fzf`][fzf]: Fzf is a general purpose fuzzy funder.
 * `tree`: This will display the directory structure as a tree. We use it to
   improve the output of `ALT-C` from `fzf`.
+* [`blsd`][blsd]: This improves the search output of `ALT-C` from `fzf`.
 * [`highlight`][highlight]: This adds coloring to output. We also use it to
   improve the output of `CTRL-T` from `fzf`.
 
@@ -207,6 +208,7 @@ chsh -s `which bash` # optionally change shell back to bash
 [solarized-repo]: <https://github.com/altercation/solarized>
 [ag]: <https://github.com/ggreer/the_silver_searcher>
 [fzf]: <https://github.com/junegunn/fzf>
+[blsd]: <https://github.com/junegunn/blsd>
 [highlight]: <http://www.andre-simon.de/doku/highlight/en/highlight.html>
 
 [itermcolors]: <https://raw.githubusercontent.com/altercation/solarized/e40cd4130e2a82f9b03ada1ca378b7701b1a9110/iterm2-colors-solarized/Solarized%20Dark.itermcolors>

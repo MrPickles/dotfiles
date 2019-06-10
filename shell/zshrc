@@ -79,6 +79,11 @@ if _has fzf; then
     export FZF_DEFAULT_COMMAND='ag -g ""'
   fi
 
+  # Use blsd for fzf directory search.
+  if _has blsd; then
+    export FZF_ALT_C_COMMAND='blsd'
+  fi
+
   # Source fzf-cd plugin.
   if [[ -f ~/.zsh-interactive-cd.plugin.zsh ]]; then
     source ~/.zsh-interactive-cd.plugin.zsh
