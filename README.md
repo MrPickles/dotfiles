@@ -47,6 +47,9 @@ As a result, you'll need to install patched fonts that support Powerline.
 To install fonts on your Mac go to the Powerline
 [fonts repository][powerline-fonts] and follow the installation instructions.
 
+To install Font Awesome symbols, follow the instructions found in the [Awesome
+Terminal Fonts][awesome-terminal-fonts] repository.
+
 Next you will want to change the fonts in your iTerm profile.
 Go to the `Text` tab in your current profile and pick an appropriate font.
 
@@ -181,6 +184,9 @@ With oh-my-zsh, you can also include zsh themes.
 I've included my own [custom theme](themes/pickles.zsh-theme) by default.
 You can read more about it in the [README](themes/README.md) in the `themes/`
 directory.
+I now use the [Powerlevel10k][powerlevel10k] theme, but you can still use the
+custom theme as a fallback option in case there are any issues installing Font
+Awesome symbols.
 
 ## Teardown
 
@@ -203,6 +209,7 @@ chsh -s `which bash` # optionally change shell back to bash
 [oh-my-zsh]: <https://github.com/robbyrussell/oh-my-zsh>
 [diff-so-fancy]: <https://github.com/so-fancy/diff-so-fancy>
 [powerline-fonts]: <https://github.com/powerline/fonts>
+[awesome-terminal-fonts]: <https://github.com/gabrielelana/awesome-terminal-fonts>
 [gnome-terminal-colors-solarized]: <https://github.com/Anthony25/gnome-terminal-colors-solarized>
 [powerline]: <https://github.com/powerline/powerline>
 [solarized-repo]: <https://github.com/altercation/solarized>
@@ -214,3 +221,5 @@ chsh -s `which bash` # optionally change shell back to bash
 [itermcolors]: <https://raw.githubusercontent.com/altercation/solarized/e40cd4130e2a82f9b03ada1ca378b7701b1a9110/iterm2-colors-solarized/Solarized%20Dark.itermcolors>
 [symbols-conf]: <https://raw.githubusercontent.com/powerline/powerline/5a24eceae9b61b89b34794fea18b8c51da823a6c/font/10-powerline-symbols.conf>
 [symbols-otf]: <https://raw.githubusercontent.com/powerline/powerline/5a24eceae9b61b89b34794fea18b8c51da823a6c/font/PowerlineSymbols.otf>
+
+[powerlevel10k]: <https://github.com/romkatv/powerlevel10k>

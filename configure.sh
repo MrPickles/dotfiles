@@ -132,6 +132,10 @@ install_zsh() {
   if [[ ! -d $HOME/.oh-my-zsh/ ]]; then
     git clone --depth=1 https://github.com/robbyrussell/oh-my-zsh.git $HOME/.oh-my-zsh
   fi
+  # Clone Powerlevel10k if it isn't already present.
+  if [[ ! -d $HOME/.oh-my-zsh/custom/themes/powerlevel10k ]]; then
+    git clone https://github.com/romkatv/powerlevel10k.git $HOME/.oh-my-zsh/custom/themes/powerlevel10k
+  fi
 }
 
 # Symlink (or unlink) the dotfiles.
@@ -160,6 +164,9 @@ for i in ${FILES_TO_SYMLINK[@]}; do
   fi
 done
 
+# Symlink the custom zsh theme.
+# TODO: Consider removing this theme. Though it can stay as a fallback option
+# in case a machine doesn't have the necessary fonts.
 sourceFile="$(pwd)/themes/pickles.zsh-theme"
 targetFile="$HOME/.oh-my-zsh/custom/pickles.zsh-theme"
 
