@@ -118,9 +118,14 @@ if _has fzf; then
     source ~/.fzf/shell/completion.zsh
   fi
 
-  # Use ag for fzf.
-  if _has ag; then
+  if _has rg; then
+    # Use ripgrep for fzf.
+    export FZF_DEFAULT_COMMAND='rg --files --hidden'
+    export FZF_CTRL_T_COMMAND='rg --files --hidden'
+  elif _has ag; then
+    # Use ag for fzf.
     export FZF_DEFAULT_COMMAND='ag -g ""'
+    export FZF_CTRL_T_COMMAND='ag -g ""'
   fi
 
   # Use blsd for fzf directory search.

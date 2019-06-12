@@ -102,7 +102,12 @@ if executable('fzf')
   nnoremap <silent> <C-p> :FZF<CR>
 endif
 
-if executable('ag')
+if executable('rg')
+  " Use rg over ag and grep and ack if available.
+  set grepprg=rg\ --nogroup\ --nocolor
+  " Use rg in ack.vim
+  let g:ackprg = 'rg --vimgrep'
+elseif executable('ag')
   " Use ag over grep and ack if available.
   set grepprg=ag\ --nogroup\ --nocolor
   " Use ag in ack.vim
