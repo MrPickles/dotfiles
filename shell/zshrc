@@ -118,18 +118,23 @@ if _has fzf; then
     source ~/.fzf/shell/completion.zsh
   fi
 
-  if _has rg; then
+  if _has fd; then
+    # Use fd for fzf.
+    export FZF_DEFAULT_COMMAND='fd --type f --follow --hidden --exclude .git'
+  elif _has rg; then
     # Use ripgrep for fzf.
     export FZF_DEFAULT_COMMAND='rg --files --hidden'
-    export FZF_CTRL_T_COMMAND='rg --files --hidden'
   elif _has ag; then
     # Use ag for fzf.
     export FZF_DEFAULT_COMMAND='ag -g ""'
-    export FZF_CTRL_T_COMMAND='ag -g ""'
   fi
+  export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
-  # Use blsd for fzf directory search.
-  if _has blsd; then
+  if _has fd; then
+    # Use fd for fzf directory search.
+    export FZF_ALT_C_COMMAND='fd --type d --color never --hidden --exclude .git'
+  elif _has blsd; then
+    # Use blsd for fzf directory search.
     export FZF_ALT_C_COMMAND='blsd'
   fi
 

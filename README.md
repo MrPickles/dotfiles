@@ -132,14 +132,14 @@ shell experience in general.
 
 * [`diff-so-fancy`][diff-so-fancy]: Diff-so-fancy is a diffing tool that gives a
   nicer diff than the git default.
-* [`ag`][ag]: The Silver Searcher is a faster alternative over `grep`. It was
-  made especially to search through source code more efficiently.
-* [`rg`][rg]: Ripgrep is a faster alternative over `ag`. It has the exact same
-  usage as `ag` and is likely more preferable in all use cases.
+* [`rg`][rg]: Ripgrep is a faster alternative over `ag`, `ack`, and `grep`.
+  It has the exact same usage as `ag` and is likely more preferable in all use
+  cases.
 * [`fzf`][fzf]: Fzf is a general purpose fuzzy funder.
+* [`fd`][fd]: `fd` is a faster alternative to the `find` command.
+  It works very well when paired with `fzf`.
 * `tree`: This will display the directory structure as a tree. We use it to
   improve the output of `ALT-C` from `fzf`.
-* [`blsd`][blsd]: This improves the search output of `ALT-C` from `fzf`.
 * [`highlight`][highlight]: This adds coloring to output. We also use it to
   improve the output of `CTRL-T` from `fzf`.
 
@@ -215,9 +215,9 @@ chsh -s `which bash` # optionally change shell back to bash
 [gnome-terminal-colors-solarized]: <https://github.com/Anthony25/gnome-terminal-colors-solarized>
 [powerline]: <https://github.com/powerline/powerline>
 [solarized-repo]: <https://github.com/altercation/solarized>
-[ag]: <https://github.com/ggreer/the_silver_searcher>
+[rg]: <https://github.com/BurntSushi/ripgrep>
+[fd]: <https://github.com/sharkdp/fd>
 [fzf]: <https://github.com/junegunn/fzf>
-[blsd]: <https://github.com/junegunn/blsd>
 [highlight]: <http://www.andre-simon.de/doku/highlight/en/highlight.html>
 
 [itermcolors]: <https://raw.githubusercontent.com/altercation/solarized/e40cd4130e2a82f9b03ada1ca378b7701b1a9110/iterm2-colors-solarized/Solarized%20Dark.itermcolors>
