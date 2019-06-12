@@ -103,6 +103,10 @@ if executable('fzf')
 endif
 
 if executable('rg')
+  " Space key will open up search.
+  nnoremap <Space> :Rg<CR>
+  nnoremap <leader><Space> :Rg!<CR>
+
   " Use rg over ag and grep and ack if available.
   set grepprg=rg\ --vimgrep\ --color=never\ --no-heading\ --hidden
   " Use rg in ack.vim
