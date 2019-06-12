@@ -129,8 +129,10 @@ shell experience in general.
 
 * [`diff-so-fancy`][diff-so-fancy]: Diff-so-fancy is a diffing tool that gives a
   nicer diff than the git default.
-* [`ag`][ag]: The Silver Searcher si a faster alternative over `grep`. It was made
-  especially to search through source code more efficiently.
+* [`ag`][ag]: The Silver Searcher is a faster alternative over `grep`. It was
+  made especially to search through source code more efficiently.
+* [`rg`][rg]: Ripgrep is a faster alternative over `ag`. It has the exact same
+  usage as `ag` and is likely more preferable in all use cases.
 * [`fzf`][fzf]: Fzf is a general purpose fuzzy funder.
 * `tree`: This will display the directory structure as a tree. We use it to
   improve the output of `ALT-C` from `fzf`.
