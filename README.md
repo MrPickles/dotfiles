@@ -134,6 +134,8 @@ shell experience in general.
 * [`rg`][rg]: Ripgrep is a faster alternative over `ag`. It has the exact same
   usage as `ag` and is likely more preferable in all use cases.
 * [`fzf`][fzf]: Fzf is a general purpose fuzzy funder.
+* [`fd`][fd]: `fd` is a faster alternative to the `find` command. It works very
+  well when paired with `fzf`.
 * `tree`: This will display the directory structure as a tree. We use it to
   improve the output of `ALT-C` from `fzf`.
 * [`blsd`][blsd]: This improves the search output of `ALT-C` from `fzf`.
@@ -209,6 +211,8 @@ chsh -s `which bash` # optionally change shell back to bash
 [powerline]: <https://github.com/powerline/powerline>
 [solarized-repo]: <https://github.com/altercation/solarized>
 [ag]: <https://github.com/ggreer/the_silver_searcher>
+[rg]: <https://github.com/BurntSushi/ripgrep>
+[fd]: <https://github.com/sharkdp/fd>
 [fzf]: <https://github.com/junegunn/fzf>
 [blsd]: <https://github.com/junegunn/blsd>
 [highlight]: <http://www.andre-simon.de/doku/highlight/en/highlight.html>
