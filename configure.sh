@@ -164,12 +164,6 @@ for i in ${FILES_TO_SYMLINK[@]}; do
   fi
 done
 
-# Symlink the custom zsh theme.
-# TODO: Consider removing this theme. Though it can stay as a fallback option
-# in case a machine doesn't have the necessary fonts.
-sourceFile="$(pwd)/themes/pickles.zsh-theme"
-targetFile="$HOME/.oh-my-zsh/custom/pickles.zsh-theme"
-
 if [[ $BUILD ]]; then
   # Prompt to switch to zsh and oh-my-zsh if not active on terminal.
   if [ ! -f /bin/zsh -a ! -f /usr/bin/zsh -o ! -d $HOME/.oh-my-zsh/ ]; then
@@ -178,9 +172,6 @@ if [[ $BUILD ]]; then
       install_zsh
     fi
   fi
-
-  # Link custom zsh theme.
-  execute "ln -fs $sourceFile $targetFile" "$targetFile → $sourceFile"
 
   # Link static gitignore.
   git config --global include.path ~/.gitconfig.static
