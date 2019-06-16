@@ -6,7 +6,7 @@ These dotfiles are best used with zsh, [oh-my-zsh][oh-my-zsh], and the
 [solarized][solarized] colorscheme.
 The configuration has powerline-based fonts status bars for vim and tmux, and
 uses a [Powerlevel10k][powerlevel10k] as its zsh theme.
-Thus you'll need to patch to a font that supports powerline and font-awesome
+Thus you'll need to patch to a font that supports powerline and Font Awesome
 symbols.
 
 ## Prequisites
@@ -49,6 +49,11 @@ Terminal Fonts][awesome-terminal-fonts] repository.
 
 Next you will want to change the fonts in your iTerm profile.
 Go to the `Text` tab in your current profile and pick an appropriate font.
+
+#### Patching the Font to be Font Awesome-compatible
+
+There are very detailed instructions on how to set up the fonts [here][fa-mac]
+cand [here][fa-mac-wiki].
 
 #### Solarized on iTerm
 
@@ -95,6 +100,22 @@ wget https://raw.githubusercontent.com/powerline/powerline/master/font/Powerline
 mkdir -p ~/.config/fontconfig/conf.d && cd ~/.config/fontconfig/conf.d
 fc-cache -vf ~/.fonts/
 wget https://raw.githubusercontent.com/powerline/powerline/master/font/10-powerline-symbols.conf
+```
+
+#### Patching the Font to be Font Awesome-compatible
+
+You'll need to do some [additional patching][fa-linux] for Font Awesome symbols.
+The instructions are in the link from the previous sentence, but your commands
+will end up looking something like what's below.
+
+```shell
+mkdir -p ~/.fonts/ && mkdir -p ~/.config/fontconfig/conf.d
+cp third_party/awesome-terminal-fonts/build/*.ttf ~/.fonts/
+cp third_party/awesome-terminal-fonts/build/*.sh ~/.fonts/
+fc-cache -vf ~/.fonts/
+# Edit 10-symbols.conf with your desired font.
+cp third_party/awesome-terminal-fonts/config/10-symbols.conf ~/.config/fontconfig/conf.d
+source ~/.fonts/*.sh
 ```
 
 #### Solarized on Ubuntu Terminal
@@ -222,3 +243,6 @@ chsh -s `which bash` # optionally change shell back to bash
 [symbols-otf]: <https://raw.githubusercontent.com/powerline/powerline/5a24eceae9b61b89b34794fea18b8c51da823a6c/font/PowerlineSymbols.otf>
 
 [powerlevel10k]: <https://github.com/romkatv/powerlevel10k>
+[fa-mac]: <https://github.com/gabrielelana/awesome-terminal-fonts#how-to-install-osx>
+[fa-mac-wiki]: <https://github.com/gabrielelana/awesome-terminal-fonts/wiki/OS-X>
+[fa-linux]: <https://github.com/gabrielelana/awesome-terminal-fonts#how-to-install-linux>
