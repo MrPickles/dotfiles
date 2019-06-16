@@ -104,9 +104,11 @@ wget https://raw.githubusercontent.com/powerline/powerline/master/font/10-powerl
 
 #### Patching the Font to be Font Awesome-compatible
 
-You'll need to do some [additional patching][fa-linux] for Font Awesome symbols.
+You may need to do some [additional patching][fa-linux] for Font Awesome.
 The instructions are in the link from the previous sentence, but your commands
 will end up looking something like what's below.
+Make sure that the symbols aren't already available out of the box before trying
+any patching.
 
 ```shell
 mkdir -p ~/.fonts/ && mkdir -p ~/.config/fontconfig/conf.d
