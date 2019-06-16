@@ -5,12 +5,9 @@ These are my personal dotfiles.
 These dotfiles are best used with zsh, [oh-my-zsh][oh-my-zsh], and the
 [solarized][solarized] colorscheme.
 The configuration has powerline-based fonts status bars for vim and tmux, and
-uses a custom zsh theme similar to agnoster.
-Thus you'll need to patch to a font that supports powerline.
-
-With all of the configuration set up, the terminal looks something like this:
-
-![Terminal Screenshot](.images/screenshot.png)
+uses a [Powerlevel10k][powerlevel10k] as its zsh theme.
+Thus you'll need to patch to a font that supports powerline and font-awesome
+symbols.
 
 ## Prequisites
 
