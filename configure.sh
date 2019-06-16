@@ -132,6 +132,10 @@ install_zsh() {
   if [[ ! -d $HOME/.oh-my-zsh/ ]]; then
     git clone --depth=1 https://github.com/robbyrussell/oh-my-zsh.git $HOME/.oh-my-zsh
   fi
+  # Clone Powerlevel10k if it isn't already present.
+  if [[ ! -d $HOME/.oh-my-zsh/custom/themes/powerlevel10k ]]; then
+    git clone https://github.com/romkatv/powerlevel10k.git $HOME/.oh-my-zsh/custom/themes/powerlevel10k
+  fi
 }
 
 # Symlink (or unlink) the dotfiles.
@@ -160,20 +164,14 @@ for i in ${FILES_TO_SYMLINK[@]}; do
   fi
 done
 
-sourceFile="$(pwd)/themes/pickles.zsh-theme"
-targetFile="$HOME/.oh-my-zsh/custom/pickles.zsh-theme"
-
 if [[ $BUILD ]]; then
   # Prompt to switch to zsh and oh-my-zsh if not active on terminal.
-  if [ ! -f /bin/zsh -a ! -f /usr/bin/zsh -o ! -d $HOME/.oh-my-zsh/ ]; then
+  if [ ! -f /bin/zsh -a ! -f /usr/bin/zsh -o ! -d $HOME/.oh-my-zsh/custom/themes/powerlevel10k ]; then
     ask_for_confirmation "Switch to zsh and oh-my-zsh?"
     if answer_is_yes; then
       install_zsh
     fi
   fi
-
-  # Link custom zsh theme.
-  execute "ln -fs $sourceFile $targetFile" "$targetFile → $sourceFile"
 
   # Link static gitignore.
   git config --global include.path ~/.gitconfig.static

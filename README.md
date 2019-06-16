@@ -5,12 +5,9 @@ These are my personal dotfiles.
 These dotfiles are best used with zsh, [oh-my-zsh][oh-my-zsh], and the
 [solarized][solarized] colorscheme.
 The configuration has powerline-based fonts status bars for vim and tmux, and
-uses a custom zsh theme similar to agnoster.
-Thus you'll need to patch to a font that supports powerline.
-
-With all of the configuration set up, the terminal looks something like this:
-
-![Terminal Screenshot](.images/screenshot.png)
+uses [Powerlevel10k][powerlevel10k] as its zsh theme.
+Thus you'll need to patch to a font that supports powerline and Font Awesome
+symbols.
 
 ## Prequisites
 
@@ -47,8 +44,16 @@ As a result, you'll need to install patched fonts that support Powerline.
 To install fonts on your Mac go to the Powerline
 [fonts repository][powerline-fonts] and follow the installation instructions.
 
+To install Font Awesome symbols, follow the instructions found in the [Awesome
+Terminal Fonts][awesome-terminal-fonts] repository.
+
 Next you will want to change the fonts in your iTerm profile.
 Go to the `Text` tab in your current profile and pick an appropriate font.
+
+#### Patching the Font to be Font Awesome-compatible
+
+There are very detailed instructions on how to set up the fonts [here][fa-mac]
+cand [here][fa-mac-wiki].
 
 #### Solarized on iTerm
 
@@ -95,6 +100,24 @@ wget https://raw.githubusercontent.com/powerline/powerline/master/font/Powerline
 mkdir -p ~/.config/fontconfig/conf.d && cd ~/.config/fontconfig/conf.d
 fc-cache -vf ~/.fonts/
 wget https://raw.githubusercontent.com/powerline/powerline/master/font/10-powerline-symbols.conf
+```
+
+#### Patching the Font to be Font Awesome-compatible
+
+You may need to do some [additional patching][fa-linux] for Font Awesome.
+The instructions are in the link from the previous sentence, but your commands
+will end up looking something like what's below.
+Make sure that the symbols aren't already available out of the box before trying
+any patching.
+
+```shell
+mkdir -p ~/.fonts/ && mkdir -p ~/.config/fontconfig/conf.d
+cp third_party/awesome-terminal-fonts/build/*.ttf ~/.fonts/
+cp third_party/awesome-terminal-fonts/build/*.sh ~/.fonts/
+fc-cache -vf ~/.fonts/
+# Edit 10-symbols.conf with your desired font.
+cp third_party/awesome-terminal-fonts/config/10-symbols.conf ~/.config/fontconfig/conf.d
+source ~/.fonts/*.sh
 ```
 
 #### Solarized on Ubuntu Terminal
@@ -183,6 +206,9 @@ With oh-my-zsh, you can also include zsh themes.
 I've included my own [custom theme](themes/pickles.zsh-theme) by default.
 You can read more about it in the [README](themes/README.md) in the `themes/`
 directory.
+I now use the [Powerlevel10k][powerlevel10k] theme, but you can still use the
+custom theme as a fallback option in case there are any issues installing Font
+Awesome symbols.
 
 ## Teardown
 
@@ -205,6 +231,7 @@ chsh -s `which bash` # optionally change shell back to bash
 [oh-my-zsh]: <https://github.com/robbyrussell/oh-my-zsh>
 [diff-so-fancy]: <https://github.com/so-fancy/diff-so-fancy>
 [powerline-fonts]: <https://github.com/powerline/fonts>
+[awesome-terminal-fonts]: <https://github.com/gabrielelana/awesome-terminal-fonts>
 [gnome-terminal-colors-solarized]: <https://github.com/Anthony25/gnome-terminal-colors-solarized>
 [powerline]: <https://github.com/powerline/powerline>
 [solarized-repo]: <https://github.com/altercation/solarized>
@@ -216,3 +243,8 @@ chsh -s `which bash` # optionally change shell back to bash
 [itermcolors]: <https://raw.githubusercontent.com/altercation/solarized/e40cd4130e2a82f9b03ada1ca378b7701b1a9110/iterm2-colors-solarized/Solarized%20Dark.itermcolors>
 [symbols-conf]: <https://raw.githubusercontent.com/powerline/powerline/5a24eceae9b61b89b34794fea18b8c51da823a6c/font/10-powerline-symbols.conf>
 [symbols-otf]: <https://raw.githubusercontent.com/powerline/powerline/5a24eceae9b61b89b34794fea18b8c51da823a6c/font/PowerlineSymbols.otf>
+
+[powerlevel10k]: <https://github.com/romkatv/powerlevel10k>
+[fa-mac]: <https://github.com/gabrielelana/awesome-terminal-fonts#how-to-install-osx>
+[fa-mac-wiki]: <https://github.com/gabrielelana/awesome-terminal-fonts/wiki/OS-X>
+[fa-linux]: <https://github.com/gabrielelana/awesome-terminal-fonts#how-to-install-linux>
