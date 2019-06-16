@@ -40,6 +40,9 @@ command! Wqa wqa
 command! WQa wqa
 command! WQA wqa
 
+" Map ctrl-n to toggle NERDTree.
+map <C-n> :NERDTreeToggle<CR>
+
 " case only matters with mixed case expressions
 set ignorecase
 set smartcase
