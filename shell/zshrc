@@ -132,7 +132,7 @@ if _has fzf; then
 
   if _has fd; then
     # Use fd for fzf directory search.
-    export FZF_ALT_C_COMMAND='fd --type d --color never --hidden --exclude .git'
+    export FZF_ALT_C_COMMAND='fd --type d --color never'
   elif _has blsd; then
     # Use blsd for fzf directory search.
     export FZF_ALT_C_COMMAND='blsd'
