@@ -212,14 +212,6 @@ Just put any additional configurations in `~/.zshrc.local`, `~/.tmux.conf.local`
 Sample local configs are included in this repo.
 Custom git configurations can also be placed in `.gitconfig`.
 
-With oh-my-zsh, you can also include zsh themes.
-I've included my own [custom theme](themes/pickles.zsh-theme) by default.
-You can read more about it in the [README](themes/README.md) in the `themes/`
-directory.
-I now use the [Powerlevel10k][powerlevel10k] theme, but you can still use the
-custom theme as a fallback option in case there are any issues installing Font
-Awesome symbols.
-
 ## Teardown
 
 To clean up the dotfiles, run the configuration script with the `clean`
