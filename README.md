@@ -39,21 +39,35 @@ As a result, you'll need to install patched fonts that support Powerline.
 
 ### MacOS
 
-#### Installing Powerline-compatible Fonts
+#### Installing Powerline/Font Awesome Fonts
 
-To install fonts on your Mac go to the Powerline
-[fonts repository][powerline-fonts] and follow the installation instructions.
+The terminal prompt uses characters from [Powerline][powerline] and
+[Font Awesome][awesome-terminal-fonts].
+Fortunately, we have a pre-patched font that contains all the necessary symbols.
 
-To install Font Awesome symbols, follow the instructions found in the [Awesome
-Terminal Fonts][awesome-terminal-fonts] repository.
+1. Install the file at
+   `third_party/awesome-terminal-fonts/patched/Droid+Sans+Mono+Awesome.ttf`.
+   Clicking on the file from Finder should be sufficient.
+2. Go to the `Text` tab in your current iTerm profile and select the option to
+   `Use a different font for non-ASCII text`.
+3. In the same tab, select `Droid Sans Mono Awesome` as the font for non-ASCII
+   text.
 
-Next you will want to change the fonts in your iTerm profile.
-Go to the `Text` tab in your current profile and pick an appropriate font.
+To patch your own fonts or configure the symbols for all other fonts, you can
+take a look at the [Mac installation instructions][fa-mac] for Font Awesome, or
+read the [wiki][fa-mac-wiki].
+Do note that the setup is much more involved than just using a pre-patched font.
 
-#### Patching the Font to be Font Awesome-compatible
+The Powerline symbols included in the font might not align well.
+As a remedy, iTerm has a `Use built-in Powerline glyphs` option to substitute
+the characters with its own built-in alternative characters.
+I'd recommend checking that option.
 
-There are very detailed instructions on how to set up the fonts [here][fa-mac]
-cand [here][fa-mac-wiki].
+The Text section of my iTerm settings looks like the picture below.
+For ASCII text, I use `Menlo Regular` (which is a native font) and use 14pt for
+all font types.
+
+![Text section of iTerm settings](.images/iterm_options.png)
 
 #### Solarized on iTerm
 
@@ -61,10 +75,6 @@ The Solarized colors for iTerm can be found in its
 [official repository][solarized-repo].
 Import [`Solarized Dark.itermcolors`][itermcolors] as a colorscheme for iTerm.
 In the `Colors` section of your iTerm profile, use the `Solarized Dark` preset.
-To get the directory colors to work, you'll need to uncheck the `Draw bold text
-in bright colors` setting.
-
-![Solarized on iTerm](.images/bold_option.png)
 
 #### Enable Copy/Paste in Tmux
 
