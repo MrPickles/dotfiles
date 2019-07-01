@@ -50,6 +50,7 @@ declare -a FILES_TO_SYMLINK=(
 
   'shell/dircolors.256dark'
   'shell/gdbinit'
+  'shell/ignore'
   'shell/tmux.conf'
   'shell/zshrc'
 

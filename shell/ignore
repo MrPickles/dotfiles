@@ -1,0 +1,11 @@
+# Common folders
+.git/
+node_modules/
+Library/
+
+# Common artifact files
+.DS_Store
+.localized
+
+# Vim swapfiles
+*.swp
