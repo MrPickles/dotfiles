@@ -120,7 +120,7 @@ if _has fzf; then
 
   if _has fd; then
     # Use fd for fzf.
-    export FZF_DEFAULT_COMMAND='fd --type f --follow --hidden --exclude .git'
+    export FZF_DEFAULT_COMMAND='fd --type f --follow --hidden'
   elif _has rg; then
     # Use ripgrep for fzf.
     export FZF_DEFAULT_COMMAND='rg --files --hidden'
