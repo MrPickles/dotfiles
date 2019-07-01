@@ -45,11 +45,13 @@ The terminal prompt uses characters from [Powerline][powerline] and
 [Font Awesome][awesome-terminal-fonts].
 Fortunately, we have a pre-patched font that contains all the necessary symbols.
 
-1. To use the pre-patched font, install the file at
+1. Install the file at
    `third_party/awesome-terminal-fonts/patched/Droid+Sans+Mono+Awesome.ttf`.
-2. Next you will want to change the fonts in your iTerm profile.
-3. Go to the `Text` tab in your current profile and pick
-   `Droid Sans Mono Awesome` for non-ASCII text.
+   Clicking on the file from Finder should be sufficient.
+2. Go to the `Text` tab in your current iTerm profile and select the option to
+   `Use a different font for non-ASCII text`.
+3. In the same tab, select `Droid Sans Mono Awesome` as the font for non-ASCII
+   text.
 
 To patch your own fonts or configure the symbols for all other fonts, you can
 take a look at the [Mac installation instructions][fa-mac] for Font Awesome, or
