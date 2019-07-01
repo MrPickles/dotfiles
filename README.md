@@ -44,13 +44,12 @@ As a result, you'll need to install patched fonts that support Powerline.
 The terminal prompt uses characters from [Powerline][powerline] and
 [Font Awesome][awesome-terminal-fonts].
 Fortunately, we have a pre-patched font that contains all the necessary symbols.
-To use the pre-patched font, install the file at
-`third_party/awesome-terminal-fonts/patched/Droid+Sans+Mono+Awesome.ttf`.
-Next you will want to change the fonts in your iTerm profile.
-Go to the `Text` tab in your current profile and pick `Droid Sans Mono Awesome`
-for non-ASCII text.
-For ASCII text, I use `Menlo Regular` (which is a native font) and use 14pt for
-all font types.
+
+1. To use the pre-patched font, install the file at
+   `third_party/awesome-terminal-fonts/patched/Droid+Sans+Mono+Awesome.ttf`.
+2. Next you will want to change the fonts in your iTerm profile.
+3. Go to the `Text` tab in your current profile and pick
+   `Droid Sans Mono Awesome` for non-ASCII text.
 
 To patch your own fonts or configure the symbols for all other fonts, you can
 take a look at the [Mac installation instructions][fa-mac] for Font Awesome, or
@@ -63,6 +62,8 @@ the characters with its own built-in alternative characters.
 I'd recommend checking that option.
 
 The Text section of my iTerm settings looks like the picture below.
+For ASCII text, I use `Menlo Regular` (which is a native font) and use 14pt for
+all font types.
 
 ![Text section of iTerm settings](.images/iterm_options.png)
 
