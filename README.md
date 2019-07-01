@@ -11,31 +11,28 @@ symbols.
 
 ## Prequisites
 
-These dotfies contain the following software dependencies:
+These dotfiles contain the following software dependencies:
+
 * Linux or MacOS
 * Vim 8.0+
-* Perl 5.8+ (optional)
 
 There currently is no Windows support.
-However MacOS and most flavors of Linux should work fine.
+However, MacOS and most flavors of Linux should work fine.
 These dotfiles use Vim's new [native package manager][vim8] in order to
 distribute modules in an organized fashion, so versions of Vim before 8 will not
 function properly.
-You will need Perl in order to run [diff-so-fancy][diff-so-fancy].
-However, this is optional, and you can use the normal diffing tool instead.
 
 ## Setting up your Local Machine
 
-*[Go to the next section](#installation) if you have already configured these
+_[Go to the next section](#installation) if you have already configured these
 dotfiles on your machine once, or if you are SSHing into another machine.
-These setup instructions only need to be done once on a local machine.*
+These setup instructions only need to be done once on a local machine._
 
 New machines require two tasks to be done which are not part of the setup
-script: installing (and using) Powerline-compatible fonts and using the
-Solarized colorscheme.
-This configuration uses a zsh theme similar to Agnoster.
-It also uses Powerline for vim and tmux.
-As a result, you'll need to install patched fonts that support Powerline.
+script:
+
+* installing (and using) Powerline/Font Awesome-compatible fonts, and
+* using the Solarized colorscheme.
 
 ### MacOS
 
@@ -81,7 +78,7 @@ In the `Colors` section of your iTerm profile, use the `Solarized Dark` preset.
 On Macs, `pbcopy` and `pbpaste` don't natively work in tmux.
 Luckly there's a [Homebrew][homebrew] formula to fix that.
 
-```bash
+```shell
 brew install reattach-to-user-namespace
 ```
 
@@ -104,7 +101,7 @@ You need [10-powerline-symbols.conf][symbols-conf] and
 [PowerlineSymbols.otf][symbols-otf].
 Follow the commands below to patch the font.
 
-```bash
+```shell
 mkdir -p ~/.fonts/ && cd ~/.fonts/
 wget https://raw.githubusercontent.com/powerline/powerline/master/font/PowerlineSymbols.otf
 mkdir -p ~/.config/fontconfig/conf.d && cd ~/.config/fontconfig/conf.d
@@ -149,7 +146,7 @@ Finally clone the
 [gnome-terminal-colors-solarized repo][gnome-terminal-colors-solarized] and
 follow its installation instructions.
 
-```bash
+```shell
 git clone https://github.com/Anthony25/gnome-terminal-colors-solarized.git
 cd gnome-terminal-colors-solarized
 ./set_dark.sh
@@ -184,14 +181,14 @@ Installation is as simple as downloading and running the install script.
 The install script will run the configuration script, which fetches oh-my-zsh
 and symlinks the dotfiles to your home directory.
 
-```bash
+```shell
 curl -sL https://raw.githubusercontent.com/MrPickles/dotfiles/master/install.sh | sh
 ```
 
 Alternatively, you can manually clone the repository and run the `configure.sh`
 script.
 
-```bash
+```shell
 git clone --depth=1 git@github.com:MrPickles/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
 ./configure.sh -t build
@@ -200,7 +197,7 @@ cd ~/.dotfiles
 You will also likely need to manually change your shell to `zsh` if you are
 currently using a different shell.
 
-```bash
+```shell
 chsh -s $(which zsh)
 ```
 
@@ -219,11 +216,11 @@ argument.
 It will remove all symlinks, but zsh and oh-my-zsh will be untouched.
 If you wish to remove those, you will have to manually delete them.
 
-```bash
+```shell
 cd ~/.dotfiles
 ./configure.sh -t clean
 rm -rf ~/.oh-my-zsh # optionally remove oh-my-zsh
-chsh -s `which bash` # optionally change shell back to bash
+chsh -s $(which bash) # optionally change shell back to bash
 ```
 
 [solarized]: <http://ethanschoonover.com/solarized>
