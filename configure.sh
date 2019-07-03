@@ -176,7 +176,4 @@ if [[ $BUILD ]]; then
 
   # Link static gitignore.
   git config --global include.path ~/.gitconfig.static
-else
-  # Unlink custom zsh theme.
-  execute "unlink $targetFile" "$targetFile"
 fi
