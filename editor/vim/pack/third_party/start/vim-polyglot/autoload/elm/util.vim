@@ -1,5 +1,7 @@
-if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'elm') == -1
-  
+if exists('g:polyglot_disabled') && index(g:polyglot_disabled, 'elm') != -1
+  finish
+endif
+
 " IsWin returns 1 if current OS is Windows or 0 otherwise
 fun! elm#util#IsWin() abort
   let l:win = ['win16', 'win32', 'win32unix', 'win64', 'win95']
@@ -134,7 +136,13 @@ function! elm#util#GoToModule(name)
 endfunction
 
 function! s:findLocalModule(rel_path, root)
-  let l:package_json = a:root . '/elm-package.json'
+  let l:old_match = findfile('elm-package.json', a:root . ';')
+  let l:new_match = findfile('elm.json', a:root . ';')
+  if !empty(l:new_match)
+    let l:package_json = l:new_match
+  elseif !empty(l:old_match)
+    let l:package_json = l:old_match
+  endif
   if exists('*json_decode')
     let l:package = json_decode(readfile(l:package_json))
     let l:source_roots = l:package['source-directories']
@@ -174,5 +182,3 @@ function! s:error(msg)
 	echohl NONE
 	let v:errmsg = a:msg
 endfunction
-
-endif

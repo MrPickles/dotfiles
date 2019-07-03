@@ -1,5 +1,7 @@
-if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'elixir') == -1
-  
+if exists('g:polyglot_disabled') && index(g:polyglot_disabled, 'elixir') != -1
+  finish
+endif
+
 if exists("b:did_ftplugin")
   finish
 endif
@@ -22,7 +24,10 @@ if !exists("b:eelixir_subtype")
     let b:eelixir_subtype = matchstr(&filetype,'^eex\.\zs\w\+')
   endif
   if b:eelixir_subtype == ''
-    let b:eelixir_subtype = matchstr(substitute(expand("%:t"),'\c\%(\.eex\|\.eelixir\)\+$','',''),'\.\zs\w\+$')
+    let b:eelixir_subtype = matchstr(&filetype,'^leex\.\zs\w\+')
+  endif
+  if b:eelixir_subtype == ''
+    let b:eelixir_subtype = matchstr(substitute(expand("%:t"),'\c\%(\.eex\|\.leex\|\.eelixir\)\+$','',''),'\.\zs\w\+$')
   endif
   if b:eelixir_subtype == 'ex'
     let b:eelixir_subtype = 'elixir'
@@ -104,5 +109,3 @@ let b:undo_ftplugin = "setl cms< " .
       \ " | unlet! b:browsefilter b:match_words | " . s:undo_ftplugin
 
 let &cpo = s:save_cpo
-
-endif

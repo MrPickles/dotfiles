@@ -1,5 +1,7 @@
-if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'coffee-script') == -1
-  
+if exists('g:polyglot_disabled') && index(g:polyglot_disabled, 'coffee-script') != -1
+  finish
+endif
+
 " Language:    CoffeeScript
 " Maintainer:  Mick Koch <mick@kochm.co>
 " URL:         http://github.com/kchmck/vim-coffee-script
@@ -11,10 +13,8 @@ if exists('b:current_syntax') && b:current_syntax == 'coffee'
 endif
 
 " Include JavaScript for coffeeEmbed.
-" Unfortunately, we need to disable inline JS to avoid incorrect script tags.
-" (see https://github.com/posva/vim-vue/issues/69)
-" syn include @coffeeJS syntax/javascript.vim
-" silent! unlet b:current_syntax
+syn include @coffeeJS syntax/javascript.vim
+silent! unlet b:current_syntax
 
 " Highlight long strings.
 syntax sync fromstart
@@ -36,7 +36,7 @@ hi def link coffeeConditional Conditional
 syn match coffeeException /\<\%(try\|catch\|finally\)\>/ display
 hi def link coffeeException Exception
 
-syn match coffeeKeyword /\<\%(new\|in\|of\|by\|and\|or\|not\|is\|isnt\|class\|extends\|super\|do\|yield\|debugger\|import\|export\|default\|await\)\>/
+syn match coffeeKeyword /\<\%(new\|in\|of\|from\|by\|and\|or\|not\|is\|isnt\|class\|extends\|super\|do\|yield\|debugger\|import\|export\|default\|await\)\>/
 \                       display
 " The `own` keyword is only a keyword after `for`.
 syn match coffeeKeyword /\<for\s\+own\>/ contained containedin=coffeeRepeat
@@ -222,6 +222,4 @@ syn cluster coffeeAll contains=coffeeStatement,coffeeRepeat,coffeeConditional,
 
 if !exists('b:current_syntax')
   let b:current_syntax = 'coffee'
-endif
-
 endif

@@ -1,5 +1,7 @@
-if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'yaml') == -1
-  
+if exists('g:polyglot_disabled') && index(g:polyglot_disabled, 'yaml') != -1
+  finish
+endif
+
 " To make this file do stuff, add something like the following (without the
 " leading ") to your ~/.vimrc:
 " au BufNewFile,BufRead *.yaml,*.yml so ~/src/PyYaml/YAML.vim
@@ -21,13 +23,17 @@ if version < 600
 endif
 syntax clear
 
-syn match yamlBlock "[\[\]\{\}\|\>]"
+syn match yamlInline "[\[\]\{\}]"
+syn match yamlBlock "[>|]\d\?[+-]"
 
 syn region yamlComment	start="\#" end="$"
 syn match yamlIndicator	"#YAML:\S\+"
 
-syn region yamlString	start="\(^\|\s\|\[\|\,\|\-\)'" end="'" skip="\\'"
+syn region yamlString	start="\(^\|\s\|\[\|\,\|\-\)\@<='" end="'" skip="\\'"
 syn region yamlString	start='"' end='"' skip='\\"' contains=yamlEscape
+syn region yamlString	matchgroup=yamlBlock start=/[>|]\s*\n\+\z(\s\+\)\S/rs=s+1 skip=/^\%(\z1\S\|^$\)/ end=/^\z1\@!.*/me=s-1
+syn region yamlString	matchgroup=yamlBlock start=/[>|]\(\d\|[+-]\)\s*\n\+\z(\s\+\)\S/rs=s+2 skip=/^\%(\z1\S\|^$\)/ end=/^\z1\@!.*/me=s-1
+syn region yamlString	matchgroup=yamlBlock start=/[>|]\d\(\d\|[+-]\)\s*\n\+\z(\s\+\)\S/rs=s+3 skip=/^\%(\z1\S\|^$\)/ end=/^\z1\@!.*/me=s-1
 syn match  yamlEscape	+\\[abfnrtv'"\\]+ contained
 syn match  yamlEscape	"\\\o\o\=\o\=" contained
 syn match  yamlEscape	"\\x\x\+" contained
@@ -53,8 +59,7 @@ hi link yamlKey		Identifier
 hi link yamlType	Type
 
 hi link yamlComment	Comment
+hi link yamlInline	Operator
 hi link yamlBlock	Operator
 hi link yamlString	String
 hi link yamlEscape	Special
-
-endif

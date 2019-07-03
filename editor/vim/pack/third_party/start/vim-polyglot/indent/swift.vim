@@ -1,5 +1,7 @@
-if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'swift') == -1
-  
+if exists('g:polyglot_disabled') && index(g:polyglot_disabled, 'swift') != -1
+  finish
+endif
+
 " File: swift.vim
 " Author: Keith Smiley
 " Description: The indent file for Swift
@@ -42,11 +44,15 @@ endfunction
 
 function! s:IsExcludedFromIndentAtPosition(line, column)
   let name = s:SyntaxNameAtPosition(a:line, a:column)
-  return name ==# "swiftComment" || name ==# "swiftString"
+  return s:IsSyntaxNameExcludedFromIndent(name)
 endfunction
 
 function! s:IsExcludedFromIndent()
-  return s:SyntaxName() ==# "swiftComment" || s:SyntaxName() ==# "swiftString"
+  return s:IsSyntaxNameExcludedFromIndent(s:SyntaxName())
+endfunction
+
+function! s:IsSyntaxNameExcludedFromIndent(name)
+  return a:name ==# "swiftComment" || a:name ==# "swiftString" || a:name ==# "swiftInterpolatedWrapper" || a:name ==# "swiftMultilineInterpolatedWrapper" || a:name ==# "swiftMultilineString"
 endfunction
 
 function! s:IsCommentLine(lnum)
@@ -103,10 +109,10 @@ function! SwiftIndent(...)
     return indent(openingSquare) + shiftwidth()
   endif
 
-  if line =~ ":$"
+  if line =~ ":$" && (line =~ '^\s*case\W' || line =~ '^\s*default\W')
     let switch = search("switch", "bWn")
     return indent(switch)
-  elseif previous =~ ":$"
+  elseif previous =~ ":$" && (previous =~ '^\s*case\W' || previous =~ '^\s*default\W')
     return previousIndent + shiftwidth()
   endif
 
@@ -133,12 +139,26 @@ function! SwiftIndent(...)
       return previousIndent + shiftwidth()
     elseif line =~ "}.*{"
       let openingBracket = searchpair("{", "", "}", "bWn", "s:IsExcludedFromIndent()")
+
+      let bracketLine = getline(openingBracket)
+      let numOpenParensBracketLine = s:NumberOfMatches("(", bracketLine, openingBracket)
+      let numCloseParensBracketLine = s:NumberOfMatches(")", bracketLine, openingBracket)
+      if numOpenParensBracketLine > numCloseParensBracketLine
+        let line = line(".")
+        let column = col(".")
+        call cursor(openingParen, column)
+        let openingParenCol = searchpairpos("(", "", ")", "bWn", "s:IsExcludedFromIndent()")[1]
+        call cursor(line, column)
+        return openingParenCol
+      endif
+
       return indent(openingBracket)
     elseif currentCloseBrackets > currentOpenBrackets
       let column = col(".")
-      call cursor(line("."), 1)
+      let line = line(".")
+      call cursor(line, 1)
       let openingBracket = searchpair("{", "", "}", "bWn", "s:IsExcludedFromIndent()")
-      call cursor(line("."), column)
+      call cursor(line, column)
 
       let bracketLine = getline(openingBracket)
 
@@ -151,8 +171,23 @@ function! SwiftIndent(...)
         let openingParen = searchpair("(", "", ")", "bWn", "s:IsExcludedFromIndent()")
         call cursor(line, column)
         return indent(openingParen)
+      elseif numOpenParensBracketLine > numCloseParensBracketLine
+        let line = line(".")
+        let column = col(".")
+        call cursor(openingParen, column)
+        let openingParenCol = searchpairpos("(", "", ")", "bWn", "s:IsExcludedFromIndent()")[1]
+        call cursor(line, column)
+        return openingParenCol
       endif
+
       return indent(openingBracket)
+    elseif line =~ '^\s*)$'
+      let line = line(".")
+      let column = col(".")
+      call cursor(line, 1)
+      let openingParen = searchpair("(", "", ")", "bWn", "s:IsExcludedFromIndent()")
+      call cursor(line, column)
+      return indent(openingParen)
     else
       " - Current line is blank, and the user presses 'o'
       return previousIndent
@@ -196,8 +231,19 @@ function! SwiftIndent(...)
         return previousIndent + shiftwidth()
       endif
 
-      let previousParen = match(previous, "(")
-      return indent(previousParen) + shiftwidth()
+      let previousParen = match(previous, '\v\($')
+      if previousParen != -1
+        return previousIndent + shiftwidth()
+      endif
+
+      let line = line(".")
+      let column = col(".")
+      call cursor(previousNum, col([previousNum, "$"]))
+      let previousParen = searchpairpos("(", "", ")", "cbWn", "s:IsExcludedFromIndent()")
+      call cursor(line, column)
+
+      " Match the last non escaped paren on the previous line
+      return previousParen[1]
     endif
 
     if numOpenBrackets > numCloseBrackets
@@ -206,7 +252,7 @@ function! SwiftIndent(...)
       call cursor(previousNum, column)
       let openingParen = searchpair("(", "", ")", "bWn", "s:IsExcludedFromIndent()")
       call cursor(line, column)
-      return indent(openingParen) + shiftwidth()
+      return openingParen + 1
     endif
 
     " - Previous line has close then open braces, indent previous + 1 'sw'
@@ -226,11 +272,23 @@ function! SwiftIndent(...)
   " - Line above has (unmatched) open paren, next line needs indent
   if numOpenParens > 0
     let savePosition = getcurpos()
+    let lastColumnOfPreviousLine = col([previousNum, "$"]) - 1
     " Must be at EOL because open paren has to be above (left of) the cursor
-    call cursor(previousNum, [previousNum, col("$")])
-    let previousParen = searchpair("(", "", ")", "cbWn", "s:IsExcludedFromIndent()")
+    call cursor(previousNum, lastColumnOfPreviousLine)
+    let previousParen = searchpairpos("(", "", ")", "cbWn", "s:IsExcludedFromIndent()")[1]
+    " If the paren on the last line is the last character, indent the contents
+    " at shiftwidth + previous indent
+    if previousParen == lastColumnOfPreviousLine
+      return previousIndent + shiftwidth()
+    endif
+
+    " The previous line opens a closure and doesn't close it
+    if numOpenBrackets > numCloseBrackets
+      return previousParen + shiftwidth()
+    endif
+
     call setpos(".", savePosition)
-    return indent(previousParen) + shiftwidth()
+    return previousParen
   endif
 
   return cindent
@@ -238,5 +296,3 @@ endfunction
 
 let &cpo = s:cpo_save
 unlet s:cpo_save
-
-endif

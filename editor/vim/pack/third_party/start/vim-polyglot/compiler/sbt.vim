@@ -1,5 +1,7 @@
-if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'scala') == -1
-  
+if exists('g:polyglot_disabled') && index(g:polyglot_disabled, 'scala') != -1
+  finish
+endif
+
 " Vim compiler file
 " Language:             Scala SBT (http://www.scala-sbt.org/)
 " Maintainer:           Derek Wyatt
@@ -22,13 +24,11 @@ set cpo-=C
 CompilerSet makeprg=sbt\ -Dsbt.log.noformat=true\ compile
 
 CompilerSet errorformat=
-      \%E\ %#[error]\ %f:%l:\ %m,%C\ %#[error]\ %p^,%-C%.%#,%Z,
-      \%W\ %#[warn]\ %f:%l:\ %m,%C\ %#[warn]\ %p^,%-C%.%#,%Z,
+      \%E\ %#[error]\ %f:%l:%c:\ %m,%C\ %#[error]\ %p^,%-C%.%#,%Z,
+      \%W\ %#[warn]\ %f:%l:%c:\ %m,%C\ %#[warn]\ %p^,%-C%.%#,%Z,
       \%-G%.%#
 
 let &cpo = s:cpo_save
 unlet s:cpo_save
 
 " vim:set sw=2 sts=2 ts=8 et:
-
-endif

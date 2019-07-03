@@ -1,8 +1,11 @@
-if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'ruby') == -1
-  
+if exists('g:polyglot_disabled') && index(g:polyglot_disabled, 'ruby') != -1
+  finish
+endif
+
 " Vim indent file
 " Language:		Ruby
-" Maintainer:		Nikolai Weibull <now at bitwi.se>
+" Maintainer:		Andrew Radev <andrey.radev@gmail.com>
+" Previous Maintainer:	Nikolai Weibull <now at bitwi.se>
 " URL:			https://github.com/vim-ruby/vim-ruby
 " Release Coordinator:	Doug Kearns <dougkearns@gmail.com>
 
@@ -51,15 +54,26 @@ set cpo&vim
 
 " Syntax group names that are strings.
 let s:syng_string =
-      \ ['String', 'Interpolation', 'InterpolationDelimiter', 'NoInterpolation', 'StringEscape']
+      \ ['String', 'Interpolation', 'InterpolationDelimiter', 'StringEscape']
 
 " Syntax group names that are strings or documentation.
 let s:syng_stringdoc = s:syng_string + ['Documentation']
 
 " Syntax group names that are or delimit strings/symbols/regexes or are comments.
-let s:syng_strcom = s:syng_stringdoc +
-      \ ['Regexp', 'RegexpDelimiter', 'RegexpEscape',
-      \ 'Symbol', 'StringDelimiter', 'ASCIICode', 'Comment']
+let s:syng_strcom = s:syng_stringdoc + [
+      \ 'Character',
+      \ 'Comment',
+      \ 'HeredocDelimiter',
+      \ 'PercentRegexpDelimiter',
+      \ 'PercentStringDelimiter',
+      \ 'PercentSymbolDelimiter',
+      \ 'Regexp',
+      \ 'RegexpDelimiter',
+      \ 'RegexpEscape',
+      \ 'StringDelimiter',
+      \ 'Symbol',
+      \ 'SymbolDelimiter',
+      \ ]
 
 " Expression used to check whether we should skip a match with searchpair().
 let s:skip_expr =
@@ -69,7 +83,7 @@ let s:skip_expr =
 let s:ruby_indent_keywords =
       \ '^\s*\zs\<\%(module\|class\|if\|for' .
       \   '\|while\|until\|else\|elsif\|case\|when\|unless\|begin\|ensure\|rescue' .
-      \   '\|\%(public\|protected\|private\)\=\s*def\):\@!\>' .
+      \   '\|\%(\K\k*[!?]\?\s\+\)\=def\):\@!\>' .
       \ '\|\%([=,*/%+-]\|<<\|>>\|:\s\)\s*\zs' .
       \    '\<\%(if\|for\|while\|until\|case\|unless\|begin\):\@!\>'
 
@@ -83,7 +97,7 @@ let s:ruby_deindent_keywords =
 let s:end_start_regex =
       \ '\C\%(^\s*\|[=,*/%+\-|;{]\|<<\|>>\|:\s\)\s*\zs' .
       \ '\<\%(module\|class\|if\|for\|while\|until\|case\|unless\|begin' .
-      \   '\|\%(public\|protected\|private\)\=\s*def\):\@!\>' .
+      \   '\|\%(\K\k*[!?]\?\s\+\)\=def\):\@!\>' .
       \ '\|\%(^\|[^.:@$]\)\@<=\<do:\@!\>'
 
 " Regex that defines the middle-match for the 'end' keyword.
@@ -146,7 +160,7 @@ let s:block_regex =
 let s:block_continuation_regex = '^\s*[^])}\t ].*'.s:block_regex
 
 " Regex that describes a leading operator (only a method call's dot for now)
-let s:leading_operator_regex = '^\s*[.]'
+let s:leading_operator_regex = '^\s*\%(&\=\.\)'
 
 " 2. GetRubyIndent Function {{{1
 " =========================
@@ -195,8 +209,29 @@ function! GetRubyIndent(...) abort
 
   " 2.3. Work on the previous line. {{{2
   " -------------------------------
+
+  " Special case: we don't need the real s:PrevNonBlankNonString for an empty
+  " line inside a string. And that call can be quite expensive in that
+  " particular situation.
   let indent_callback_names = [
         \ 's:EmptyInsideString',
+        \ ]
+
+  for callback_name in indent_callback_names
+"    Decho "Running: ".callback_name
+    let indent = call(function(callback_name), [indent_info])
+
+    if indent >= 0
+"      Decho "Match: ".callback_name." indent=".indent." info=".string(indent_info)
+      return indent
+    endif
+  endfor
+
+  " Previous line number
+  let indent_info.plnum = s:PrevNonBlankNonString(indent_info.clnum - 1)
+  let indent_info.pline = getline(indent_info.plnum)
+
+  let indent_callback_names = [
         \ 's:StartOfFile',
         \ 's:AfterAccessModifier',
         \ 's:ContinuedLine',
@@ -207,10 +242,6 @@ function! GetRubyIndent(...) abort
         \ 's:AfterEndKeyword',
         \ 's:AfterIndentKeyword',
         \ ]
-
-  " Previous line number
-  let indent_info.plnum = s:PrevNonBlankNonString(indent_info.clnum - 1)
-  let indent_info.pline = getline(indent_info.plnum)
 
   for callback_name in indent_callback_names
 "    Decho "Running: ".callback_name
@@ -389,12 +420,17 @@ function! s:LeadingOperator(cline_info) abort
 endfunction
 
 function! s:EmptyInsideString(pline_info) abort
-  " If the line is empty and inside a string (plnum would not be the real
-  " prevnonblank in that case), use the previous line's indent
+  " If the line is empty and inside a string (the previous line is a string,
+  " too), use the previous line's indent
   let info = a:pline_info
 
-  if info.cline =~ '^\s*$' && info.plnum != prevnonblank(info.clnum - 1)
-    return indent(prevnonblank(info.clnum))
+  let plnum = prevnonblank(info.clnum - 1)
+  let pline = getline(plnum)
+
+  if info.cline =~ '^\s*$'
+        \ && s:IsInStringOrComment(plnum, 1)
+        \ && s:IsInStringOrComment(plnum, strlen(pline))
+    return indent(plnum)
   endif
   return -1
 endfunction
@@ -673,7 +709,10 @@ endfunction
 
 " Check if the character at lnum:col is inside a string delimiter
 function! s:IsInStringDelimiter(lnum, col) abort
-  return s:IsInRubyGroup(['StringDelimiter'], a:lnum, a:col)
+  return s:IsInRubyGroup(
+        \ ['HeredocDelimiter', 'PercentStringDelimiter', 'StringDelimiter'],
+        \ a:lnum, a:col
+        \ )
 endfunction
 
 function! s:IsAssignment(str, pos) abort
@@ -915,5 +954,3 @@ let &cpo = s:cpo_save
 unlet s:cpo_save
 
 " vim:set sw=2 sts=2 ts=8 et:
-
-endif

@@ -1,5 +1,7 @@
-if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'ansible') == -1
-  
+if exists('g:polyglot_disabled') && index(g:polyglot_disabled, 'ansible') != -1
+  finish
+endif
+
 let s:save_cpo = &cpo
 set cpo&vim
 
@@ -10,7 +12,7 @@ setlocal expandtab
 setlocal softtabstop=2
 setlocal shiftwidth=2
 setlocal commentstring=#%s
-setlocal formatoptions=cl
+setlocal formatoptions+=cl
 " c -> wrap long comments, including #
 " l -> do not wrap long lines
 
@@ -59,5 +61,3 @@ function GetAnsibleIndent(lnum)
 endfunction
 
 let &cpo = s:save_cpo
-
-endif

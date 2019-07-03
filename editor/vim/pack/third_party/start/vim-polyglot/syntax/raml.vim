@@ -1,9 +1,13 @@
-if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'raml') == -1
-  
+if exists('g:polyglot_disabled') && index(g:polyglot_disabled, 'raml') != -1
+  finish
+endif
+
 " Vim syntax file
 " Language:    RAML (RESTful API Modeling Language)
 " Maintainer:  Eric Hopkins <eric.on.tech@gmail.com>
-" Last Change: 2016-02-29
+" URL:         https://github.com/in3d/vim-raml
+" License:     Same as Vim
+" Last Change: 2018-11-03
 
 if exists("b:current_syntax")
   finish
@@ -104,5 +108,3 @@ let b:current_syntax = "raml"
 
 let &cpo = s:cpo_save
 unlet s:cpo_save
-
-endif

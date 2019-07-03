@@ -1,5 +1,7 @@
-if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'go') == -1
-  
+if exists('g:polyglot_disabled') && index(g:polyglot_disabled, 'go') != -1
+  finish
+endif
+
 if exists("b:did_indent")
   finish
 endif
@@ -14,6 +16,10 @@ setlocal indentkeys+==else,=end
 if exists("*GetGoHTMLTmplIndent")
   finish
 endif
+
+" don't spam the user when Vim is started in Vi compatibility mode
+let s:cpo_save = &cpo
+set cpo&vim
 
 function! GetGoHTMLTmplIndent(lnum)
   " Get HTML indent
@@ -45,6 +51,8 @@ function! GetGoHTMLTmplIndent(lnum)
   return ind
 endfunction
 
-" vim: sw=2 ts=2 et
+" restore Vi compatibility settings
+let &cpo = s:cpo_save
+unlet s:cpo_save
 
-endif
+" vim: sw=2 ts=2 et

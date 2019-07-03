@@ -1,12 +1,14 @@
-if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'ruby') == -1
-  
+if exists('g:polyglot_disabled') && index(g:polyglot_disabled, 'ruby') != -1
+  finish
+endif
+
 " Vim syntax file
 " Language:		eRuby
 " Maintainer:		Tim Pope <vimNOSPAM@tpope.org>
 " URL:			https://github.com/vim-ruby/vim-ruby
 " Release Coordinator:	Doug Kearns <dougkearns@gmail.com>
 
-if exists("b:current_syntax")
+if &syntax !~# '\<eruby\>' || get(b:, 'current_syntax') =~# '\<eruby\>'
   finish
 endif
 
@@ -20,6 +22,8 @@ endif
 
 if &filetype =~ '^eruby\.'
   let b:eruby_subtype = matchstr(&filetype,'^eruby\.\zs\w\+')
+elseif &filetype =~ '^.*\.eruby\>'
+  let b:eruby_subtype = matchstr(&filetype,'^.\{-\}\ze\.eruby\>')
 elseif !exists("b:eruby_subtype") && main_syntax == 'eruby'
   let s:lines = getline(1)."\n".getline(2)."\n".getline(3)."\n".getline(4)."\n".getline(5)."\n".getline("$")
   let b:eruby_subtype = matchstr(s:lines,'eruby_subtype=\zs\w\+')
@@ -43,16 +47,20 @@ elseif !exists("b:eruby_subtype") && main_syntax == 'eruby'
 endif
 
 if !exists("b:eruby_nest_level")
-  let b:eruby_nest_level = strlen(substitute(substitute(substitute(expand("%:t"),'@','','g'),'\c\.\%(erb\|rhtml\)\>','@','g'),'[^@]','','g'))
+  if &syntax =~# '\<eruby\.eruby\>'
+    let b:eruby_nest_level = strlen(substitute(substitute(&filetype,'\C\<eruby\>','@','g'),'[^@]','','g'))
+  else
+    let b:eruby_nest_level = strlen(substitute(substitute(substitute(expand("%:t"),'@','','g'),'\c\.\%(erb\|rhtml\)\>','@','g'),'[^@]','','g'))
+  endif
 endif
 if !b:eruby_nest_level
   let b:eruby_nest_level = 1
 endif
 
-if exists("b:eruby_subtype") && b:eruby_subtype != '' && b:eruby_subtype !=? 'eruby'
+if get(b:, 'eruby_subtype', '') !~# '^\%(eruby\)\=$' && &syntax =~# '^eruby\>'
   exe "runtime! syntax/".b:eruby_subtype.".vim"
-  unlet! b:current_syntax
 endif
+unlet! b:current_syntax
 syn include @rubyTop syntax/ruby.vim
 
 syn cluster erubyRegions contains=erubyOneLiner,erubyBlock,erubyExpression,erubyComment
@@ -67,12 +75,10 @@ exe 'syn region  erubyComment    matchgroup=erubyDelimiter start="<%\{1,'.b:erub
 hi def link erubyDelimiter		PreProc
 hi def link erubyComment		Comment
 
-let b:current_syntax = 'eruby'
+let b:current_syntax = matchstr(&syntax, '^.*\<eruby\>')
 
 if main_syntax == 'eruby'
   unlet main_syntax
 endif
 
 " vim: nowrap sw=2 sts=2 ts=8:
-
-endif

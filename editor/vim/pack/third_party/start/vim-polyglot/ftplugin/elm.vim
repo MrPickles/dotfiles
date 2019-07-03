@@ -1,5 +1,7 @@
-if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'elm') == -1
-  
+if exists('g:polyglot_disabled') && index(g:polyglot_disabled, 'elm') != -1
+  finish
+endif
+
 " plugin for Elm (http://elm-lang.org/)
 
 if exists('b:did_ftplugin')
@@ -52,6 +54,18 @@ command -buffer ElmShowDocs call elm#ShowDocs()
 command -buffer ElmBrowseDocs call elm#BrowseDocs()
 command -buffer ElmFormat call elm#Format()
 
+" Commands cleanup
+let b:undo_ftplugin = "
+      \ delcommand ElmMake
+      \|delcommand ElmMakeMain
+      \|delcommand ElmTest
+      \|delcommand ElmRepl
+      \|delcommand ElmErrorDetail
+      \|delcommand ElmShowDocs
+      \|delcommand ElmBrowseDocs
+      \|delcommand ElmFormat
+      \"
+
 if get(g:, 'elm_setup_keybindings', 1)
   nmap <buffer> <LocalLeader>m <Plug>(elm-make)
   nmap <buffer> <LocalLeader>b <Plug>(elm-make-main)
@@ -97,5 +111,3 @@ let &l:path =
 setlocal includeexpr=GetElmFilename(v:fname)
 setlocal include=^\\s*import\\s\\+
 setlocal suffixesadd=.elm
-
-endif

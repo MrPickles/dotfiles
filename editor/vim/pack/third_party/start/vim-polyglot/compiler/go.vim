@@ -1,5 +1,7 @@
-if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'go') == -1
-  
+if exists('g:polyglot_disabled') && index(g:polyglot_disabled, 'go') != -1
+  finish
+endif
+
 " Copyright 2013 The Go Authors. All rights reserved.
 " Use of this source code is governed by a BSD-style
 " license that can be found in the LICENSE file.
@@ -10,6 +12,10 @@ if exists("g:current_compiler")
   finish
 endif
 let g:current_compiler = "go"
+
+" don't spam the user when Vim is started in Vi compatibility mode
+let s:cpo_save = &cpo
+set cpo&vim
 
 if exists(":CompilerSet") != 2
   command -nargs=* CompilerSet setlocal <args>
@@ -40,6 +46,8 @@ CompilerSet errorformat+=%-G%.%#                      " All lines not matching a
 let &cpo = s:save_cpo
 unlet s:save_cpo
 
-" vim: sw=2 ts=2 et
+" restore Vi compatibility settings
+let &cpo = s:cpo_save
+unlet s:cpo_save
 
-endif
+" vim: sw=2 ts=2 et

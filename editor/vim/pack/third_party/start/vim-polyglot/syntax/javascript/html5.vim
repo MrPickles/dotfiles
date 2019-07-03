@@ -1,5 +1,7 @@
-if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'html5') == -1
-  
+if exists('g:polyglot_disabled') && index(g:polyglot_disabled, 'html5') != -1
+  finish
+endif
+
 " Vim syntax file
 " Language:	    HTML5 New Stuff
 " Maintainer:	othree <othree@gmail.com>
@@ -42,9 +44,10 @@ syn keyword javascriptDomElemFuncs load addTextTrack
 syn keyword javascriptDomElemAttrs videoWidth videoHeight poster
 
 " drag and drop
-syn keyword javascriptDomElemAttrs onDragStart onDragEnd onDragEnter onDragLeave onDragOver onDrag onDrop draggable dropzone
+syn keyword javascriptDomElemAttrs ondragstart ondragend ondragenter ondragleave ondragover ondrag ondrop draggable dropzone
 
 " <checkbox>
 syn keyword javascriptDomElemAttrs indeterminate
 
-endif
+" select https://w3c.github.io/selection-api/#extensions-to-globaleventhandlers
+syn keyword javascriptDomElemAttrs onselectstart onselectchange

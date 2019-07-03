@@ -1,5 +1,7 @@
-if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'crystal') == -1
-  
+if exists('g:polyglot_disabled') && index(g:polyglot_disabled, 'crystal') != -1
+  finish
+endif
+
 " Only load this indent file when no other was loaded.
 if exists('b:did_indent')
   finish
@@ -49,8 +51,8 @@ let s:skip_expr =
 
 " Regex used for words that, at the start of a line, add a level of indent.
 let s:crystal_indent_keywords =
-      \ '^\s*\zs\<\%(module\|\%(abstract\)\=\s*\%(class\|struct\)\|enum\|if\|for\|macro' .
-      \ '\|while\|until\|else\|elsif\|case\|when\|unless\|begin\|ensure\|rescue\|lib' .
+      \ '^\s*\zs\<\%(module\|\%(private\s\+\)\=\%(abstract\s\+\)\=\%(class\|struct\)\|enum\|if' .
+      \ '\|for\|macro\|while\|until\|else\|elsif\|case\|when\|unless\|begin\|ensure\|rescue\|lib' .
       \ '\|\%(protected\|private\)\=\s*def\):\@!\>' .
       \ '\|\%([=,*/%+-]\|<<\|>>\|:\s\)\s*\zs' .
       \ '\<\%(if\|for\|while\|until\|case\|unless\|begin\):\@!\>' .
@@ -66,7 +68,7 @@ let s:crystal_deindent_keywords =
 let s:end_start_regex =
       \ '{%\s*\<\%(if\|for\|while\|until\|unless\|begin\|lib\)\>\|' .
       \ '\C\%(^\s*\|[=,*/%+\-|;{]\|<<\|>>\|:\s\)\s*\zs' .
-      \ '\<\%(module\|\%(abstract\)\=\s*\%(class\|struct\)\|enum\|macro\|if\|for\|while\|until\|case\|unless\|begin\|lib' .
+      \ '\<\%(module\|\%(private\s\+\)\=\%(abstract\s\+\)\=\%(class\|struct\)\|enum\|macro\|if\|for\|while\|until\|case\|unless\|begin\|lib' .
       \ '\|\%(protected\|private\)\=\s*def\):\@!\>' .
       \ '\|\%(^\|[^.:@$]\)\@<=\<do:\@!\>'
 
@@ -129,17 +131,17 @@ let s:access_modifier_regex = '\C^\s*\%(public\|protected\|private\)\s*\%(#.*\)\
 
 " Check if the character at lnum:col is inside a string, comment, or is ascii.
 function s:IsInStringOrComment(lnum, col)
-  return synIDattr(synID(a:lnum, a:col, 1), 'name') =~ s:syng_strcom
+  return synIDattr(synID(a:lnum, a:col, 1), 'name') =~# s:syng_strcom
 endfunction
 
 " Check if the character at lnum:col is inside a string.
 function s:IsInString(lnum, col)
-  return synIDattr(synID(a:lnum, a:col, 1), 'name') =~ s:syng_string
+  return synIDattr(synID(a:lnum, a:col, 1), 'name') =~# s:syng_string
 endfunction
 
 " Check if the character at lnum:col is inside a string or documentation.
 function s:IsInStringOrDocumentation(lnum, col)
-  return synIDattr(synID(a:lnum, a:col, 1), 'name') =~ s:syng_stringdoc
+  return synIDattr(synID(a:lnum, a:col, 1), 'name') =~# s:syng_stringdoc
 endfunction
 
 " Check if the character at lnum:col is inside a string delimiter
@@ -635,5 +637,3 @@ let &cpo = s:cpo_save
 unlet s:cpo_save
 
 " vim:set sw=2 sts=2 ts=8 et:
-
-endif

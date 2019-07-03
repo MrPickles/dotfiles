@@ -1,5 +1,7 @@
-if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'markdown') == -1
-  
+if exists('g:polyglot_disabled') && index(g:polyglot_disabled, 'markdown') != -1
+  finish
+endif
+
 if exists("b:did_indent") | finish | endif
 let b:did_indent = 1
 
@@ -7,15 +9,15 @@ setlocal indentexpr=GetMarkdownIndent()
 setlocal nolisp
 setlocal autoindent
 
-" Automatically insert bullets
-setlocal formatoptions+=r
-" Do not automatically insert bullets when auto-wrapping with text-width
-setlocal formatoptions-=c
-" Accept various markers as bullets
-setlocal comments=b:*,b:+,b:-
-
 " Automatically continue blockquote on line break
-setlocal comments+=b:>
+setlocal formatoptions+=r
+setlocal comments=b:>
+if get(g:, "vim_markdown_auto_insert_bullets", 1)
+    " Do not automatically insert bullets when auto-wrapping with text-width
+    setlocal formatoptions-=c
+    " Accept various markers as bullets
+    setlocal comments+=b:*,b:+,b:-
+endif
 
 " Only define the function once
 if exists("*GetMarkdownIndent") | finish | endif
@@ -75,5 +77,3 @@ function GetMarkdownIndent()
         return ind
     endif
 endfunction
-
-endif

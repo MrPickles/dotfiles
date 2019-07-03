@@ -1,5 +1,7 @@
-if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'ruby') == -1
-  
+if exists('g:polyglot_disabled') && index(g:polyglot_disabled, 'ruby') != -1
+  finish
+endif
+
 " Vim filetype plugin
 " Language:		eRuby
 " Maintainer:		Tim Pope <vimNOSPAM@tpope.org>
@@ -68,6 +70,21 @@ if exists("b:match_words")
   unlet b:match_words
 endif
 
+let s:cfilemap = v:version >= 704 ? maparg('<Plug><cfile>', 'c', 0, 1) : {}
+if !get(s:cfilemap, 'buffer') || !s:cfilemap.expr || s:cfilemap.rhs =~# 'ErubyAtCursor()'
+  let s:cfilemap = {}
+endif
+if !has_key(s:cfilemap, 'rhs')
+  let s:cfilemap.rhs = "substitute(&l:inex =~# '\\<v:fname\\>' && len(expand('<cfile>')) ? eval(substitute(&l:inex, '\\<v:fname\\>', '\\=string(expand(\"<cfile>\"))', 'g')) : '', '^$', \"\\022\\006\",'')"
+endif
+let s:ctagmap = v:version >= 704 ? maparg('<Plug><ctag>', 'c', 0, 1) : {}
+if !get(s:ctagmap, 'buffer') || !s:ctagmap.expr || s:ctagmap.rhs =~# 'ErubyAtCursor()'
+  let s:ctagmap = {}
+endif
+let s:include = &l:include
+let s:path = &l:path
+let s:suffixesadd = &l:suffixesadd
+
 runtime! ftplugin/ruby.vim ftplugin/ruby_*.vim ftplugin/ruby/*.vim
 let b:did_ftplugin = 1
 
@@ -81,6 +98,15 @@ endif
 if exists("b:match_words")
   let s:match_words = b:match_words . ',' . s:match_words
 endif
+
+if len(s:include)
+  let &l:include = s:include
+endif
+let &l:path = s:path . (s:path =~# ',$\|^$' ? '' : ',') . &l:path
+let &l:suffixesadd = s:suffixesadd . (s:suffixesadd =~# ',$\|^$' ? '' : ',') . &l:suffixesadd
+exe 'cmap <buffer><script><expr> <Plug><cfile> ErubyAtCursor() ? ' . maparg('<Plug><cfile>', 'c') . ' : ' . s:cfilemap.rhs
+exe 'cmap <buffer><script><expr> <Plug><ctag> ErubyAtCursor() ? ' . maparg('<Plug><ctag>', 'c') . ' : ' . get(s:ctagmap, 'rhs', '"\022\027"')
+unlet s:cfilemap s:ctagmap s:include s:path s:suffixesadd
 
 " Change the browse dialog on Win32 to show mainly eRuby-related files
 if has("gui_win32")
@@ -101,6 +127,9 @@ let b:undo_ftplugin = "setl cms< "
 let &cpo = s:save_cpo
 unlet s:save_cpo
 
-" vim: nowrap sw=2 sts=2 ts=8:
+function! ErubyAtCursor() abort
+  let groups = map(['erubyBlock', 'erubyComment', 'erubyExpression', 'erubyOneLiner'], 'hlID(v:val)')
+  return !empty(filter(synstack(line('.'), col('.')), 'index(groups, v:val) >= 0'))
+endfunction
 
-endif
+" vim: nowrap sw=2 sts=2 ts=8:

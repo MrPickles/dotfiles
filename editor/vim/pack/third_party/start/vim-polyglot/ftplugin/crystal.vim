@@ -1,5 +1,7 @@
-if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'crystal') == -1
-  
+if exists('g:polyglot_disabled') && index(g:polyglot_disabled, 'crystal') != -1
+  finish
+endif
+
 if exists('b:did_ftplugin')
   finish
 endif
@@ -51,6 +53,7 @@ command! -buffer -nargs=? CrystalSpecSwitch call crystal_lang#switch_spec_file(<
 command! -buffer -nargs=? CrystalSpecRunAll call crystal_lang#run_all_spec(<f-args>)
 command! -buffer -nargs=? CrystalSpecRunCurrent call crystal_lang#run_current_spec(<f-args>)
 command! -buffer -nargs=* -bar CrystalFormat call crystal_lang#format(<q-args>, 0)
+command! -buffer -nargs=* CrystalExpand echo crystal_lang#expand(expand('%'), getpos('.'), <q-args>).output
 
 nnoremap <buffer><Plug>(crystal-jump-to-definition) :<C-u>CrystalDef<CR>
 nnoremap <buffer><Plug>(crystal-show-context) :<C-u>CrystalContext<CR>
@@ -79,5 +82,3 @@ let &cpo = s:save_cpo
 unlet s:save_cpo
 
 " vim: nowrap sw=2 sts=2 ts=8:
-
-endif

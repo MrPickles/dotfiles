@@ -1,8 +1,10 @@
-if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'crystal') == -1
-  
+if exists('g:polyglot_disabled') && index(g:polyglot_disabled, 'crystal') != -1
+  finish
+endif
+
 " Language: Crystal
 " Based on Ruby syntax highlight
-" which is made by Mirko Nasato and Doug Kearns
+" which was made by Mirko Nasato and Doug Kearns
 " ---------------------------------------------
 
 if exists('b:current_syntax')
@@ -23,7 +25,7 @@ endif
 " Operators
 if exists('g:crystal_operators')
   syn match  crystalOperator "[~!^&|*/%+-]\|\%(class\s*\)\@<!<<\|<=>\|<=\|\%(<\|\<class\s\+\u\w*\s*\)\@<!<[^<]\@=\|===\|==\|=\~\|>>\|>=\|=\@<!>\|\*\*\|\.\.\.\|\.\.\|::"
-  syn match  crystalOperator "->\|-=\|/=\|\*\*=\|\*=\|&&=\|&=\|&&\|||=\||=\|||\|%=\|+=\|!\~\|!="
+  syn match  crystalOperator "->\|-=\|/=\|\*\*=\|\*=\|&&=\|&=\|&&\|||=\||=\|||\|%=\|+=\|!\~\|!=\|//"
   syn region crystalBracketOperator matchgroup=crystalOperator start="\%(\w[?!]\=\|[]})]\)\@<=\[\s*" end="\s*]" contains=ALLBUT,@crystalNotTop
 endif
 
@@ -31,11 +33,11 @@ endif
 syn match crystalStringEscape "\\\\\|\\[abefnrstv]\|\\\o\{1,3}\|\\x\x\{1,2}"						    contained display
 syn match crystalStringEscape "\%(\\M-\\C-\|\\C-\\M-\|\\M-\\c\|\\c\\M-\|\\c\|\\C-\|\\M-\)\%(\\\o\{1,3}\|\\x\x\{1,2}\|\\\=\S\)" contained display
 
-syn region crystalInterpolation	      matchgroup=crystalInterpolationDelimiter start="#{" end="}" contained contains=ALLBUT,@crystalNotTop
-syn match  crystalInterpolation	      "#\%(\$\|@@\=\)\w\+"    display contained contains=crystalInterpolationDelimiter,crystalInstanceVariable,crystalClassVariable,crystalGlobalVariable,crystalPredefinedVariable
-syn match  crystalInterpolationDelimiter "#\ze\%(\$\|@@\=\)\w\+" display contained
-syn match  crystalInterpolation	      "#\$\%(-\w\|\W\)"       display contained contains=crystalInterpolationDelimiter,crystalPredefinedVariable,crystalInvalidVariable
-syn match  crystalInterpolationDelimiter "#\ze\$\%(-\w\|\W\)"    display contained
+syn region crystalInterpolation	      matchgroup=crystalInterpolationDelim start="#{" end="}" contained contains=ALLBUT,@crystalNotTop
+syn match  crystalInterpolation	      "#\%(\$\|@@\=\)\w\+"    display contained contains=crystalInterpolationDelim,crystalInstanceVariable,crystalClassVariable,crystalGlobalVariable,crystalPredefinedVariable
+syn match  crystalInterpolationDelim "#\ze\%(\$\|@@\=\)\w\+" display contained
+syn match  crystalInterpolation	      "#\$\%(-\w\|\W\)"       display contained contains=crystalInterpolationDelim,crystalPredefinedVariable,crystalInvalidVariable
+syn match  crystalInterpolationDelim "#\ze\$\%(-\w\|\W\)"    display contained
 syn region crystalNoInterpolation	      start="\\#{" end="}"            contained
 syn match  crystalNoInterpolation	      "\\#{"		      display contained
 syn match  crystalNoInterpolation	      "\\#\%(\$\|@@\=\)\w\+"  display contained
@@ -66,9 +68,9 @@ syn match  crystalRegexpSpecial	"\\k'\%([a-z_]\w*\|-\=\d\+\)\%([+-]\d\+\)\='" co
 syn match  crystalRegexpSpecial	"\\g<\%([a-z_]\w*\|-\=\d\+\)>" contained display
 syn match  crystalRegexpSpecial	"\\g'\%([a-z_]\w*\|-\=\d\+\)'" contained display
 
-syn cluster crystalStringSpecial	      contains=crystalInterpolation,crystalNoInterpolation,crystalStringEscape
+syn cluster crystalStringSpecial	 contains=crystalInterpolation,crystalNoInterpolation,crystalStringEscape
 syn cluster crystalExtendedStringSpecial contains=@crystalStringSpecial,crystalNestedParentheses,crystalNestedCurlyBraces,crystalNestedAngleBrackets,crystalNestedSquareBrackets
-syn cluster crystalRegexpSpecial	      contains=crystalInterpolation,crystalNoInterpolation,crystalStringEscape,crystalRegexpSpecial,crystalRegexpEscape,crystalRegexpBrackets,crystalRegexpCharClass,crystalRegexpDot,crystalRegexpQuantifier,crystalRegexpAnchor,crystalRegexpParens,crystalRegexpComment
+syn cluster crystalRegexpSpecial	 contains=crystalInterpolation,crystalNoInterpolation,crystalStringEscape,crystalRegexpSpecial,crystalRegexpEscape,crystalRegexpBrackets,crystalRegexpCharClass,crystalRegexpDot,crystalRegexpQuantifier,crystalRegexpAnchor,crystalRegexpParens,crystalRegexpComment
 
 " Numbers and ASCII Codes
 syn match crystalASCIICode	"\%(\w\|[]})\"'/]\)\@<!\%(?\%(\\M-\\C-\|\\C-\\M-\|\\M-\\c\|\\c\\M-\|\\c\|\\C-\|\\M-\)\=\%(\\\o\{1,3}\|\\x\x\{1,2}\|\\\=\S\)\)"
@@ -83,6 +85,12 @@ syn match crystalFloat	"\%(\%(\w\|[]})\"']\s*\)\@<!-\)\=\<\%(0\|[1-9]\d*\%(_\d\+
 syn match crystalLocalVariableOrMethod "\<[_[:lower:]][_[:alnum:]]*[?!=]\=" contains=NONE display transparent
 syn match crystalBlockArgument	    "&[_[:lower:]][_[:alnum:]]"		 contains=NONE display transparent
 
+syn match  crystalTypeName		"\%(\%([.@$]\@<!\.\)\@<!\<\|::\)\_s*\zs\u\w*\%(\>\|::\)\@=" contained
+syn match  crystalClassName		"\%(\%([.@$]\@<!\.\)\@<!\<\|::\)\_s*\zs\u\w*\%(\>\|::\)\@=" contained
+syn match  crystalModuleName		"\%(\%([.@$]\@<!\.\)\@<!\<\|::\)\_s*\zs\u\w*\%(\>\|::\)\@=" contained
+syn match  crystalStructName		"\%(\%([.@$]\@<!\.\)\@<!\<\|::\)\_s*\zs\u\w*\%(\>\|::\)\@=" contained
+syn match  crystalLibName		"\%(\%([.@$]\@<!\.\)\@<!\<\|::\)\_s*\zs\u\w*\%(\>\|::\)\@=" contained
+syn match  crystalEnumName		"\%(\%([.@$]\@<!\.\)\@<!\<\|::\)\_s*\zs\u\w*\%(\>\|::\)\@=" contained
 syn match  crystalConstant		"\%(\%([.@$]\@<!\.\)\@<!\<\|::\)\_s*\zs\u\w*\%(\>\|::\)\@="
 syn match  crystalClassVariable	"@@\%(\h\|%\|[^\x00-\x7F]\)\%(\w\|%\|[^\x00-\x7F]\)*" display
 syn match  crystalInstanceVariable "@\%(\h\|%\|[^\x00-\x7F]\)\%(\w\|%\|[^\x00-\x7F]\)*"  display
@@ -129,7 +137,7 @@ syn region crystalString matchgroup=crystalStringDelimiter start="\"" end="\"" s
 syn region crystalString matchgroup=crystalStringDelimiter start="`"	end="`"  skip="\\\\\|\\`"  contains=@crystalStringSpecial fold
 
 " Character
-syn match crystalCharLiteral "'\%([^\\]\|\\[abefnrstv'\\]\|\\\o\{1,3}\|\\x\x\{1,2}\|\\u\x\{4}\)'" contained display
+syn match crystalCharLiteral "'\%([^\\]\|\\[abefnrstv'\\]\|\\\o\{1,3}\|\\x\x\{1,2}\|\\u\x\{4}\)'" contains=crystalStringEscape display
 
 " Generalized Single Quoted String, Symbol and Array of Strings
 syn region crystalString matchgroup=crystalStringDelimiter start="%[qwi]\z([~`!@#$%^&*_\-+=|\:;"',.?/]\)" end="\z1" skip="\\\\\|\\\z1" fold
@@ -176,15 +184,15 @@ end
 
 syn match crystalAliasDeclaration    "[^[:space:];#.()]\+" contained contains=crystalSymbol,crystalGlobalVariable,crystalPredefinedVariable nextgroup=crystalAliasDeclaration2 skipwhite
 syn match crystalAliasDeclaration2   "[^[:space:];#.()]\+" contained contains=crystalSymbol,crystalGlobalVariable,crystalPredefinedVariable
-syn match crystalMethodDeclaration   "[^[:space:];#(]\+"	 contained contains=crystalConstant,crystalBoolean,crystalPseudoVariable,crystalInstanceVariable,crystalClassVariable,crystalGlobalVariable
-syn match crystalFunctionDeclaration "[^[:space:];#(=]\+"	 contained contains=crystalConstant
-syn match crystalTypeDeclaration     "[^[:space:];#=]\+"	 contained contains=crystalConstant
-syn match crystalClassDeclaration    "[^[:space:];#<]\+"	 contained contains=crystalConstant,crystalOperator
-syn match crystalModuleDeclaration   "[^[:space:];#<]\+"	 contained contains=crystalConstant,crystalOperator
-syn match crystalStructDeclaration   "[^[:space:];#<]\+"	 contained contains=crystalConstant,crystalOperator
-syn match crystalLibDeclaration      "[^[:space:];#<]\+"	 contained contains=crystalConstant,crystalOperator
-syn match crystalMacroDeclaration    "[^[:space:];#<\"]\+"	 contained contains=crystalConstant,crystalOperator
-syn match crystalEnumDeclaration     "[^[:space:];#<\"]\+"	 contained contains=crystalConstant
+syn match crystalMethodDeclaration   "[^[:space:];#(]\+"	 contained contains=crystalConstant,crystalFunction,crystalBoolean,crystalPseudoVariable,crystalInstanceVariable,crystalClassVariable,crystalGlobalVariable
+syn match crystalFunctionDeclaration "[^[:space:];#(=]\+"	 contained contains=crystalFunction
+syn match crystalTypeDeclaration     "[^[:space:];#=]\+"	 contained contains=crystalTypeName
+syn match crystalClassDeclaration    "[^[:space:];#<]\+"	 contained contains=crystalClassName,crystalOperator
+syn match crystalModuleDeclaration   "[^[:space:];#]\+"		 contained contains=crystalModuleName,crystalOperator
+syn match crystalStructDeclaration   "[^[:space:];#<]\+"	 contained contains=crystalStructName,crystalOperator
+syn match crystalLibDeclaration      "[^[:space:];#]\+"		 contained contains=crystalLibName,crystalOperator
+syn match crystalMacroDeclaration    "[^[:space:];#(]\+"	 contained contains=crystalFunction
+syn match crystalEnumDeclaration     "[^[:space:];#<\"]\+"	 contained contains=crystalEnumName
 syn match crystalFunction "\<[_[:alpha:]][_[:alnum:]]*[?!=]\=[[:alnum:]_.:?!=]\@!" contained containedin=crystalMethodDeclaration,crystalFunctionDeclaration
 syn match crystalFunction "\%(\s\|^\)\@<=[_[:alpha:]][_[:alnum:]]*[?!=]\=\%(\s\|$\)\@=" contained containedin=crystalAliasDeclaration,crystalAliasDeclaration2
 syn match crystalFunction "\%([[:space:].]\|^\)\@<=\%(\[\][=?]\=\|\*\*\|[+-]@\=\|[*/%|&^~]\|<<\|>>\|[<>]=\=\|<=>\|===\|[=!]=\|[=!]\~\|!\|`\)\%([[:space:];#(]\|$\)\@=" contained containedin=crystalAliasDeclaration,crystalAliasDeclaration2,crystalMethodDeclaration,crystalFunctionDeclaration
@@ -232,11 +240,13 @@ if !exists('b:crystal_no_expensive') && !exists('g:crystal_no_expensive')
   syn region crystalArrayLiteral	matchgroup=crystalArrayDelimiter	    start="\%(\w\|[\]})]\)\@<!\[" end="]"	contains=ALLBUT,@crystalNotTop fold
 
   " statements without 'do'
-  syn region crystalBlockExpression       matchgroup=crystalControl	  start="\<begin\>" end="\<end\>" contains=ALLBUT,@crystalNotTop fold
-  syn region crystalCaseExpression	       matchgroup=crystalConditional start="\<case\>"  end="\<end\>" contains=ALLBUT,@crystalNotTop fold
+  syn region crystalBlockExpression  matchgroup=crystalControl     start="\<begin\>"  end="\<end\>" contains=ALLBUT,@crystalNotTop fold
+  syn region crystalCaseExpression   matchgroup=crystalConditional start="\<case\>"   end="\<end\>" contains=ALLBUT,@crystalNotTop fold
+  syn region crystalSelectExpression matchgroup=crystalConditional start="\<select\>" end="\<end\>" contains=ALLBUT,@crystalNotTop fold
   syn region crystalConditionalExpression matchgroup=crystalConditional start="\%(\%(^\|\.\.\.\=\|[{:,;([<>~\*/%&^|+=-]\|\%(\<[_[:lower:]][_[:alnum:]]*\)\@<![?!]\)\s*\)\@<=\%(if\|ifdef\|unless\)\>" end="\%(\%(\%(\.\@<!\.\)\|::\)\s*\)\@<!\<end\>" contains=ALLBUT,@crystalNotTop fold
 
-  syn match crystalConditional "\<\%(then\|else\|when\)\>[?!]\@!"	contained containedin=crystalCaseExpression
+  syn match crystalConditional "\<\%(then\|else\|when\)\>[?!]\@!"  contained containedin=crystalCaseExpression
+  syn match crystalConditional "\<\%(when\|else\)\>[?!]\@!"        contained containedin=crystalSelectExpression
   syn match crystalConditional "\<\%(then\|else\|elsif\)\>[?!]\@!" contained containedin=crystalConditionalExpression
 
   syn match crystalExceptional	  "\<\%(\%(\%(;\|^\)\s*\)\@<=rescue\|else\|ensure\)\>[?!]\@!" contained containedin=crystalBlockExpression
@@ -274,7 +284,8 @@ syn match crystalLinkAttr "]" contained containedin=crystalLinkAttrRegion displa
 if !exists('g:crystal_no_special_methods')
   syn keyword crystalAccess    protected private
   " attr is a common variable name
-  syn keyword crystalAttribute getter setter property abstract
+  syn keyword crystalAttribute abstract
+  syn match   crystalAttribute "\<\%(class_\)\=\%(getter\|setter\|property\)[!?]\=\s" display
   syn match   crystalControl   "\<\%(abort\|at_exit\|exit\|fork\|loop\)\>[?!]\@!" display
   syn keyword crystalException raise
   " false positive with 'include?'
@@ -298,7 +309,7 @@ if !exists('g:crystal_no_comment_fold')
 endif
 
 " Note: this is a hack to prevent 'keywords' being highlighted as such when called as methods with an explicit receiver
-syn match crystalKeywordAsMethod "\%(\%(\.\@<!\.\)\|::\)\_s*\%(alias\|begin\|break\|case\|class\|def\|defined\|do\|else\)\>"		  transparent contains=NONE
+syn match crystalKeywordAsMethod "\%(\%(\.\@<!\.\)\|::\)\_s*\%(alias\|begin\|break\|case\|class\|def\|defined\|do\|else\|select\)\>"		  transparent contains=NONE
 syn match crystalKeywordAsMethod "\%(\%(\.\@<!\.\)\|::\)\_s*\%(elsif\|end\|ensure\|false\|for\|if\|ifdef\|in\|module\|next\|nil\)\>"		  transparent contains=NONE
 syn match crystalKeywordAsMethod "\%(\%(\.\@<!\.\)\|::\)\_s*\%(rescue\|return\|self\|super\|previous_def\|then\|true\)\>"		  transparent contains=NONE
 syn match crystalKeywordAsMethod "\%(\%(\.\@<!\.\)\|::\)\_s*\%(undef\|unless\|until\|when\|while\|yield\|with\|__FILE__\|__LINE__\)\>" transparent contains=NONE
@@ -312,82 +323,81 @@ syn match crystalKeywordAsMethod "\%(\%(\.\@<!\.\)\|::\)\_s*\%(loop\|private\|pr
 syn match crystalKeywordAsMethod "\%(\%(\.\@<!\.\)\|::\)\_s*\%(require\|raise\)\>"	transparent contains=NONE
 syn match crystalKeywordAsMethod "\%(\%(\.\@<!\.\)\|::\)\_s*\%(typeof\|pointerof\|sizeof\|instance_sizeof\|\)\>"	transparent contains=NONE
 
-hi def link crystalClass			crystalDefine
-hi def link crystalModule			crystalDefine
-hi def link crystalStruct			crystalDefine
+hi def link crystalClass		crystalDefine
+hi def link crystalModule		crystalDefine
+hi def link crystalStruct		crystalDefine
 hi def link crystalLib			crystalDefine
-hi def link crystalMacro			crystalDefine
+hi def link crystalMacro		crystalDefine
 hi def link crystalEnum			crystalDefine
 hi def link crystalMethodExceptional	crystalDefine
-hi def link crystalDefine			Define
+hi def link crystalDefine		Define
 hi def link crystalFunction		Function
 hi def link crystalConditional		Conditional
 hi def link crystalConditionalModifier	crystalConditional
 hi def link crystalExceptional		crystalConditional
-hi def link crystalRepeat			Repeat
-hi def link crystalRepeatModifier		crystalRepeat
+hi def link crystalRepeat		Repeat
+hi def link crystalRepeatModifier	crystalRepeat
 hi def link crystalOptionalDo		crystalRepeat
-hi def link crystalControl			Statement
-hi def link crystalInclude			Include
-hi def link crystalRecord			Statement
-hi def link crystalInteger			Number
+hi def link crystalControl		Statement
+hi def link crystalInclude		Include
+hi def link crystalRecord		Statement
+hi def link crystalInteger		Number
 hi def link crystalASCIICode		Character
-hi def link crystalFloat			Float
-hi def link crystalBoolean			Boolean
+hi def link crystalFloat		Float
+hi def link crystalBoolean		Boolean
 hi def link crystalException		Exception
 if !exists('g:crystal_no_identifiers')
   hi def link crystalIdentifier		Identifier
 else
   hi def link crystalIdentifier		NONE
 endif
-hi def link crystalClassVariable		crystalIdentifier
+hi def link crystalClassVariable	crystalIdentifier
 hi def link crystalConstant		Type
-hi def link crystalGlobalVariable		crystalIdentifier
-hi def link crystalBlockParameter		crystalIdentifier
+hi def link crystalTypeName		crystalConstant
+hi def link crystalClassName		crystalConstant
+hi def link crystalModuleName		crystalConstant
+hi def link crystalStructName		crystalConstant
+hi def link crystalLibName		crystalConstant
+hi def link crystalEnumName		crystalConstant
+hi def link crystalGlobalVariable	crystalIdentifier
+hi def link crystalBlockParameter	crystalIdentifier
 hi def link crystalInstanceVariable	crystalIdentifier
 hi def link crystalFreshVariable	crystalIdentifier
 hi def link crystalPredefinedIdentifier	crystalIdentifier
 hi def link crystalPredefinedConstant	crystalPredefinedIdentifier
 hi def link crystalPredefinedVariable	crystalPredefinedIdentifier
-hi def link crystalSymbol			Constant
-hi def link crystalKeyword			Keyword
+hi def link crystalSymbol		Constant
+hi def link crystalKeyword		Keyword
 hi def link crystalOperator		Operator
-hi def link crystalAccess			Statement
+hi def link crystalAccess		Statement
 hi def link crystalAttribute		Statement
-hi def link crystalPseudoVariable		Constant
+hi def link crystalPseudoVariable	Constant
 hi def link crystalCharLiteral		Character
-
-hi def link crystalComment			Comment
+hi def link crystalComment		Comment
 hi def link crystalTodo			Todo
-
 hi def link crystalStringEscape		Special
-hi def link crystalInterpolationDelimiter	Delimiter
-hi def link crystalNoInterpolation		crystalString
+hi def link crystalInterpolationDelim	Delimiter
+hi def link crystalNoInterpolation	crystalString
 hi def link crystalSharpBang		PreProc
-hi def link crystalRegexpDelimiter		crystalStringDelimiter
-hi def link crystalSymbolDelimiter		crystalStringDelimiter
-hi def link crystalStringDelimiter		Delimiter
-hi def link crystalHeredoc			crystalString
-hi def link crystalString			String
+hi def link crystalRegexpDelimiter	crystalStringDelimiter
+hi def link crystalSymbolDelimiter	crystalStringDelimiter
+hi def link crystalStringDelimiter	Delimiter
+hi def link crystalString		String
+hi def link crystalHeredoc		crystalString
 hi def link crystalRegexpEscape		crystalRegexpSpecial
 hi def link crystalRegexpQuantifier	crystalRegexpSpecial
 hi def link crystalRegexpAnchor		crystalRegexpSpecial
 hi def link crystalRegexpDot		crystalRegexpCharClass
-hi def link crystalRegexpCharClass		crystalRegexpSpecial
-hi def link crystalRegexpSpecial		Special
-hi def link crystalRegexpComment		Comment
-hi def link crystalRegexp			crystalString
-
-hi def link crystalLinkAttr		PreProc
-
+hi def link crystalRegexpCharClass	crystalRegexpSpecial
+hi def link crystalRegexpSpecial	Special
+hi def link crystalRegexpComment	Comment
+hi def link crystalRegexp		crystalString
 hi def link crystalMacro		PreProc
-
-hi def link crystalInvalidVariable		Error
-hi def link crystalError			Error
+hi def link crystalLinkAttr		crystalMacro
+hi def link crystalError		Error
+hi def link crystalInvalidVariable	crystalError
 hi def link crystalSpaceError		crystalError
 
 let b:current_syntax = 'crystal'
 
 " vim: nowrap sw=2 sts=2 ts=8 noet:
-
-endif

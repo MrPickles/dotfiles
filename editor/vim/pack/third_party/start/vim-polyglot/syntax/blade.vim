@@ -1,5 +1,7 @@
-if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'blade') == -1
-  
+if exists('g:polyglot_disabled') && index(g:polyglot_disabled, 'blade') != -1
+  finish
+endif
+
 " Vim syntax file
 " Language:     Blade (Laravel)
 " Maintainer:   Jason Walton <jwalton512@gmail.com>
@@ -33,12 +35,13 @@ syn region  bladeComment    matchgroup=bladeDelimiter start="{{--" end="--}}"  c
 
 syn keyword bladeKeyword @if @elseif @foreach @forelse @for @while @can @cannot @elsecan @elsecannot @include
     \ @includeIf @each @inject @extends @section @stack @push @unless @yield @parent @hasSection @break @continue
-    \ @unset @lang @choice @component @slot @prepend
+    \ @unset @lang @choice @component @slot @prepend @json @isset @auth @guest @switch @case @includeFirst @empty
+    \ @includeWhen
     \ nextgroup=bladePhpParenBlock skipwhite containedin=ALLBUT,@bladeExempt
 
-syn keyword bladeKeyword @else @endif @endunless @endfor @endforeach @empty @endforelse @endwhile @endcan
+syn keyword bladeKeyword @else @endif @endunless @endfor @endforeach @endforelse @endwhile @endcan
     \ @endcannot @stop @append @endsection @endpush @show @overwrite @verbatim @endverbatim @endcomponent
-    \ @endslot @endprepend
+    \ @endslot @endprepend @endisset @endempty @endauth @endguest @endswitch
     \ containedin=ALLBUT,@bladeExempt
 
 if exists('g:blade_custom_directives')
@@ -71,6 +74,4 @@ let b:current_syntax = 'blade'
 
 if exists('main_syntax') && main_syntax == 'blade'
     unlet main_syntax
-endif
-
 endif

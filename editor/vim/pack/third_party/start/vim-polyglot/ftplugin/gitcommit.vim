@@ -1,5 +1,7 @@
-if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'git') == -1
-  
+if exists('g:polyglot_disabled') && index(g:polyglot_disabled, 'git') != -1
+  finish
+endif
+
 " Vim filetype plugin
 " Language:	git commit file
 " Maintainer:	Tim Pope <vimNOSPAM@tpope.org>
@@ -15,8 +17,10 @@ let b:did_ftplugin = 1
 
 setlocal comments=:# commentstring=#\ %s
 setlocal nomodeline tabstop=8 formatoptions+=tl textwidth=72
-setlocal formatoptions-=c formatoptions-=r formatoptions-=o formatoptions-=q
-let b:undo_ftplugin = 'setl modeline< tabstop< formatoptions< tw< com< cms<'
+setlocal formatoptions-=c formatoptions-=r formatoptions-=o formatoptions-=q formatoptions+=n
+setlocal formatlistpat+=\\\|^\\s*[-*+]\\s\\+
+
+let b:undo_ftplugin = 'setl modeline< tabstop< formatoptions< tw< com< cms< formatlistpat<'
 
 if exists("g:no_gitcommit_commands") || v:version < 700
   finish
@@ -64,5 +68,3 @@ function! s:gitdiffcached(bang,gitdir,...)
   nnoremap <buffer> <silent> q :q<CR>
   setlocal buftype=nowrite nobuflisted noswapfile nomodifiable filetype=git
 endfunction
-
-endif

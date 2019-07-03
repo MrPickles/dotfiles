@@ -1,5 +1,7 @@
-if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'git') == -1
-  
+if exists('g:polyglot_disabled') && index(g:polyglot_disabled, 'git') != -1
+  finish
+endif
+
 " Vim syntax file
 " Language:	git commit file
 " Maintainer:	Tim Pope <vimNOSPAM@tpope.org>
@@ -20,11 +22,18 @@ endif
 syn include @gitcommitDiff syntax/diff.vim
 syn region gitcommitDiff start=/\%(^diff --\%(git\|cc\|combined\) \)\@=/ end=/^\%(diff --\|$\|#\)\@=/ fold contains=@gitcommitDiff
 
-syn match   gitcommitFirstLine	"\%^[^#].*"  nextgroup=gitcommitBlank skipnl
-syn match   gitcommitSummary	"^.\{0,50\}" contained containedin=gitcommitFirstLine nextgroup=gitcommitOverflow contains=@Spell
+syn match   gitcommitSummary	".*\%<50v" contained containedin=gitcommitFirstLine nextgroup=gitcommitOverflow contains=@Spell
 syn match   gitcommitOverflow	".*" contained contains=@Spell
 syn match   gitcommitBlank	"^[^#].*" contained contains=@Spell
-syn match   gitcommitComment	"^#.*"
+
+if get(g:, "gitcommit_cleanup") is# "scissors"
+  syn match gitcommitFirstLine	"\%^.*" nextgroup=gitcommitBlank skipnl
+  syn region gitcommitComment start=/^# -\+ >8 -\+$/ end=/\%$/ contains=gitcommitDiff
+else
+  syn match gitcommitFirstLine	"\%^[^#].*" nextgroup=gitcommitBlank skipnl
+  syn match gitcommitComment	"^#.*"
+endif
+
 syn match   gitcommitHead	"^\%(#   .*\n\)\+#$" contained transparent
 syn match   gitcommitOnBranch	"\%(^# \)\@<=On branch" contained containedin=gitcommitComment nextgroup=gitcommitBranch skipwhite
 syn match   gitcommitOnBranch	"\%(^# \)\@<=Your branch .\{-\} '" contained containedin=gitcommitComment nextgroup=gitcommitBranch skipwhite
@@ -84,5 +93,3 @@ hi def link gitcommitArrow		gitcommitComment
 hi def link gitcommitBlank		Error
 
 let b:current_syntax = "gitcommit"
-
-endif

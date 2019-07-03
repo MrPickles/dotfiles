@@ -1,6 +1,20 @@
+function! s:setf(filetype) abort
+  if &filetype !=# a:filetype
+    let &filetype = a:filetype
+  endif
+endfunction
+
 " Enable jsx syntax by default
 if !exists('g:jsx_ext_required')
   let g:jsx_ext_required = 0
+endif
+
+" Make csv loading faster
+if !exists('g:csv_start')
+  let g:csv_start = 1
+endif
+if !exists('g:csv_end')
+  let g:csv_end = 2
 endif
 
 " Disable json concealing by default
@@ -59,7 +73,7 @@ augroup filetypedetect
   autocmd BufNewFile,BufRead .gitsendemail.*                               set ft=gitsendemail
 
   " plantuml
-  autocmd BufRead,BufNewFile *.pu,*.uml,*.plantuml setfiletype plantuml | set filetype=plantuml
+  autocmd BufRead,BufNewFile *.pu,*.uml,*.plantuml,*.puml setfiletype plantuml | set filetype=plantuml
 
   " scala
   au BufRead,BufNewFile *.scala,*.sc set filetype=scala
@@ -67,5 +81,13 @@ augroup filetypedetect
 
   " swift
   autocmd BufNewFile,BufRead *.swift set filetype=swift
+
+
+  "jinja
+  autocmd BufNewFile,BufRead *.jinja2,*.j2,*.jinja,*.nunjucks,*.nunjs,*.njk set ft=jinja
 augroup END
 
+" Fix for https://github.com/sheerun/vim-polyglot/issues/236#issuecomment-387984954
+if (!exists('g:graphql_javascript_tags'))
+  let g:graphql_javascript_tags = ['gql', 'graphql', 'Relay.QL']
+endif

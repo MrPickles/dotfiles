@@ -1,5 +1,7 @@
-if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'git') == -1
-  
+if exists('g:polyglot_disabled') && index(g:polyglot_disabled, 'git') != -1
+  finish
+endif
+
 " Vim filetype plugin
 " Language:	generic git output
 " Maintainer:	Tim Pope <vimNOSPAM@tpope.org>
@@ -12,7 +14,7 @@ endif
 let b:did_ftplugin = 1
 
 if !exists('b:git_dir')
-  if expand('%:p') =~# '[\/]\.git[\/]modules[\/]'
+  if expand('%:p') =~# '[\/]\.git[\/]modules[\/]\|:[\/][\/]\|^\a\a\+:'
     " Stay out of the way
   elseif expand('%:p') =~# '[\/]\.git[\/]worktrees'
     let b:git_dir = matchstr(expand('%:p'),'.*\.git[\/]worktrees[\/][^\/]\+\>')
@@ -41,5 +43,3 @@ endif
 
 setlocal includeexpr=substitute(v:fname,'^[^/]\\+/','','')
 let b:undo_ftplugin = "setl keywordprg< path< includeexpr<"
-
-endif

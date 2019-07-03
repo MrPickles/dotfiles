@@ -1,5 +1,7 @@
-if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'solidity') == -1
-  
+if exists('g:polyglot_disabled') && index(g:polyglot_disabled, 'solidity') != -1
+  finish
+endif
+
 " Vim syntax file
 " Language:     Solidity
 " Maintainer:   Tomlion (qycpublic@gmail.com)
@@ -12,9 +14,9 @@ endif
 " basic
 " contract, library and event are defined at bottom of file
 syn keyword solKeyword           abstract anonymous as assembly break case catch constant continue default
-syn keyword solKeyword           delete do else enum external final for function if import in indexed inline
+syn keyword solKeyword           delete do else emit enum external final for function if import in indexed inline
 syn keyword solKeyword           interface internal is let match memory modifier new of payable pragma private public pure
-syn keyword solKeyword           relocatable return returns static storage struct switch throw try type typeof using
+syn keyword solKeyword           relocatable require return returns static storage struct throw try type typeof using
 syn keyword solKeyword           var view while
 syn keyword solConstant          true false wei szabo finney ether seconds minutes hours days weeks years now
 syn keyword solConstant          block msg now tx sha3 keccak256 sha256 ripemd160 ecerecover addmod mulmod this super selfdestruct
@@ -148,5 +150,3 @@ syn region  solComment           start="/\*"  end="\*/" contains=solCommentTodo,
 hi def link solCommentTodo       Comment
 hi def link solLineComment       Comment
 hi def link solComment           Comment
-
-endif

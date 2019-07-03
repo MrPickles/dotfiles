@@ -1,11 +1,12 @@
-if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'ruby') == -1
-  
+if exists('g:polyglot_disabled') && index(g:polyglot_disabled, 'ruby') != -1
+  finish
+endif
+
 " Vim filetype plugin
 " Language:		Ruby
 " Maintainer:		Tim Pope <vimNOSPAM@tpope.org>
 " URL:			https://github.com/vim-ruby/vim-ruby
-" Release Coordinator:  Doug Kearns <dougkearns@gmail.com>
-" ----------------------------------------------------------------------------
+" Release Coordinator:	Doug Kearns <dougkearns@gmail.com>
 
 if (exists("b:did_ftplugin"))
   finish
@@ -26,38 +27,31 @@ if exists("loaded_matchit") && !exists("b:match_words")
   let b:match_ignorecase = 0
 
   let b:match_words =
-	\ '\<\%(if\|unless\|case\|while\|until\|for\|do\|class\|module\|def\|begin\)\>=\@!' .
+	\ '{\|\<\%(if\|unless\|case\|while\|until\|for\|do\|class\|module\|def\|=\@<!begin\)\>=\@!' .
 	\ ':' .
 	\ '\<\%(else\|elsif\|ensure\|when\|rescue\|break\|redo\|next\|retry\)\>' .
 	\ ':' .
-        \ '\%(^\|[^.\:@$]\)\@<=\<end\:\@!\>' .
-	\ ',{:},\[:\],(:)'
+        \ '}\|\%(^\|[^.\:@$=]\)\@<=\<end\:\@!\>' .
+        \ ',^=begin\>:^=end\>,' .
+	\ ',\[:\],(:)'
 
   let b:match_skip =
 	\ "synIDattr(synID(line('.'),col('.'),0),'name') =~ '" .
-	\ "\\<ruby\\%(String\\|StringDelimiter\\|ASCIICode\\|Escape\\|" .
-        \ "Regexp\\|RegexpDelimiter\\|" .
-	\ "Interpolation\\|NoInterpolation\\|Comment\\|Documentation\\|" .
-	\ "ConditionalModifier\\|RepeatModifier\\|OptionalDo\\|" .
-	\ "Function\\|BlockArgument\\|KeywordAsMethod\\|ClassVariable\\|" .
+	\ "\\<ruby\\%(String\\|.\+Delimiter\\|Character\\|.\+Escape\\|" .
+        \ "Regexp\\|Interpolation\\|Comment\\|Documentation\\|" .
+	\ "ConditionalModifier\\|RepeatModifier\\|RescueModifier\\|OptionalDo\\|" .
+	\ "MethodName\\|BlockArgument\\|KeywordAsMethod\\|ClassVariable\\|" .
 	\ "InstanceVariable\\|GlobalVariable\\|Symbol\\)\\>'"
 endif
 
 setlocal formatoptions-=t formatoptions+=croql
 
 setlocal include=^\\s*\\<\\(load\\>\\\|require\\>\\\|autoload\\s*:\\=[\"']\\=\\h\\w*[\"']\\=,\\)
-setlocal includeexpr=substitute(substitute(v:fname,'::','/','g'),'\%(\.rb\)\=$','.rb','')
 setlocal suffixesadd=.rb
 
 if exists("&ofu") && has("ruby")
   setlocal omnifunc=rubycomplete#Complete
 endif
-
-" To activate, :set ballooneval
-if has('balloon_eval') && exists('+balloonexpr')
-  setlocal balloonexpr=RubyBalloonexpr()
-endif
-
 
 " TODO:
 "setlocal define=^\\s*def
@@ -143,22 +137,32 @@ if (has("gui_win32") || has("gui_gtk")) && !exists("b:browsefilter")
                      \ "All Files (*.*)\t*.*\n"
 endif
 
-let b:undo_ftplugin = "setl fo< inc< inex< sua< def< com< cms< path< tags< kp<"
+let b:undo_ftplugin = "setl inc= sua= path= tags= fo< com< cms< kp="
       \."| unlet! b:browsefilter b:match_ignorecase b:match_words b:match_skip"
       \."| if exists('&ofu') && has('ruby') | setl ofu< | endif"
-      \."| if has('balloon_eval') && exists('+bexpr') | setl bexpr< | endif"
+
+if get(g:, 'ruby_recommended_style', 1)
+  setlocal shiftwidth=2 softtabstop=2 expandtab
+  let b:undo_ftplugin .= ' | setl sw< sts< et<'
+endif
+
+" To activate, :set ballooneval
+if exists('+balloonexpr') && get(g:, 'ruby_balloonexpr')
+  setlocal balloonexpr=RubyBalloonexpr()
+  let b:undo_ftplugin .= "| setl bexpr="
+endif
 
 function! s:map(mode, flags, map) abort
   let from = matchstr(a:map, '\S\+')
   if empty(mapcheck(from, a:mode))
-    exe a:mode.'map' '<buffer>'.(a:0 ? a:1 : '') a:map
+    exe a:mode.'map' '<buffer>' a:flags a:map
     let b:undo_ftplugin .= '|sil! '.a:mode.'unmap <buffer> '.from
   endif
 endfunction
 
-cmap <buffer><script><expr> <Plug><cword> substitute(RubyCursorIdentifier(),'^$',"\022\027",'')
+cmap <buffer><script><expr> <Plug><ctag> substitute(RubyCursorTag(),'^$',"\022\027",'')
 cmap <buffer><script><expr> <Plug><cfile> substitute(RubyCursorFile(),'^$',"\022\006",'')
-let b:undo_ftplugin .= "| sil! cunmap <buffer> <Plug><cword>| sil! cunmap <buffer> <Plug><cfile>"
+let b:undo_ftplugin .= "| sil! cunmap <buffer> <Plug><ctag>| sil! cunmap <buffer> <Plug><cfile>"
 
 if !exists("g:no_plugin_maps") && !exists("g:no_ruby_maps")
   nmap <buffer><script> <SID>:  :<C-U>
@@ -206,19 +210,18 @@ if !exists("g:no_plugin_maps") && !exists("g:no_ruby_maps")
           \."| sil! exe 'xunmap <buffer> iM' | sil! exe 'xunmap <buffer> aM'"
   endif
 
-  call s:map('c', '', '<C-R><C-W> <Plug><cword>')
   call s:map('c', '', '<C-R><C-F> <Plug><cfile>')
 
   cmap <buffer><script><expr> <SID>tagzv &foldopen =~# 'tag' ? '<Bar>norm! zv' : ''
-  call s:map('n', '<silent>', '<C-]>       <SID>:exe  v:count1."tag <Plug><cword>"<SID>tagzv<CR>')
-  call s:map('n', '<silent>', 'g<C-]>      <SID>:exe         "tjump <Plug><cword>"<SID>tagzv<CR>')
-  call s:map('n', '<silent>', 'g]          <SID>:exe       "tselect <Plug><cword>"<SID>tagzv<CR>')
-  call s:map('n', '<silent>', '<C-W>]      <SID>:exe v:count1."stag <Plug><cword>"<SID>tagzv<CR>')
-  call s:map('n', '<silent>', '<C-W><C-]>  <SID>:exe v:count1."stag <Plug><cword>"<SID>tagzv<CR>')
-  call s:map('n', '<silent>', '<C-W>g<C-]> <SID>:exe        "stjump <Plug><cword>"<SID>tagzv<CR>')
-  call s:map('n', '<silent>', '<C-W>g]     <SID>:exe      "stselect <Plug><cword>"<SID>tagzv<CR>')
-  call s:map('n', '<silent>', '<C-W>}      <SID>:exe v:count1."ptag <Plug><cword>"<CR>')
-  call s:map('n', '<silent>', '<C-W>g}     <SID>:exe        "ptjump <Plug><cword>"<CR>')
+  call s:map('n', '<silent>', '<C-]>       <SID>:exe  v:count1."tag <Plug><ctag>"<SID>tagzv<CR>')
+  call s:map('n', '<silent>', 'g<C-]>      <SID>:exe         "tjump <Plug><ctag>"<SID>tagzv<CR>')
+  call s:map('n', '<silent>', 'g]          <SID>:exe       "tselect <Plug><ctag>"<SID>tagzv<CR>')
+  call s:map('n', '<silent>', '<C-W>]      <SID>:exe v:count1."stag <Plug><ctag>"<SID>tagzv<CR>')
+  call s:map('n', '<silent>', '<C-W><C-]>  <SID>:exe v:count1."stag <Plug><ctag>"<SID>tagzv<CR>')
+  call s:map('n', '<silent>', '<C-W>g<C-]> <SID>:exe        "stjump <Plug><ctag>"<SID>tagzv<CR>')
+  call s:map('n', '<silent>', '<C-W>g]     <SID>:exe      "stselect <Plug><ctag>"<SID>tagzv<CR>')
+  call s:map('n', '<silent>', '<C-W>}      <SID>:exe v:count1."ptag <Plug><ctag>"<CR>')
+  call s:map('n', '<silent>', '<C-W>g}     <SID>:exe        "ptjump <Plug><ctag>"<CR>')
 
   call s:map('n', '<silent>', 'gf           <SID>c:find <Plug><cfile><CR>')
   call s:map('n', '<silent>', '<C-W>f      <SID>c:sfind <Plug><cfile><CR>')
@@ -311,13 +314,16 @@ function! s:synid() abort
 endfunction
 
 function! s:wrap_i(back,forward) abort
-  execute 'norm k'.a:forward
+  execute 'norm! k'
+  execute 'norm '.a:forward
   let line = line('.')
   execute 'norm '.a:back
   if line('.') == line - 1
     return s:wrap_a(a:back,a:forward)
   endif
-  execute 'norm jV'.a:forward.'k'
+  execute 'norm! jV'
+  execute 'norm '.a:forward
+  execute 'norm! k'
 endfunction
 
 function! s:wrap_a(back,forward) abort
@@ -330,11 +336,15 @@ function! s:wrap_a(back,forward) abort
     -
   endwhile
   if exists('after')
-    execute 'norm V'.a:forward.'j'
+    execute 'norm! V'
+    execute 'norm '.a:forward
+    execute 'norm! j'
   elseif line('.') > 1 && getline(line('.')-1) =~# '^\s*$'
-    execute 'norm kV'.a:forward
+    execute 'norm! kV'
+    execute 'norm '.a:forward
   else
-    execute 'norm V'.a:forward
+    execute 'norm! V'
+    execute 'norm '.a:forward
   endif
 endfunction
 
@@ -350,6 +360,10 @@ function! RubyCursorIdentifier() abort
   let raw          = matchstr(getline('.')[col-1 : ],pattern)
   let stripped     = substitute(substitute(raw,'\s\+=$','=',''),'^\s*[:.]\=','','')
   return stripped == '' ? expand("<cword>") : stripped
+endfunction
+
+function! RubyCursorTag() abort
+  return substitute(RubyCursorIdentifier(), '^[$@]*', '', '')
 endfunction
 
 function! RubyCursorFile() abort
@@ -422,5 +436,3 @@ endfunction
 "
 
 " vim: nowrap sw=2 sts=2 ts=8:
-
-endif

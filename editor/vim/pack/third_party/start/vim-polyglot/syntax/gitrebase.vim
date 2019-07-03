@@ -1,5 +1,7 @@
-if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'git') == -1
-  
+if exists('g:polyglot_disabled') && index(g:polyglot_disabled, 'git') != -1
+  finish
+endif
+
 " Vim syntax file
 " Language:	git rebase --interactive
 " Maintainer:	Tim Pope <vimNOSPAM@tpope.org>
@@ -20,7 +22,9 @@ syn match   gitrebaseEdit   "\v^e%(dit)=>"   nextgroup=gitrebaseCommit skipwhite
 syn match   gitrebaseSquash "\v^s%(quash)=>" nextgroup=gitrebaseCommit skipwhite
 syn match   gitrebaseFixup  "\v^f%(ixup)=>"  nextgroup=gitrebaseCommit skipwhite
 syn match   gitrebaseExec   "\v^%(x|exec)>" nextgroup=gitrebaseCommand skipwhite
+syn match   gitrebaseBreak  "\v^b%(reak)=>"  nextgroup=gitrebaseCommit skipwhite
 syn match   gitrebaseDrop   "\v^d%(rop)=>"   nextgroup=gitrebaseCommit skipwhite
+syn match   gitrebaseNoop   "\v^noop>"
 syn match   gitrebaseSummary ".*"               contains=gitrebaseHash contained
 syn match   gitrebaseCommand ".*"                                      contained
 syn match   gitrebaseComment "^\s*#.*"             contains=gitrebaseHash
@@ -34,11 +38,11 @@ hi def link gitrebaseEdit           PreProc
 hi def link gitrebaseSquash         Type
 hi def link gitrebaseFixup          Special
 hi def link gitrebaseExec           Function
+hi def link gitrebaseBreak          Macro
 hi def link gitrebaseDrop           Comment
+hi def link gitrebaseNoop           Comment
 hi def link gitrebaseSummary        String
 hi def link gitrebaseComment        Comment
 hi def link gitrebaseSquashError    Error
 
 let b:current_syntax = "gitrebase"
-
-endif

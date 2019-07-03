@@ -1,5 +1,7 @@
-if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'python-ident') == -1
-  
+if exists('g:polyglot_disabled') && index(g:polyglot_disabled, 'python-indent') != -1
+  finish
+endif
+
 " PEP8 compatible Python indent file
 " Language:         Python
 " Maintainer:       Daniel Hahler <https://daniel.hahler.de/>
@@ -36,14 +38,27 @@ if !exists('g:python_pep8_indent_multiline_string')
     let g:python_pep8_indent_multiline_string = 0
 endif
 
+if !exists('g:python_pep8_indent_hang_closing')
+    let g:python_pep8_indent_hang_closing = 0
+endif
+
+" TODO: check required patch for timeout argument, likely lower than 7.3.429 though.
+if !exists('g:python_pep8_indent_searchpair_timeout')
+    if has('patch-8.0.1483')
+        let g:python_pep8_indent_searchpair_timeout = 150
+    else
+        let g:python_pep8_indent_searchpair_timeout = 0
+    endif
+endif
+
 let s:block_rules = {
-            \ '^\s*elif\>': ['if', 'elif'],
-            \ '^\s*except\>': ['try', 'except'],
-            \ '^\s*finally\>': ['try', 'except', 'else']
-            \ }
+      \ '^\s*elif\>': [['if', 'elif'], ['else']],
+      \ '^\s*except\>': [['try', 'except'], []],
+      \ '^\s*finally\>': [['try', 'except', 'else'], []]
+      \ }
 let s:block_rules_multiple = {
-            \ '^\s*else\>': ['if', 'elif', 'for', 'try', 'except'],
-            \ }
+      \ '^\s*else\>': [['if', 'elif', 'for', 'try', 'except'], []]
+      \ }
 " Pairs to look for when searching for opening parenthesis.
 " The value is the maximum offset in lines.
 let s:paren_pairs = {'()': 50, '[]': 100, '{}': 1000}
@@ -55,28 +70,36 @@ else
 endif
 let s:stop_statement = '^\s*\(break\|continue\|raise\|return\|pass\)\>'
 
-" Skip strings and comments. Return 1 for chars to skip.
-" jedi* refers to syntax definitions from jedi-vim for call signatures, which
-" are inserted temporarily into the buffer.
-let s:skip_special_chars = 'synIDattr(synID(line("."), col("."), 0), "name") ' .
-            \ '=~? "\\vstring|comment|jedi\\S"'
-
 let s:skip_after_opening_paren = 'synIDattr(synID(line("."), col("."), 0), "name") ' .
             \ '=~? "\\vcomment|jedi\\S"'
 
-" Also ignore anything concealed.
-" Wrapper around synconcealed for older Vim (7.3.429, used on Travis CI).
-function! s:is_concealed(line, col)
-    let concealed = synconcealed(a:line, a:col)
-    return len(concealed) && concealed[0]
-endfunction
-if has('conceal')
-    let s:skip_special_chars .= '|| s:is_concealed(line("."), col("."))'
+let s:special_chars_syn_pattern = "\\vstring|comment|^pythonbytes%(contents)=$|pythonTodo|jedi\\S"
+
+if !get(g:, 'python_pep8_indent_skip_concealed', 0) || !has('conceal')
+    " Skip strings and comments. Return 1 for chars to skip.
+    " jedi* refers to syntax definitions from jedi-vim for call signatures, which
+    " are inserted temporarily into the buffer.
+    function! s:_skip_special_chars(line, col)
+        return synIDattr(synID(a:line, a:col, 0), 'name')
+              \ =~? s:special_chars_syn_pattern
+    endfunction
+else
+    " Also ignore anything concealed.
+    " TODO: doc; likely only necessary with jedi-vim, where a better version is
+    " planned (https://github.com/Vimjas/vim-python-pep8-indent/pull/98).
+
+    " Wrapper around synconcealed for older Vim (7.3.429, used on Travis CI).
+    function! s:is_concealed(line, col)
+        let concealed = synconcealed(a:line, a:col)
+        return len(concealed) && concealed[0]
+    endfunction
+
+    function! s:_skip_special_chars(line, col)
+        return synIDattr(synID(a:line, a:col, 0), 'name')
+              \ =~? s:special_chars_syn_pattern
+              \ || s:is_concealed(a:line, a:col)
+    endfunction
 endif
-
-
-let s:skip_search = 'synIDattr(synID(line("."), col("."), 0), "name") ' .
-            \ '=~? "comment"'
 
 " Use 'shiftwidth()' instead of '&sw'.
 " (Since Vim patch 7.3.629, 'shiftwidth' can be set to 0 to follow 'tabstop').
@@ -90,33 +113,22 @@ else
     endfunction
 endif
 
-function! s:pair_sort(x, y)
-    if a:x[0] == a:y[0]
-        return a:x[1] == a:y[1] ? 0 : a:x[1] > a:y[1] ? 1 : -1
-    else
-        return a:x[0] > a:y[0] ? 1 : -1
-    endif
-endfunction
-
 " Find backwards the closest open parenthesis/bracket/brace.
-function! s:find_opening_paren(...)
-    " optional arguments: line and column (defaults to 1) to search around
-    if a:0 > 0
-        let view = winsaveview()
-        call cursor(a:1, a:0 > 1 ? a:2 : 1)
-        let ret = s:find_opening_paren()
-        call winrestview(view)
-        return ret
+function! s:find_opening_paren(lnum, col)
+    " Return if cursor is in a comment.
+    if synIDattr(synID(a:lnum, a:col, 0), 'name') =~? 'comment'
+        return [0, 0]
     endif
 
-    " Return if cursor is in a comment.
-    exe 'if' s:skip_search '| return [0, 0] | endif'
+    call cursor(a:lnum, a:col)
 
     let nearest = [0, 0]
+    let timeout = g:python_pep8_indent_searchpair_timeout
+    let skip_special_chars = 's:_skip_special_chars(line("."), col("."))'
     for [p, maxoff] in items(s:paren_pairs)
         let stopline = max([0, line('.') - maxoff, nearest[0]])
         let next = searchpairpos(
-           \ '\V'.p[0], '', '\V'.p[1], 'bnW', s:skip_special_chars, stopline)
+           \ '\V'.p[0], '', '\V'.p[1], 'bnW', skip_special_chars, stopline, timeout)
         if next[0] && (next[0] > nearest[0] || (next[0] == nearest[0] && next[1] > nearest[1]))
             let nearest = next
         endif
@@ -131,7 +143,7 @@ function! s:find_start_of_multiline_statement(lnum)
         if getline(lnum - 1) =~# '\\$'
             let lnum = prevnonblank(lnum - 1)
         else
-            let [paren_lnum, _] = s:find_opening_paren(lnum)
+            let [paren_lnum, _] = s:find_opening_paren(lnum, 1)
             if paren_lnum < 1
                 return lnum
             else
@@ -142,29 +154,31 @@ function! s:find_start_of_multiline_statement(lnum)
 endfunction
 
 " Find possible indent(s) of the block starter that matches the current line.
-function! s:find_start_of_block(lnum, types, multiple)
+function! s:find_start_of_block(lnum, types, skip, multiple) abort
     let r = []
-    let types = copy(a:types)
     let re = '\V\^\s\*\('.join(a:types, '\|').'\)\>'
+    if !empty(a:skip)
+      let re_skip = '\V\^\s\*\('.join(a:skip, '\|').'\)\>'
+    else
+      let re_skip = ''
+    endif
     let lnum = a:lnum
     let last_indent = indent(lnum) + 1
     while lnum > 0 && last_indent > 0
         let indent = indent(lnum)
         if indent < last_indent
-            for type in types
-                let re = '\v^\s*'.type.'>'
-                if getline(lnum) =~# re
-                    if !a:multiple
-                        return [indent]
-                    endif
-                    if index(r, indent) == -1
-                        let r += [indent]
-                    endif
-                    " Remove any handled type, e.g. 'if'.
-                    call remove(types, index(types, type))
+            let line = getline(lnum)
+            if !empty(re_skip) && line =~# re_skip
+                let last_indent = indent
+            elseif line =~# re
+                if !a:multiple
+                    return [indent]
                 endif
-            endfor
-            let last_indent = indent(lnum)
+                if index(r, indent) == -1
+                    let r += [indent]
+                endif
+                let last_indent = indent
+            endif
         endif
         let lnum = prevnonblank(lnum - 1)
     endwhile
@@ -194,7 +208,7 @@ endfunction
 
 " Line up with open parenthesis/bracket/brace.
 function! s:indent_like_opening_paren(lnum)
-    let [paren_lnum, paren_col] = s:find_opening_paren(a:lnum)
+    let [paren_lnum, paren_col] = s:find_opening_paren(a:lnum, 1)
     if paren_lnum <= 0
         return -2
     endif
@@ -205,11 +219,19 @@ function! s:indent_like_opening_paren(lnum)
                 \ s:skip_after_opening_paren, paren_lnum, paren_col+1)
     let starts_with_closing_paren = getline(a:lnum) =~# '^\s*[])}]'
 
+    let hang_closing = get(b:, 'python_pep8_indent_hang_closing',
+                \ get(g:, 'python_pep8_indent_hang_closing', 0))
+
     if nothing_after_opening_paren
-        if starts_with_closing_paren
+        if starts_with_closing_paren && !hang_closing
             let res = base
         else
             let res = base + s:sw()
+
+            " Special case for parenthesis.
+            if text[paren_col-1] ==# '(' && getline(a:lnum) !~# '\v\)\s*:?\s*$'
+                return res
+            endif
         endif
     else
         " Indent to match position of opening paren.
@@ -220,10 +242,13 @@ function! s:indent_like_opening_paren(lnum)
     " indent further to distinguish the continuation line
     " from the next logical line.
     if text =~# b:control_statement && res == base + s:sw()
-        return base + s:sw() * 2
-    else
-        return res
+        " But only if not inside parens itself (Flake's E127).
+        let [paren_lnum, _] = s:find_opening_paren(paren_lnum, 1)
+        if paren_lnum <= 0
+            return res + s:sw()
+        endif
     endif
+    return res
 endfunction
 
 " Match indent of first block of this type.
@@ -231,14 +256,16 @@ function! s:indent_like_block(lnum)
     let text = getline(a:lnum)
     for [multiple, block_rules] in [
                 \ [0, s:block_rules],
-                \ [1, s:block_rules_multiple]]
-        for [line_re, blocks] in items(block_rules)
+                \ [1, s:block_rules_multiple],
+                \ ]
+        for [line_re, blocks_ignore] in items(block_rules)
             if text !~# line_re
                 continue
             endif
 
-            let indents = s:find_start_of_block(a:lnum - 1, blocks, multiple)
-            if !len(indents)
+            let [blocks, skip] = blocks_ignore
+            let indents = s:find_start_of_block(a:lnum - 1, blocks, skip, multiple)
+            if empty(indents)
                 return -1
             endif
             if len(indents) == 1
@@ -271,24 +298,23 @@ function! s:indent_like_previous_line(lnum)
     let base = indent(start)
     let current = indent(a:lnum)
 
-    " Jump to last character in previous line.
-    call cursor(lnum, len(text))
-    let ignore_last_char = eval(s:skip_special_chars)
+    " Ignore last character in previous line?
+    let lastcol = len(text)
+    let col = lastcol
 
     " Search for final colon that is not inside something to be ignored.
     while 1
-        let curpos = getpos('.')[2]
-        if curpos == 1 | break | endif
-        if eval(s:skip_special_chars) || text[curpos-1] =~# '\s'
-            normal! h
+        if col == 1 | break | endif
+        if text[col-1] =~# '\s' || s:_skip_special_chars(lnum, col)
+            let col = col - 1
             continue
-        elseif text[curpos-1] ==# ':'
+        elseif text[col-1] ==# ':'
             return base + s:sw()
         endif
         break
     endwhile
 
-    if text =~# '\\$' && !ignore_last_char
+    if text =~# '\\$' && !s:_skip_special_chars(lnum, lastcol)
         " If this line is the continuation of a control statement
         " indent further to distinguish the continuation line
         " from the next logical line.
@@ -319,7 +345,7 @@ function! s:indent_like_previous_line(lnum)
         return -1
     endif
 
-    if !empty && s:is_dedented_already(current, base)
+    if (current || !empty) && s:is_dedented_already(current, base)
         return -1
     endif
 
@@ -337,11 +363,11 @@ endfunction
 " Is the syntax at lnum (and optionally cnum) a python string?
 function! s:is_python_string(lnum, ...)
     let line = getline(a:lnum)
-    let linelen = len(line)
-    if linelen < 1
-      let linelen = 1
+    if a:0
+      let cols = type(a:1) != type([]) ? [a:1] : a:1
+    else
+      let cols = range(1, max([1, len(line)]))
     endif
-    let cols = a:0 ? type(a:1) != type([]) ? [a:1] : a:1 : range(1, linelen)
     for cnum in cols
         if match(map(synstack(a:lnum, cnum),
                     \ "synIDattr(v:val, 'name')"), 'python\S*String') == -1
@@ -361,7 +387,7 @@ function! GetPythonPEPIndent(lnum)
     let prevline = getline(a:lnum-1)
 
     " Multilinestrings: continous, docstring or starting.
-    if s:is_python_string(a:lnum-1, len(prevline))
+    if s:is_python_string(a:lnum-1, max([1, len(prevline)]))
                 \ && (s:is_python_string(a:lnum, 1)
                 \     || match(line, '^\%("""\|''''''\)') != -1)
 
@@ -370,17 +396,18 @@ function! GetPythonPEPIndent(lnum)
         if match_quotes != -1
             " closing multiline string
             let quotes = line[match_quotes:(match_quotes+2)]
-            let pairpos = searchpairpos(quotes, '', quotes, 'b')
+            call cursor(a:lnum, 1)
+            let pairpos = searchpairpos(quotes, '', quotes, 'bW', '', 0, g:python_pep8_indent_searchpair_timeout)
             if pairpos[0] != 0
                 return indent(pairpos[0])
             else
-                " TODO: test to cover this!
+                return -1
             endif
         endif
 
         if s:is_python_string(a:lnum-1)
-            " Previous line is (completely) a string.
-            return indent(a:lnum-1)
+            " Previous line is (completely) a string: keep current indent.
+            return -1
         endif
 
         if match(prevline, '^\s*\%("""\|''''''\)') != -1
@@ -429,5 +456,3 @@ function! GetPythonPEPIndent(lnum)
 
     return s:indent_like_previous_line(a:lnum)
 endfunction
-
-endif

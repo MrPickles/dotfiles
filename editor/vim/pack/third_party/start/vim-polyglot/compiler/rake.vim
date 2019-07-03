@@ -1,5 +1,7 @@
-if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'ruby') == -1
-  
+if exists('g:polyglot_disabled') && index(g:polyglot_disabled, 'ruby') != -1
+  finish
+endif
+
 " Vim compiler file
 " Language:		Rake
 " Maintainer:		Tim Pope <vimNOSPAM@tpope.org>
@@ -22,12 +24,12 @@ CompilerSet makeprg=rake
 
 CompilerSet errorformat=
       \%D(in\ %f),
-      \%\\s%#from\ %f:%l:%m,
-      \%\\s%#from\ %f:%l:,
-      \%\\s%##\ %f:%l:%m%\\&%.%#%\\D:%\\d%#:%.%#,
-      \%\\s%##\ %f:%l%\\&%.%#%\\D:%\\d%#,
-      \%\\s%#[%f:%l:\ %#%m%\\&%.%#%\\D:%\\d%#:%.%#,
-      \%\\s%#%f:%l:\ %#%m%\\&%.%#%\\D:%\\d%#:%.%#,
+      \%\\s%#%\\d%#:%#\ %#from\ %f:%l:%m,
+      \%\\s%#%\\d%#:%#\ %#from\ %f:%l:,
+      \%\\s%##\ %f:%l:%m%\\&%.%#%\\D:%\\d%\\+:%.%#,
+      \%\\s%##\ %f:%l%\\&%.%#%\\D:%\\d%\\+,
+      \%\\s%#[%f:%l:\ %#%m%\\&%.%#%\\D:%\\d%\\+:%.%#,
+      \%\\s%#%f:%l:\ %#%m%\\&%.%#%\\D:%\\d%\\+:%.%#,
       \%\\s%#%f:%l:,
       \%m\ [%f:%l]:,
       \%+Erake\ aborted!,
@@ -39,5 +41,3 @@ let &cpo = s:cpo_save
 unlet s:cpo_save
 
 " vim: nowrap sw=2 sts=2 ts=8:
-
-endif

@@ -1,5 +1,7 @@
-if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'nix') == -1
-  
+if exists('g:polyglot_disabled') && index(g:polyglot_disabled, 'nix') != -1
+  finish
+endif
+
 " Vim syntax file
 " Language:    Nix
 " Maintainer:  Daiderd Jordan <daiderd@gmail.com>
@@ -36,11 +38,16 @@ syn region  nixComment start=+/\*+ end=+\*/+ contains=nixTodo,@Spell
 
 syn region nixInterpolation matchgroup=nixInterpolationDelimiter start="\${" end="}" contained contains=@nixExpr,nixInterpolationParam
 
-syn match nixSimpleStringSpecial /\\["nrt\\$]/ contained
-syn match nixInterpolationSpecial /''['$]/ contained
+syn match nixSimpleStringSpecial /\\\%([nrt"\\$]\|$\)/ contained
+syn match nixStringSpecial /''['$]/ contained
+syn match nixStringSpecial /\$\$/ contained
+syn match nixStringSpecial /''\\[nrt]/ contained
 
-syn region nixSimpleString matchgroup=nixStringDelimiter start=+"+ skip=+\\"+ end=+"+ contains=nixInterpolation,nixSimpleStringSpecial
-syn region nixString matchgroup=nixStringDelimiter start=+''+ skip=+''['$]+ end=+''+ contains=nixInterpolation,nixInterpolationSpecial
+syn match nixInvalidSimpleStringEscape /\\[^nrt"\\$]/ contained
+syn match nixInvalidStringEscape /''\\[^nrt]/ contained
+
+syn region nixSimpleString matchgroup=nixStringDelimiter start=+"+ skip=+\\"+ end=+"+ contains=nixInterpolation,nixSimpleStringSpecial,nixInvalidSimpleStringEscape
+syn region nixString matchgroup=nixStringDelimiter start=+''+ skip=+''['$\\]+ end=+''+ contains=nixInterpolation,nixStringSpecial,nixInvalidStringEscape
 
 syn match nixFunctionCall "[a-zA-Z_][a-zA-Z0-9_'-]*"
 
@@ -52,7 +59,7 @@ syn match nixSearchPathRef "<[a-zA-Z0-9._+-]\+\%(\/[a-zA-Z0-9._+-]\+\)*>" contai
 syn match nixURI "[a-zA-Z][a-zA-Z0-9.+-]*:[a-zA-Z0-9%/?:@&=$,_.!~*'+-]\+"
 
 syn match nixAttributeDot "\." contained
-syn match nixAttribute "[a-zA-Z_][a-zA-Z0-9_'-]*\ze\%([^a-zA-Z0-9_'-.]\|$\)" contained
+syn match nixAttribute "[a-zA-Z_][a-zA-Z0-9_'-]*\ze\%([^a-zA-Z0-9_'.-]\|$\)" contained
 syn region nixAttributeAssignment start="=" end="\ze;" contained contains=@nixExpr
 syn region nixAttributeDefinition start=/\ze[a-zA-Z_"$]/ end=";" contained contains=nixComment,nixAttribute,nixInterpolation,nixSimpleString,nixAttributeDot,nixAttributeAssignment
 
@@ -117,65 +124,74 @@ syn region nixWithExpr matchgroup=nixWithExprKeyword start="\<with\>" matchgroup
 
 syn region nixAssertExpr matchgroup=nixAssertKeyword start="\<assert\>" matchgroup=NONE end=";" contains=@nixExpr
 
-syn cluster nixExpr contains=nixBoolean,nixNull,nixOperator,nixParen,nixInteger,nixRecKeyword,nixConditional,nixBuiltin,nixSimpleBuiltin,nixComment,nixFunctionCall,nixFunctionArgument,nixSimpleFunctionArgument,nixPath,nixHomePath,nixSearchPathRef,nixURI,nixAttributeSet,nixList,nixSimpleString,nixString,nixLetExpr,nixIfExpr,nixWithExpr,nixAssertExpr
+syn cluster nixExpr contains=nixBoolean,nixNull,nixOperator,nixParen,nixInteger,nixRecKeyword,nixConditional,nixBuiltin,nixSimpleBuiltin,nixComment,nixFunctionCall,nixFunctionArgument,nixSimpleFunctionArgument,nixPath,nixHomePath,nixSearchPathRef,nixURI,nixAttributeSet,nixList,nixSimpleString,nixString,nixLetExpr,nixIfExpr,nixWithExpr,nixAssertExpr,nixInterpolation
 
 " These definitions override @nixExpr and have to come afterwards:
 
 syn match nixInterpolationParam "[a-zA-Z_][a-zA-Z0-9_'-]*\%(\.[a-zA-Z_][a-zA-Z0-9_'-]*\)*" contained
 
-" Non-namespaced Nix builtins as of version 1.10:
+" Non-namespaced Nix builtins as of version 2.0:
 syn keyword nixSimpleBuiltin
-      \ abort baseNameOf derivation dirOf fetchTarball import map removeAttrs
-      \ throw toString
+      \ abort baseNameOf derivation derivationStrict dirOf fetchGit
+      \ fetchMercurial fetchTarball import isNull map placeholder removeAttrs
+      \ scopedImport throw toString
 
-" Namespaced and non-namespaced Nix builtins as of version 1.10:
+
+" Namespaced and non-namespaced Nix builtins as of version 2.0:
 syn keyword nixNamespacedBuiltin contained
-      \ abort add all any attrNames attrValues baseNameOf compareVersions
-      \ concatLists currentSystem deepSeq derivation dirOf div elem elemAt
-      \ fetchTarball fetchurl filter filterSource foldl' fromJSON genList
-      \ getAttr getEnv hasAttr hashString head import intersectAttrs isAttrs
-      \ isBool isFunction isInt isList isString length lessThan listToAttrs map
-      \ mul parseDrvName pathExists readDir readFile removeAttrs replaceStrings
-      \ seq sort stringLength sub substring tail throw toFile toJSON toPath
-      \ toString toXML trace typeOf
+      \ abort add addErrorContext all any attrNames attrValues baseNameOf
+      \ catAttrs compareVersions concatLists concatStringsSep currentSystem
+      \ currentTime deepSeq derivation derivationStrict dirOf div elem elemAt
+      \ fetchGit fetchMercurial fetchTarball fetchurl filter \ filterSource
+      \ findFile foldl' fromJSON functionArgs genList \ genericClosure getAttr
+      \ getEnv hasAttr hasContext hashString head import intersectAttrs isAttrs
+      \ isBool isFloat isFunction isInt isList isNull isString langVersion
+      \ length lessThan listToAttrs map match mul nixPath nixVersion
+      \ parseDrvName partition path pathExists placeholder readDir readFile
+      \ removeAttrs replaceStrings scopedImport seq sort split splitVersion
+      \ storeDir storePath stringLength sub substring tail throw toFile toJSON
+      \ toPath toString toXML trace tryEval typeOf unsafeDiscardOutputDependency
+      \ unsafeDiscardStringContext unsafeGetAttrPos valueSize
 
 syn match nixBuiltin "builtins\.[a-zA-Z']\+"he=s+9 contains=nixComment,nixNamespacedBuiltin
 
-hi def link nixArgOperator            Operator
-hi def link nixArgumentDefinition     Identifier
-hi def link nixArgumentEllipsis       Operator
-hi def link nixAssertKeyword          Keyword
-hi def link nixAttribute              Identifier
-hi def link nixAttributeDot           Operator
-hi def link nixBoolean                Boolean
-hi def link nixBuiltin                Special
-hi def link nixComment                Comment
-hi def link nixConditional            Conditional
-hi def link nixHomePath               Include
-hi def link nixIfExprKeyword          Keyword
-hi def link nixInherit                Keyword
-hi def link nixInteger                Integer
-hi def link nixInterpolation          Macro
-hi def link nixInterpolationDelimiter Delimiter
-hi def link nixInterpolationParam     Macro
-hi def link nixInterpolationSpecial   Special
-hi def link nixLetExprKeyword         Keyword
-hi def link nixNamespacedBuiltin      Special
-hi def link nixNull                   Constant
-hi def link nixOperator               Operator
-hi def link nixPath                   Include
-hi def link nixPathDelimiter          Delimiter
-hi def link nixRecKeyword             Keyword
-hi def link nixSearchPath             Include
-hi def link nixSimpleBuiltin          Keyword
-hi def link nixSimpleFunctionArgument Identifier
-hi def link nixSimpleString           String
-hi def link nixSimpleStringSpecial    SpecialChar
-hi def link nixString                 String
-hi def link nixStringDelimiter        Delimiter
-hi def link nixTodo                   Todo
-hi def link nixURI                    Include
-hi def link nixWithExprKeyword        Keyword
+hi def link nixArgOperator               Operator
+hi def link nixArgumentDefinition        Identifier
+hi def link nixArgumentEllipsis          Operator
+hi def link nixAssertKeyword             Keyword
+hi def link nixAttribute                 Identifier
+hi def link nixAttributeDot              Operator
+hi def link nixBoolean                   Boolean
+hi def link nixBuiltin                   Special
+hi def link nixComment                   Comment
+hi def link nixConditional               Conditional
+hi def link nixHomePath                  Include
+hi def link nixIfExprKeyword             Keyword
+hi def link nixInherit                   Keyword
+hi def link nixInteger                   Integer
+hi def link nixInterpolation             Macro
+hi def link nixInterpolationDelimiter    Delimiter
+hi def link nixInterpolationParam        Macro
+hi def link nixInvalidSimpleStringEscape Error
+hi def link nixInvalidStringEscape       Error
+hi def link nixLetExprKeyword            Keyword
+hi def link nixNamespacedBuiltin         Special
+hi def link nixNull                      Constant
+hi def link nixOperator                  Operator
+hi def link nixPath                      Include
+hi def link nixPathDelimiter             Delimiter
+hi def link nixRecKeyword                Keyword
+hi def link nixSearchPath                Include
+hi def link nixSimpleBuiltin             Keyword
+hi def link nixSimpleFunctionArgument    Identifier
+hi def link nixSimpleString              String
+hi def link nixSimpleStringSpecial       SpecialChar
+hi def link nixString                    String
+hi def link nixStringDelimiter           Delimiter
+hi def link nixStringSpecial             Special
+hi def link nixTodo                      Todo
+hi def link nixURI                       Include
+hi def link nixWithExprKeyword           Keyword
 
 " This could lead up to slow syntax highlighting for large files, but usually
 " large files such as all-packages.nix are one large attribute set, so if we'd
@@ -183,5 +199,3 @@ hi def link nixWithExprKeyword        Keyword
 syn sync fromstart
 
 let b:current_syntax = "nix"
-
-endif

@@ -1,8 +1,10 @@
-if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'vifm') == -1
-  
+if exists('g:polyglot_disabled') && index(g:polyglot_disabled, 'vifm') != -1
+  finish
+endif
+
 " common functions for vifm plugin related to globals
 " Maintainer:  xaizek <xaizek@posteo.net>
-" Last Change: January 02, 2018
+" Last Change: November 03, 2018
 
 " Initializes global variables to defaults unless they are already set
 function! vifm#globals#Init()
@@ -26,6 +28,8 @@ function! vifm#globals#Init()
             let g:vifm_term = 'xterm -e'
         endif
     endif
-endfunction
 
-endif
+    if !exists('g:vifm_embed_term')
+        let g:vifm_embed_term = has('gui_running')
+    endif
+endfunction

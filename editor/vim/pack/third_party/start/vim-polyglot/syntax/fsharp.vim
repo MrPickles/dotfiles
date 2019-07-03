@@ -1,5 +1,7 @@
-if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'fsharp') == -1
-  
+if exists('g:polyglot_disabled') && index(g:polyglot_disabled, 'fsharp') != -1
+  finish
+endif
+
 " Vim syntax file
 " Language:     F#
 " Last Change:  Sun 19 Oct 2014 11:11:44 PM CEST
@@ -47,7 +49,7 @@ syn match fsharpSymbol "\%(member\)\@<=\s\+\w\+\.\zs\w\+"
 
 
 " types
-syn match    fsharpTypeName   "\%(\<type\s\+\)\@<=\w\+"
+syn match    fsharpTypeName   "\%#=1\%(\<type\s\+\)\@<=\w\+"
 
 
 " errors
@@ -182,7 +184,7 @@ syn match    fsharpFloat         "\<-\=\d\(_\|\d\)*\.\(_\|\d\)*\([eE][-+]\=\d\(_
 syn match    fsharpFloat         "\<\d\+\.\d*"
 
 " modules
-syn match    fsharpModule     "\%(\<open\s\+\)\@<=[a-zA-Z.]\+"
+syn match    fsharpModule     "\%#=1\%(\<open\s\+\)\@<=[a-zA-Z.]\+"
 
 " attributes
 syn region   fsharpAttrib matchgroup=fsharpAttribute start="\[<" end=">]"
@@ -265,5 +267,3 @@ endif
 let b:current_syntax = 'fsharp'
 
 " vim: sw=4 et sts=4
-
-endif

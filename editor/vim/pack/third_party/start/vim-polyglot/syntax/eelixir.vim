@@ -1,5 +1,7 @@
-if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'elixir') == -1
-  
+if exists('g:polyglot_disabled') && index(g:polyglot_disabled, 'elixir') != -1
+  finish
+endif
+
 if exists("b:current_syntax")
   finish
 endif
@@ -22,7 +24,10 @@ if !exists("b:eelixir_subtype")
     let b:eelixir_subtype = matchstr(&filetype,'^eex\.\zs\w\+')
   endif
   if b:eelixir_subtype == ''
-    let b:eelixir_subtype = matchstr(substitute(expand("%:t"),'\c\%(\.eex\|\.eelixir\)\+$','',''),'\.\zs\w\+$')
+    let b:eelixir_subtype = matchstr(&filetype,'^leex\.\zs\w\+')
+  endif
+  if b:eelixir_subtype == ''
+    let b:eelixir_subtype = matchstr(substitute(expand("%:t"),'\c\%(\.eex\|\.leex\|\.eelixir\)\+$','',''),'\.\zs\w\+$')
   endif
   if b:eelixir_subtype == 'ex'
     let b:eelixir_subtype = 'elixir'
@@ -67,5 +72,3 @@ endif
 
 let &cpo = s:cpo_save
 unlet s:cpo_save
-
-endif

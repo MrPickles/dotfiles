@@ -1,5 +1,7 @@
-if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'dart') == -1
-  
+if exists('g:polyglot_disabled') && index(g:polyglot_disabled, 'dart') != -1
+  finish
+endif
+
 " Vim syntax file " Language: Dart
 " Copyright (c) 2012, the Dart project authors.  Please see the AUTHORS file
 " for details. All rights reserved. Use of this source code is governed by a
@@ -25,17 +27,18 @@ syntax keyword dartConditional    if else switch
 syntax keyword dartRepeat         do while for
 syntax keyword dartBoolean        true false
 syntax keyword dartConstant       null
-syntax keyword dartTypedef        this super class typedef enum
+syntax keyword dartTypedef        this super class typedef enum mixin
 syntax keyword dartOperator       new is as in
 syntax match   dartOperator       "+=\=\|-=\=\|*=\=\|/=\=\|%=\=\|\~/=\=\|<<=\=\|>>=\=\|[<>]=\=\|===\=\|\!==\=\|&=\=\|\^=\=\||=\=\|||\|&&\|\[\]=\=\|=>\|!\|\~\|?\|:"
-syntax keyword dartType           void var bool int double num dynamic covariant
+syntax keyword dartType           void var bool int double num dynamic
 syntax keyword dartStatement      return
 syntax keyword dartStorageClass   static abstract final const factory
 syntax keyword dartExceptions     throw rethrow try on catch finally
 syntax keyword dartAssert         assert
 syntax keyword dartClassDecl      extends with implements
 syntax keyword dartBranch         break continue nextgroup=dartUserLabelRef skipwhite
-syntax keyword dartKeyword        get set operator call external async await yield sync native
+syntax keyword dartKeyword        get set operator call external async await
+    \ yield sync native covariant
 syntax match   dartUserLabelRef   "\k\+" contained
 
 syntax region  dartLabelRegion   transparent matchgroup=dartLabel start="\<case\>" matchgroup=NONE end=":"
@@ -133,6 +136,4 @@ let b:spell_options = "contained"
 
 if g:main_syntax is# 'dart'
   unlet g:main_syntax
-endif
-
 endif

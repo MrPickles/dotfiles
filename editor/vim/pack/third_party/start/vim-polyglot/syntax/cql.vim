@@ -1,5 +1,7 @@
-if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'cql') == -1
-  
+if exists('g:polyglot_disabled') && index(g:polyglot_disabled, 'cql') != -1
+  finish
+endif
+
 " Vim syntax file
 " Language:     cql
 " Maintainer:   Eric Lubow <eric@lubow.org
@@ -25,6 +27,7 @@ syn keyword cqlKeyword         limit key keyspace
 syn keyword cqlKeyword         on or primary reversed
 syn keyword cqlKeyword         select set truncate
 syn keyword cqlKeyword         where with update use using values
+syn keyword cqlKeyword         asc desc
 
 " CQL 3 additions
 syn keyword cqlKeyword         table order by type if exists not frozen
@@ -81,8 +84,8 @@ syn keyword cqlSpecial         false null true
 syn keyword cqlType            SizeTieredCompactionStrategy LeveledCompactionStrategy
 
 " Variable Types
-syn keyword cqlType     bytea ascii text varchar uuid varint int bigint
-syn keyword cqlType     bytestype utf8type timeuuidtype timeuuid timestamp
+syn keyword cqlType     bytea ascii text varchar uuid inet varint int bigint tinyint smallint
+syn keyword cqlType     bytestype utf8type timeuuidtype timeuuid timestamp date time duration
 syn keyword cqlType     blob boolean counter decimal double float
 syn keyword cqlType     serializingcacheprovider
 syn keyword cqlType     set list map tuple
@@ -130,5 +133,3 @@ endif
 
 let b:current_syntax = "cql"
 
-
-endif

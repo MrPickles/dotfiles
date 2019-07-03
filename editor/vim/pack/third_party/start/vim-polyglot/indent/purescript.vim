@@ -1,5 +1,7 @@
-if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'purescript') == -1
-  
+if exists('g:polyglot_disabled') && index(g:polyglot_disabled, 'purescript') != -1
+  finish
+endif
+
 " indentation for purescript
 "
 " Based on idris indentation
@@ -103,7 +105,7 @@ function! GetPurescriptIndent()
     return s
   endif
 
-  if prevline =~ '^\S.*::' && line !~ '^\s*\(\.\|->\|→\|=>\|⇒\)' && !~ '^instance'
+  if prevline =~ '^\S.*::' && line !~ '^\s*\(\.\|->\|→\|=>\|⇒\)' && prevline !~ '^instance'
     " f :: String
     "	-> String
     return 0
@@ -276,5 +278,3 @@ function! GetPurescriptIndent()
 
   return match(prevline, '\S')
 endfunction
-
-endif

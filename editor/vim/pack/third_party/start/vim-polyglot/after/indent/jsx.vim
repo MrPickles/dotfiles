@@ -1,118 +1,173 @@
-if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'jsx') == -1
-  
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Vim indent file
-"
-" Language: JSX (JavaScript)
-" Maintainer: Max Wang <mxawng@gmail.com>
-"
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" Save the current JavaScript indentexpr.
-let b:jsx_js_indentexpr = &indentexpr
-
-" Prologue; load in XML indentation.
-if exists('b:did_indent')
-  let s:did_indent=b:did_indent
-  unlet b:did_indent
-endif
-exe 'runtime! indent/xml.vim'
-if exists('s:did_indent')
-  let b:did_indent=s:did_indent
+if exists('g:polyglot_disabled') && index(g:polyglot_disabled, 'styled-components') != -1
+  finish
 endif
 
-setlocal indentexpr=GetJsxIndent()
+" Vim syntax file
+" Language:   styled-components (js/ts)
+" Maintainer: Karl Fleischmann <fleischmann.karl@gmail.com>
+" URL:        https://github.com/styled-components/vim-styled-components
 
-" JS indentkeys
-setlocal indentkeys=0{,0},0),0],0\,,!^F,o,O,e
-" XML indentkeys
-setlocal indentkeys+=*<Return>,<>>,<<>,/
+" initialize variable to check, if the indentation expression is run
+" multiple times in a row, which indicates an infinite recursion
+let s:is_recursion = 0
 
-" Multiline end tag regex (line beginning with '>' or '/>')
-let s:endtag = '^\s*\/\?>\s*;\='
+" store current indentexpr for later
+let b:js_ts_indent=&indentexpr
 
-" Get all syntax types at the beginning of a given line.
-fu! SynSOL(lnum)
-  return map(synstack(a:lnum, 1), 'synIDattr(v:val, "name")')
+" set indentexpr for this filetype (styled-components)
+setlocal indentexpr=GetStyledIndent()
+
+" add the following keys to trigger reindenting, when in insert mode
+" - *;    - Indent and insert on press of ';' key.
+" - *<:>  - Indent and insert on press of ':' key.
+set indentkeys+=*;,*<:>,*<Return>
+
+fu! s:GetSyntaxNames(lnum, cnum)
+  return map(synstack(a:lnum, a:cnum), 'synIDattr(v:val, "name")')
 endfu
 
-" Get all syntax types at the end of a given line.
-fu! SynEOL(lnum)
-  let lnum = prevnonblank(a:lnum)
-  let col = strlen(getline(lnum))
-  return map(synstack(lnum, col), 'synIDattr(v:val, "name")')
+" re-implement SynSOL of vim-jsx
+" TODO: add dependency to the readme and remove duplicate implementation
+fu! s:SynSOL(lnum)
+  return s:GetSyntaxNames(a:lnum, 1)
 endfu
 
-" Check if a syntax attribute is XMLish.
-fu! SynAttrXMLish(synattr)
-  return a:synattr =~ "^xml" || a:synattr =~ "^jsx"
+" re-implement SynEOL of vim-jsx
+" TODO: add dependency to the readme and remove duplicate implementation
+fu! s:SynEOL(lnum, offset)
+  let l:lnum = prevnonblank(a:lnum)
+  let l:col = strlen(getline(l:lnum))
+
+  return s:GetSyntaxNames(l:lnum, l:col + a:offset)
 endfu
 
-" Check if a synstack is XMLish (i.e., has an XMLish last attribute).
-fu! SynXMLish(syns)
-  return SynAttrXMLish(get(a:syns, -1))
+
+"" Return whether the current line is a jsTemplateString
+fu! s:IsStyledDefinition(lnum)
+  " iterate through all syntax items in the given line
+  for item in s:SynSOL(a:lnum)
+    " if syntax-item is a jsTemplateString return 1 - true
+    " `==#` is a match case comparison of the item
+    if item ==# 'styledDefinition'
+      return 1
+    endif
+  endfor
+
+  " fallback to 0 - false
+  return 0
 endfu
 
-" Check if a synstack denotes the end of a JSX block.
-fu! SynJSXBlockEnd(syns)
-  return get(a:syns, -1) =~ '\%(js\|javascript\)Braces' &&
-       \ SynAttrXMLish(get(a:syns, -2))
+"" Count occurences of `str` at the beginning of the given `lnum` line
+fu! s:CountOccurencesInSOL(lnum, str)
+  let l:occurence = 0
+
+  " iterate through all items in the given line
+  for item in s:SynSOL(a:lnum)
+    " if the syntax-item equals the given str increment the counter
+    " `==?` is a case isensitive equal operation
+    if item ==? a:str
+      let l:occurence += 1
+    endif
+  endfor
+
+  " return the accumulated count of occurences
+  return l:occurence
 endfu
 
-" Determine how many jsxRegions deep a synstack is.
-fu! SynJSXDepth(syns)
-  return len(filter(copy(a:syns), 'v:val ==# "jsxRegion"'))
+"" Count occurences of `str` at the end of the given `lnum` line
+fu! s:CountOccurencesInEOL(lnum, str, offset)
+  let l:occurence = 0
+
+  " iterate through all items in the given line
+  for item in s:SynEOL(a:lnum, a:offset)
+    " if the syntax-item equals the given str increment the counter
+    " `==?` is a case insensitive equal operation
+    if item == a:str
+      let l:occurence += 1
+    endif
+  endfor
+
+  " return the accumulated count of occurences
+  return l:occurence
 endfu
 
-" Check whether `cursyn' continues the same jsxRegion as `prevsyn'.
-fu! SynJSXContinues(cursyn, prevsyn)
-  let curdepth = SynJSXDepth(a:cursyn)
-  let prevdepth = SynJSXDepth(a:prevsyn)
+"" Get the indentation of the current line
+fu! GetStyledIndent()
+  if s:IsStyledDefinition(v:lnum)
+    let l:baseIndent = 0
 
-  " In most places, we expect the nesting depths to be the same between any
-  " two consecutive positions within a jsxRegion (e.g., between a parent and
-  " child node, between two JSX attributes, etc.).  The exception is between
-  " sibling nodes, where after a completed element (with depth N), we return
-  " to the parent's nesting (depth N - 1).  This case is easily detected,
-  " since it is the only time when the top syntax element in the synstack is
-  " jsxRegion---specifically, the jsxRegion corresponding to the parent.
-  return prevdepth == curdepth ||
-      \ (prevdepth == curdepth + 1 && get(a:cursyn, -1) ==# 'jsxRegion')
-endfu
+    " find last non-styled line
+    let l:cnum = v:lnum
+    while s:IsStyledDefinition(l:cnum)
+      let l:cnum -= 1
+    endwhile
 
-" Cleverly mix JS and XML indentation.
-fu! GetJsxIndent()
-  let cursyn  = SynSOL(v:lnum)
-  let prevsyn = SynEOL(v:lnum - 1)
+    " get indentation of the last non-styled line as base indentation
+    let l:baseIndent = indent(l:cnum)
 
-  " Use XML indenting iff:
-  "   - the syntax at the end of the previous line was either JSX or was the
-  "     closing brace of a jsBlock whose parent syntax was JSX; and
-  "   - the current line continues the same jsxRegion as the previous line.
-  if (SynXMLish(prevsyn) || SynJSXBlockEnd(prevsyn)) &&
-        \ SynJSXContinues(cursyn, prevsyn)
-    let ind = XmlIndentGet(v:lnum, 0)
+    " incrementally build indentation based on current indentation
+    " - one shiftwidth for the styled definition region
+    " - one shiftwidth per open nested definition region
+    let l:styledIndent = &sw
+    let l:styledIndent += min([
+          \ s:CountOccurencesInSOL(v:lnum, 'styledNestedRegion'),
+          \ s:CountOccurencesInEOL(v:lnum, 'styledNestedRegion', 0)
+          \ ]) * &sw
 
-    " Align '/>' and '>' with '<' for multiline tags.
-    if getline(v:lnum) =~? s:endtag
-      let ind = ind - &sw
+    " decrease indentation by one shiftwidth, if the styled definition
+    " region ends on the current line
+    " - either directly via styled definition region, or
+    " - if the very last
+    if s:CountOccurencesInEOL(v:lnum, 'styledDefinition', 1) == 0
+      let l:styledIndent -= &sw
     endif
 
-    " Then correct the indentation of any JSX following '/>' or '>'.
-    if getline(v:lnum - 1) =~? s:endtag
-      let ind = ind + &sw
+    " return the base indentation
+    " (for nested styles inside classes/objects/etc.) plus the actual
+    " indentation inside the styled definition region
+    return l:baseIndent + l:styledIndent
+  elseif len(b:js_ts_indent)
+    let l:result = 0
+    let l:offset = 0
+
+    " increase indentation by one shiftwidth, if the last line ended on a
+    " styledXmlRegion and this line does not continue with it
+    " this is a fix for an incorrectly indented xml prop after a
+    " glamor-styled styledXmlRegion
+    if s:CountOccurencesInEOL(v:lnum-1, 'styledXmlRegion', 0) == 1 &&
+          \ s:CountOccurencesInSOL(v:lnum, 'styledXmlRegion') == 0
+      let l:offset = &sw
     endif
-  else
-    if len(b:jsx_js_indentexpr)
-      " Invoke the base JS package's custom indenter.  (For vim-javascript,
-      " e.g., this will be GetJavascriptIndent().)
-      let ind = eval(b:jsx_js_indentexpr)
-    else
-      let ind = cindent(v:lnum)
+
+    " make sure `GetStyledIndent` and `GetJsxIndent` don't infinitely
+    " recurse by incrementing a counter variable, before evaluating the
+    " stored indent expression
+    if s:is_recursion == 0
+      let s:is_recursion = 1
+      let l:result = eval(b:js_ts_indent)
     endif
+
+    " `is_recursion` being 0 at this point indicates, that
+    " `eval(b:js_ts_indent)` did itself evaluate it's stored indentexpr
+    " and thus it can be assumed, that the current line should be
+    " indented as JS
+    if s:is_recursion == 0
+      " use one of `GetJavascriptIndent` or `GetJsIndent` if existing
+      " fallback to cindent, if not
+      if exists('*GetJavascriptIndent')
+        let l:result = GetJavascriptIndent()
+      elseif exists('*GetJsIndent')
+        let l:result = GetJsIndent()
+      else
+        let l:result = cindent(v:lnum)
+      endif
+    endif
+
+    " reset `is_recursion` counter and return the indentation value
+    let s:is_recursion = 0
+    return l:result + l:offset
   endif
 
-  return ind
+  " if all else fails indent according to C-syntax
+  return cindent(v:lnum)
 endfu
-
-endif

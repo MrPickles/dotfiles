@@ -1,5 +1,7 @@
-if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'elm') == -1
-  
+if exists('g:polyglot_disabled') && index(g:polyglot_disabled, 'elm') != -1
+  finish
+endif
+
 let s:errors = []
 
 function! s:elmOracle(...) abort
@@ -349,11 +351,14 @@ function! elm#FindRootDirectory() abort
 	if empty(l:elm_root)
 		let l:current_file = expand('%:p')
 		let l:dir_current_file = fnameescape(fnamemodify(l:current_file, ':h'))
-		let l:match = findfile('elm-package.json', l:dir_current_file . ';')
-		if empty(l:match)
-			let l:elm_root = ''
+		let l:old_match = findfile('elm-package.json', l:dir_current_file . ';')
+		let l:new_match = findfile('elm.json', l:dir_current_file . ';')
+		if !empty(l:new_match)
+			let l:elm_root = fnamemodify(l:new_match, ':p:h')
+		elseif !empty(l:old_match)
+			let l:elm_root = fnamemodify(l:old_match, ':p:h')
 		else
-			let l:elm_root = fnamemodify(l:match, ':p:h')
+			let l:elm_root = ''
 		endif
 
 		if !empty(l:elm_root)
@@ -378,5 +383,3 @@ function! s:ExecuteInRoot(cmd) abort
 
 	return l:out
 endfunction
-
-endif
