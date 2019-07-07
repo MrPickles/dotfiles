@@ -104,6 +104,9 @@ fi
 # Source Oh-My-ZSH.
 source $ZSH/oh-my-zsh.sh
 
+# Update completion scripts (which should be defined by homebrew and oh-my-zsh).
+rm -f ~/.zcompdump && compinit
+
 # Configure fzf (if available).
 if _has fzf; then
   # Source fzf key bindings and auto-completion.
