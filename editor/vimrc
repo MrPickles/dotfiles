@@ -2,6 +2,8 @@
 " This must be first, because it changes other options as a side effect.
 set nocompatible
 
+set encoding=UTF-8
+
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
 
@@ -131,6 +133,9 @@ if !exists('g:airline_symbols')
 endif
 let g:airline_symbols.branch = ''
 let g:airline_symbols.readonly = ''
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
+let g:airline#extensions#tabline#show_buffers = 0
 
 " Local config
 if filereadable(glob("~/.vimrc.local"))
