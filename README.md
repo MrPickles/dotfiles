@@ -36,24 +36,31 @@ script:
 
 ### MacOS
 
-#### Installing Powerline/Font Awesome Fonts
+#### Installing Fonts with Custom Glyph Support
 
-The terminal prompt uses characters from [Powerline][powerline] and
-[Font Awesome][awesome-terminal-fonts].
-Fortunately, we have a pre-patched font that contains all the necessary symbols.
+We will be using [Nerd Fonts][nerd-fonts] to patch in all of our symbols.
+This font aggregator is nice in the sense that it collects many different glyphs
+from various sources; we'll be using a lot of different symbols!
 
-1. Install the file at
-   `third_party/awesome-terminal-fonts/patched/Droid+Sans+Mono+Awesome.ttf`.
-   Clicking on the file from Finder should be sufficient.
-2. Go to the `Text` tab in your current iTerm profile and select the option to
+You'll first want to install a pre-patched font.
+There are multiple ways to do this.
+If you prefer to use the browser, download `Droid Sans Mono Nerd Font
+Complete.otf` from the Nerd Fonts [prepatched fonts folder][prepatched].
+Clicking on the file from Finder, after downloading it should be sufficient.
+
+Alternatively, if you have Homebrew, you can install it from the command line.
+
+```shell
+brew tap homebrew/cask-fonts
+brew cask install font-droidsansmono-nerd-font
+```
+
+Next, you'll want to configure iTerm to use the new font.
+
+1. Go to the `Text` tab in your current iTerm profile and select the option to
    `Use a different font for non-ASCII text`.
-3. In the same tab, select `Droid Sans Mono Awesome` as the font for non-ASCII
+2. In the same tab, select `Droid Sans Mono Nerd Font` as the font for non-ASCII
    text.
-
-To patch your own fonts or configure the symbols for all other fonts, you can
-take a look at the [Mac installation instructions][fa-mac] for Font Awesome, or
-read the [wiki][fa-mac-wiki].
-Do note that the setup is much more involved than just using a pre-patched font.
 
 The Powerline symbols included in the font might not align well.
 As a remedy, iTerm has a `Use built-in Powerline glyphs` option to substitute
@@ -93,38 +100,15 @@ The setting can be found in the advanced preferences.
 
 ### Linux
 
-#### Patching the Font to be Powerline-compatible
+#### Downloading Fonts for Linux
 
-In Linux machines, you need to patch the current font to support
-[Powerline][powerline] characters.
-You need [10-powerline-symbols.conf][symbols-conf] and
-[PowerlineSymbols.otf][symbols-otf].
-Follow the commands below to patch the font.
+Similarly to that of MacOS, you'll need to fetch modified fonts.
 
 ```shell
-mkdir -p ~/.fonts/ && cd ~/.fonts/
-wget https://raw.githubusercontent.com/powerline/powerline/master/font/PowerlineSymbols.otf
-mkdir -p ~/.config/fontconfig/conf.d && cd ~/.config/fontconfig/conf.d
-fc-cache -vf ~/.fonts/
-wget https://raw.githubusercontent.com/powerline/powerline/master/font/10-powerline-symbols.conf
-```
-
-#### Patching the Font to be Font Awesome-compatible
-
-You may need to do some [additional patching][fa-linux] for Font Awesome.
-The instructions are in the link from the previous sentence, but your commands
-will end up looking something like what's below.
-Make sure that the symbols aren't already available out of the box before trying
-any patching.
-
-```shell
-mkdir -p ~/.fonts/ && mkdir -p ~/.config/fontconfig/conf.d
-cp third_party/awesome-terminal-fonts/build/*.ttf ~/.fonts/
-cp third_party/awesome-terminal-fonts/build/*.sh ~/.fonts/
-fc-cache -vf ~/.fonts/
-# Edit 10-symbols.conf with your desired font.
-cp third_party/awesome-terminal-fonts/config/10-symbols.conf ~/.config/fontconfig/conf.d
-source ~/.fonts/*.sh
+mkdir -p ~/.local/share/fonts
+cd ~/.local/share/fonts
+curl -fLo "Droid Sans Mono for Powerline Nerd Font Complete.otf" \
+  https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf
 ```
 
 #### Solarized on Ubuntu Terminal
@@ -207,7 +191,7 @@ You can customize vim, git, tmux, and zsh for each specific machine.
 Just put any additional configurations in `~/.zshrc.local`, `~/.tmux.conf.local`
 `~/.gitconfig.local` or `~/.vimrc.local`.
 Sample local configs are included in this repo.
-Custom git configurations can also be placed in `.gitconfig`.
+Custom git configurations can also be placed in `~/.gitconfig`.
 
 ## Teardown
 
@@ -226,24 +210,15 @@ chsh -s $(which bash) # optionally change shell back to bash
 [solarized]: <http://ethanschoonover.com/solarized>
 [homebrew]: <http://brew.sh/>
 [vim8]: <https://github.com/vim/vim/blob/753289f9bf71c0528f00d803a39d017184640e9d/runtime/doc/version8.txt>
-
 [oh-my-zsh]: <https://github.com/robbyrussell/oh-my-zsh>
 [diff-so-fancy]: <https://github.com/so-fancy/diff-so-fancy>
-[powerline-fonts]: <https://github.com/powerline/fonts>
-[awesome-terminal-fonts]: <https://github.com/gabrielelana/awesome-terminal-fonts>
+[nerd-fonts]: <https://github.com/ryanoasis/nerd-fonts>
+[prepatched]: <https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf>
 [gnome-terminal-colors-solarized]: <https://github.com/Anthony25/gnome-terminal-colors-solarized>
-[powerline]: <https://github.com/powerline/powerline>
 [solarized-repo]: <https://github.com/altercation/solarized>
 [rg]: <https://github.com/BurntSushi/ripgrep>
 [fd]: <https://github.com/sharkdp/fd>
 [fzf]: <https://github.com/junegunn/fzf>
 [highlight]: <http://www.andre-simon.de/doku/highlight/en/highlight.html>
-
 [itermcolors]: <https://raw.githubusercontent.com/altercation/solarized/e40cd4130e2a82f9b03ada1ca378b7701b1a9110/iterm2-colors-solarized/Solarized%20Dark.itermcolors>
-[symbols-conf]: <https://raw.githubusercontent.com/powerline/powerline/5a24eceae9b61b89b34794fea18b8c51da823a6c/font/10-powerline-symbols.conf>
-[symbols-otf]: <https://raw.githubusercontent.com/powerline/powerline/5a24eceae9b61b89b34794fea18b8c51da823a6c/font/PowerlineSymbols.otf>
-
 [powerlevel10k]: <https://github.com/romkatv/powerlevel10k>
-[fa-mac]: <https://github.com/gabrielelana/awesome-terminal-fonts#how-to-install-osx>
-[fa-mac-wiki]: <https://github.com/gabrielelana/awesome-terminal-fonts/wiki/OS-X>
-[fa-linux]: <https://github.com/gabrielelana/awesome-terminal-fonts#how-to-install-linux>
