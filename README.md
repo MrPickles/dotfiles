@@ -107,8 +107,10 @@ Similarly to that of MacOS, you'll need to fetch modified fonts.
 ```shell
 mkdir -p ~/.local/share/fonts
 cd ~/.local/share/fonts
-curl -fLo "Droid Sans Mono for Powerline Nerd Font Complete.otf" \
-  https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf
+# Download the Droid Sans Mono from the latest Nerd Font release.
+# We don't download from master due to lack of stability guarantees.
+curl -fLo "Droid Sans Mono Nerd Font Complete.otf" \
+  https://github.com/ryanoasis/nerd-fonts/raw/a516f740938f9eff28de9b7c981c210005d86e38/patched-fonts/DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf
 ```
 
 #### Solarized on Ubuntu Terminal
