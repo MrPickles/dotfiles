@@ -40,13 +40,14 @@ script:
 
 We will be using [Nerd Fonts][nerd-fonts] to patch in all of our symbols.
 This font aggregator is nice in the sense that it collects many different glyphs
-from various sources; we'll be using a lot of different symbols!
+from various sources.
+(We'll be using a lot of different symbols!)
 
 You'll first want to install a pre-patched font.
 There are multiple ways to do this.
 If you prefer to use the browser, download `Droid Sans Mono Nerd Font
 Complete.otf` from the Nerd Fonts [prepatched fonts folder][prepatched].
-Clicking on the file from Finder, after downloading it should be sufficient.
+Clicking on the file from Finder after downloading it should be sufficient.
 
 Alternatively, if you have Homebrew, you can install it from the command line.
 
@@ -68,8 +69,8 @@ the characters with its own built-in alternative characters.
 I'd recommend checking that option.
 
 The Text section of my iTerm settings looks like the picture below.
-For ASCII text, I use `Menlo Regular` (which is a native font) and use 14pt for
-all font types.
+For ASCII text, I use `Menlo Regular` (which is a native font) and use `14pt`
+for all font types.
 
 ![Text section of iTerm settings](.images/iterm_options.png)
 
@@ -189,11 +190,13 @@ chsh -s $(which zsh)
 
 ## Customizing
 
-You can customize vim, git, tmux, and zsh for each specific machine.
-Just put any additional configurations in `~/.zshrc.local`, `~/.tmux.conf.local`
-`~/.gitconfig.local` or `~/.vimrc.local`.
+You can customize zsh, vim, tmux, and git for each specific machine.
+Just put any additional configurations in `~/.zshrc.local`, `~/.vimrc.local`,
+or `~/.tmux.conf.local`.
 Sample local configs are included in this repo.
-Custom git configurations can also be placed in `~/.gitconfig`.
+Custom git configurations can be placed in `~/.gitconfig`.
+The normal git config file is not put under version control, so it's safe to put
+machine-specific tokens in it.
 
 ## Teardown
 
