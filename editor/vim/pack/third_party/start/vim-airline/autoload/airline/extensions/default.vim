@@ -1,4 +1,4 @@
-" MIT License. Copyright (c) 2013-2016 Bailey Ling.
+" MIT License. Copyright (c) 2013-2019 Bailey Ling et al.
 " vim: et ts=2 sts=2 sw=2
 
 scriptencoding utf-8
@@ -19,7 +19,7 @@ let s:layout = get(g:, 'airline#extensions#default#layout', [
 
 function! s:get_section(winnr, key, ...)
   if has_key(s:section_truncate_width, a:key)
-    if winwidth(a:winnr) < s:section_truncate_width[a:key]
+    if airline#util#winwidth(a:winnr) < s:section_truncate_width[a:key]
       return ''
     endif
   endif
@@ -98,4 +98,3 @@ function! airline#extensions#default#apply(builder, context)
 
   return 1
 endfunction
-

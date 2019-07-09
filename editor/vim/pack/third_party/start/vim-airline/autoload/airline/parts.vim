@@ -1,4 +1,4 @@
-" MIT License. Copyright (c) 2013-2016 Bailey Ling.
+" MIT License. Copyright (c) 2013-2019 Bailey Ling et al.
 " vim: et ts=2 sts=2 sw=2
 
 scriptencoding utf-8
@@ -67,9 +67,10 @@ endfunction
 function! airline#parts#spell()
   let spelllang = g:airline_detect_spelllang ? printf(" [%s]", toupper(substitute(&spelllang, ',', '/', 'g'))) : ''
   if g:airline_detect_spell && &spell
-    if winwidth(0) >= 90
+    let winwidth = airline#util#winwidth()
+    if winwidth >= 90
       return g:airline_symbols.spell . spelllang
-    elseif winwidth(0) >= 70
+    elseif winwidth >= 70
       return g:airline_symbols.spell
     else
       return split(g:airline_symbols.spell, '\zs')[0]
@@ -86,6 +87,11 @@ function! airline#parts#iminsert()
 endfunction
 
 function! airline#parts#readonly()
+  " only consider regular buffers (e.g. ones that represent actual files,
+  " but not special ones like e.g. NERDTree)
+  if !empty(&buftype) || airline#util#ignore_buf(bufname('%'))
+    return ''
+  endif
   if &readonly && !filereadable(bufname('%'))
     return '[noperm]'
   else
@@ -94,7 +100,9 @@ function! airline#parts#readonly()
 endfunction
 
 function! airline#parts#filetype()
-  return winwidth(0) < 90 && strlen(&filetype) > 3 ? matchstr(&filetype, '...'). (&encoding is? 'utf-8' ? '…' : '>') : &filetype
+  return (airline#util#winwidth() < 90 && strlen(&filetype) > 3)
+        \ ? matchstr(&filetype, '...'). (&encoding is? 'utf-8' ? '…' : '>')
+        \ : &filetype
 endfunction
 
 function! airline#parts#ffenc()

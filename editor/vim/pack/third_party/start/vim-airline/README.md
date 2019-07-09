@@ -1,8 +1,62 @@
-# vim-airline [![Build Status](https://travis-ci.org/vim-airline/vim-airline.png)](https://travis-ci.org/vim-airline/vim-airline)
+# vim-airline [![Build Status](https://travis-ci.org/vim-airline/vim-airline.png)](https://travis-ci.org/vim-airline/vim-airline)[![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg)](https://saythanks.io/to/chrisbra)
 
 Lean &amp; mean status/tabline for vim that's light as air.
 
 ![img](https://github.com/vim-airline/vim-airline/wiki/screenshots/demo.gif)
+
+When the plugin is correctly loaded, Vim will draw a nice statusline at the
+bottom of each window.
+
+That line consists of several sections, each one displaying some piece of
+information. By default (without configuration) this line will look like this:
+
+```
++-----------------------------------------------------------------------------+
+|~                                                                            |
+|~                                                                            |
+|~                     VIM - Vi IMproved                                      |
+|~                                                                            |
+|~                       version 8.0                                          |
+|~                    by Bram Moolenaar et al.                                |
+|~           Vim is open source and freely distributable                      |
+|~                                                                            |
+|~           type :h :q<Enter>          to exit                               |
+|~           type :help<Enter> or <F1>  for on-line help                      |
+|~           type :help version8<Enter> for version info                      |
+|~                                                                            |
+|~                                                                            |
++-----------------------------------------------------------------------------+
+| A | B |                     C                            X | Y | Z |  [...] |
++-----------------------------------------------------------------------------+
+```
+
+The statusline is the colored line at the bottom, which contains the sections
+(possibly in different colors):
+
+section|meaning (example)
+-------|------------------
+  A    | displays the mode + additional flags like crypt/spell/paste (INSERT)
+  B    | VCS information (branch, hunk summary) (master)
+  C    | filename + read-only flag (~/.vim/vimrc RO)
+  X    | filetype  (vim)
+  Y    | file encoding[fileformat] (utf-8[unix])
+  Z    | current position in the file
+ [...] | additional sections (warning/errors/statistics) from external plugins (e.g. YCM, syntastic, ...)
+
+The information in Section Z looks like this:
+
+`10% ☰ 10/100 ln : 20`
+
+This means:
+```
+10%     - 10 percent down the top of the file
+☰ 10    - current line 10
+/100 ln - of 100 lines
+: 20    - current column 20
+```
+
+For a better look, those sections can be colored differently, depending on various conditions
+(e.g. the mode or whether the current file is 'modified')
 
 # Features
 
@@ -62,6 +116,26 @@ Separators can be configured independently for the tabline, so here is how you c
     let g:airline#extensions#tabline#left_sep = ' '
     let g:airline#extensions#tabline#left_alt_sep = '|'
 
+In addition, you can also choose which path formatter airline uses. This affects how file paths are
+displayed in each individual tab as well as the current buffer indicator in the upper right.
+To do so, set the `formatter` field with:
+
+    let g:airline#extensions#tabline#formatter = 'default'
+
+Here is a complete list of formatters with screenshots:
+
+#### `default`
+![image](https://user-images.githubusercontent.com/2652762/34422844-1d005efa-ebe6-11e7-8053-c784c0da7ba7.png)
+
+#### `jsformatter`
+![image](https://user-images.githubusercontent.com/2652762/34422843-1cf6a4d2-ebe6-11e7-810a-07e6eb08de24.png)
+
+#### `unique_tail`
+![image](https://user-images.githubusercontent.com/2652762/34422841-1ce5b4ec-ebe6-11e7-86e9-3d45c876068b.png)
+
+#### `unique_tail_improved`
+![image](https://user-images.githubusercontent.com/2652762/34422842-1cee23f2-ebe6-11e7-962d-97e068873077.png)
+
 ## Seamless integration
 
 vim-airline integrates with a variety of plugins out of the box.  These extensions will be lazily loaded if and only if you have the other plugins installed (and of course you can turn them off).
@@ -108,12 +182,25 @@ vim-airline integrates with a variety of plugins out of the box.  These extensio
 #### [vimtex][53]
 ![image](https://cloud.githubusercontent.com/assets/1798172/25799740/e77d5c2e-33ee-11e7-8660-d34ce4c5f13f.png)
 
+#### [localsearch][54]
+![image](https://raw.githubusercontent.com/mox-mox/vim-localsearch/master/vim-airline-localsearch-indicator.png)
+
+#### [LanguageClient][57]
+![image](https://user-images.githubusercontent.com/9622/45275524-52f45c00-b48b-11e8-8b83-a66240b10747.gif)
+
 ## Extras
 
 vim-airline also supplies some supplementary stand-alone extensions.  In addition to the tabline extension mentioned earlier, there is also:
 
 #### whitespace
 ![image](https://f.cloud.github.com/assets/306502/962401/2a75385e-04ef-11e3-935c-e3b9f0e954cc.png)
+
+### statusline on top
+The statusline can alternatively by drawn on top, making room for other plugins to use the statusline:
+The example shows a custom statusline setting, that imitates Vims default statusline, while allowing
+to call custom functions.  Use `:let g:airline_statusline_ontop=1` to enable it.
+
+![image](https://i.imgur.com/tW1lMRU.png)
 
 ## Configurable and extensible
 
@@ -159,7 +246,8 @@ This plugin follows the standard runtime path structure, and as such it can be i
 | [Plug][40] | `Plug 'vim-airline/vim-airline'` |
 | [VAM][22] | `call vam#ActivateAddons([ 'vim-airline' ])` |
 | [Dein][52] | `call dein#add('vim-airline/vim-airline')` |
-| [minpac][54] | `call minpac#add('vim-airline/vim-airline')` |
+| [minpac][55] | `call minpac#add('vim-airline/vim-airline')` |
+| pack feature (native Vim 8 package feature)| `git clone https://github.com/vim-airline/vim-airline ~/.vim/pack/dist/start/vim-airline`<br/>Remember to run `:helptags` to generate help tags |
 | manual | copy all of the files into your `~/.vim` directory |
 
 # Documentation
@@ -188,9 +276,9 @@ The [minivimrc][7] project has some helper mappings to troubleshoot performance 
 
 If you don't want all the bells and whistles enabled by default, you can define a value for `g:airline_extensions`.  When this variable is defined, only the extensions listed will be loaded; an empty array would effectively disable all extensions (e.g. `:let g:airline_extensions = []`).
 
-Also, you can enable caching of the various syntax highlighting groups. This will try to prevent some of the more expensive `:hi` calls in Vim, which seem to be expensive in the Vim core at the expense of possibly not being hunderet percent correct all the times (especially if you often change highlighting groups yourself using `:hi` commands). To set this up do `:let g:airline_highlighting_cache = 1`. A `:AirlineRefresh` will however clear the cache.
+Also, you can enable caching of the various syntax highlighting groups. This will try to prevent some of the more expensive `:hi` calls in Vim, which seem to be expensive in the Vim core at the expense of possibly not being one hundred percent correct all the time (especially if you often change highlighting groups yourself using `:hi` commands). To set this up do `:let g:airline_highlighting_cache = 1`. A `:AirlineRefresh` will however clear the cache.
 
-In addition you might want to check out the [dark_minimal theme][55], which does not change highlighting groups once they are defined. Also please check the [FAQ][27] for more information on how to diagnose and fix the problem.
+In addition you might want to check out the [dark_minimal theme][56], which does not change highlighting groups once they are defined. Also please check the [FAQ][27] for more information on how to diagnose and fix the problem.
 
 # Screenshots
 
@@ -204,7 +292,7 @@ If you are interested in becoming a maintainer (we always welcome more maintaine
 
 # License
 
-MIT License. Copyright (c) 2013-2017 Bailey Ling & Contributors.
+[MIT License][58]. Copyright (c) 2013-2019 Bailey Ling & Contributors.
 
 [1]: https://github.com/Lokaltog/vim-powerline
 [2]: https://github.com/Lokaltog/powerline
@@ -243,7 +331,7 @@ MIT License. Copyright (c) 2013-2017 Bailey Ling & Contributors.
 [35]: https://github.com/edkolev/tmuxline.vim
 [36]: https://github.com/edkolev/promptline.vim
 [37]: https://github.com/gcmt/taboo.vim
-[38]: https://github.com/szw/vim-ctrlspace
+[38]: https://github.com/vim-ctrlspace/vim-ctrlspace
 [39]: https://github.com/tomtom/quickfixsigns_vim
 [40]: https://github.com/junegunn/vim-plug
 [41]: https://github.com/bling
@@ -259,5 +347,8 @@ MIT License. Copyright (c) 2013-2017 Bailey Ling & Contributors.
 [51]: https://github.com/Shougo/denite.nvim
 [52]: https://github.com/Shougo/dein.vim
 [53]: https://github.com/lervag/vimtex
-[54]: https://github.com/k-takata/minpac/
-[55]: https://github.com/vim-airline/vim-airline-themes/blob/master/autoload/airline/themes/dark_minimal.vim
+[54]: https://github.com/mox-mox/vim-localsearch
+[55]: https://github.com/k-takata/minpac/
+[56]: https://github.com/vim-airline/vim-airline-themes/blob/master/autoload/airline/themes/dark_minimal.vim
+[57]: https://github.com/autozimu/LanguageClient-neovim
+[58]: https://github.com/vim-airline/vim-airline/blob/master/LICENSE
