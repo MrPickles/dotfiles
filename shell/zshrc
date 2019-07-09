@@ -1,7 +1,7 @@
 ZSH=$HOME/.oh-my-zsh
 
-# Set zsh theme to be powerlevel10k with fontawesome.
-POWERLEVEL9K_MODE='awesome-fontconfig'
+# Set zsh theme to be powerlevel10k with patched fontawesome symbols.
+POWERLEVEL9K_MODE='awesome-patched'
 ZSH_THEME='powerlevel10k/powerlevel10k'
 
 plugins=(
