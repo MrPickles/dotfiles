@@ -54,6 +54,7 @@ declare -a FILES_TO_SYMLINK=(
   'shell/tmux.conf'
   'shell/zshrc'
 
+  'third_party/Gdbinit/gdbinit'
   'third_party/zsh-interactive-cd/zsh-interactive-cd.plugin.zsh'
 )
 
