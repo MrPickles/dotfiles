@@ -1,10 +1,7 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " xTabline - Reduced version for vim-airline
-" MIT License Copyright (C) 2018-2019 Gianmaria Bajo <mg1979.git@gmail.com>
-" tabpagecd:
-" expanded version by mg979
-" MIT License Copyright (C) 2012-2013 Kana Natsuno <http://whileimautomaton.net/>
-" MIT License Copyright (C) 2018-2019 Gianmaria Bajo <mg1979.git@gmail.com>
+" Copyright (C) 2018 Gianmaria Bajo <mg1979.git@gmail.com>
+" License: MIT License
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 
@@ -321,6 +318,11 @@ endfunction
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " tabpagecd - Turn :cd into :tabpagecd, to use one tab page per project
+" expanded version by mg979
+" Copyright (C) 2012-2013 Kana Natsuno <http://whileimautomaton.net/>
+" Copyright (C) 2018 Gianmaria Bajo <mg1979.git@gmail.com>
+" License: MIT License
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 function! s:InitCwds()

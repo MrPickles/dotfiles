@@ -1,4 +1,4 @@
-" MIT License. Copyright (c) 2013-2019 Bailey Ling et al.
+" MIT License. Copyright (c) 2013-2018 Bailey Ling et al.
 " vim: et ts=2 sts=2 sw=2 fdm=marker
 
 scriptencoding utf-8
@@ -41,7 +41,7 @@ endfunction
 " check user-defined formatter exists with appropriate functions, otherwise
 " fall back to default
 if s:formatter !=# 'default'
-  execute 'runtime! autoload/airline/extensions/wordcount/formatters/'.s:formatter.'.vim'
+  execute 'runtime! autoload/airline/extensions/wordcount/formatters/'.s:formatter
   if !exists('*airline#extensions#wordcount#formatters#{s:formatter}#to_string')
     if !exists('*airline#extensions#wordcount#formatters#{s:formatter}#format')
       let s:formatter = 'default'
@@ -68,8 +68,9 @@ function! s:update_wordcount(force_update)
   endif
 endfunction
 
+let s:visual_active = 0  " Boolean: for when to get visual wordcount
 function airline#extensions#wordcount#get()
-  if get(g:, 'airline#visual_active', 0)
+  if s:visual_active
     return s:format_wordcount(s:get_wordcount(1))
   else
     if get(b:, 'airline_changedtick', 0) != b:changedtick
@@ -82,14 +83,13 @@ endfunction
 
 " airline functions {{{1
 " default filetypes:
+let s:filetypes = ['help', 'markdown', 'rst', 'org', 'text', 'asciidoc', 'tex', 'mail']
 function! airline#extensions#wordcount#apply(...)
-  let filetypes = get(g:, 'airline#extensions#wordcount#filetypes', 
-    \ ['asciidoc', 'help', 'mail', 'markdown', 'org', 'rst', 'tex', 'text'])
-  " export current filetypes settings to global namespace
-  let g:airline#extensions#wordcount#filetypes = filetypes
+  let filetypes = get(g:, 'airline#extensions#wordcount#filetypes', s:filetypes)
 
   " Check if filetype needs testing
-  if did_filetype()
+  if did_filetype() || filetypes isnot s:filetypes
+    let s:filetypes = filetypes
 
     " Select test based on type of "filetypes": new=list, old=string
     if type(filetypes) == get(v:, 't_list', type([]))
@@ -109,5 +109,9 @@ function! airline#extensions#wordcount#apply(...)
 endfunction
 
 function! airline#extensions#wordcount#init(ext)
+  augroup airline_wordcount
+    autocmd! User AirlineModeChanged nested
+          \ let s:visual_active = (mode() ==? 'v' || mode() ==? 's')
+  augroup END
   call a:ext.add_statusline_func('airline#extensions#wordcount#apply')
 endfunction

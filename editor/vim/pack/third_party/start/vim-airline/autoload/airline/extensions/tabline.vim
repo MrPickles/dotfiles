@@ -1,7 +1,8 @@
-" MIT License. Copyright (c) 2013-2019 Bailey Ling et al.
+" MIT License. Copyright (c) 2013-2018 Bailey Ling et al.
 " vim: et ts=2 sts=2 sw=2
 
 scriptencoding utf-8
+
 
 let s:taboo = get(g:, 'airline#extensions#taboo#enabled', 1) && get(g:, 'loaded_taboo', 0)
 if s:taboo
@@ -32,11 +33,6 @@ function! s:toggle_off()
 endfunction
 
 function! s:toggle_on()
-  if get(g:, 'airline_statusline_ontop', 0)
-    call airline#extensions#tabline#enable()
-    let &tabline='%!airline#statusline('.winnr().')'
-    return
-  endif
   call airline#extensions#tabline#autoshow#on()
   call airline#extensions#tabline#tabs#on()
   call airline#extensions#tabline#buffers#on()
@@ -62,26 +58,9 @@ function! s:update_tabline()
     return
   endif
   call airline#util#doautocmd('BufMRUChange')
-  call airline#extensions#tabline#redraw()
-endfunction
-
-function! airline#extensions#tabline#redraw()
   " sometimes, the tabline is not correctly updated see #1580
   " so force redraw here
-  if exists(":redrawtabline") == 2
-    redrawtabline
-  else
-  " Have to set a property equal to itself to get airline to re-eval.
-  " Setting `let &tabline=&tabline` destroys the cursor position so we
-  " need something less invasive.
-    let &ro = &ro
-  endif
-endfunction
-
-function! airline#extensions#tabline#enable()
-  if &lines > 3
-    set showtabline=2
-  endif
+  let &tabline = &tabline
 endfunction
 
 function! airline#extensions#tabline#load_theme(palette)
@@ -113,8 +92,6 @@ function! airline#extensions#tabline#load_theme(palette)
   call airline#highlighter#exec('airline_tabhid', tabhid)
 
   " Theme for tabs on the right
-  " label on the right
-  let tablabel_r  = get(colors, 'airline_tablabel', a:palette.normal.airline_b)
   let tabsel_right  = get(colors, 'airline_tabsel_right', a:palette.normal.airline_a)
   let tab_right     = get(colors, 'airline_tab_right',    a:palette.inactive.airline_c)
   let tabmod_right  = get(colors, 'airline_tabmod_right', a:palette.insert.airline_a)
@@ -125,7 +102,6 @@ function! airline#extensions#tabline#load_theme(palette)
     "Fall back to normal airline_c if modified airline_c isn't present
     let tabmodu_right = get(colors, 'airline_tabmod_unsel_right', a:palette.normal.airline_c)
   endif
-  call airline#highlighter#exec('airline_tablabel_right', tablabel_r)
   call airline#highlighter#exec('airline_tab_right',    tab_right)
   call airline#highlighter#exec('airline_tabsel_right', tabsel_right)
   call airline#highlighter#exec('airline_tabmod_right', tabmod_right)
@@ -225,16 +201,9 @@ function! airline#extensions#tabline#group_of_bufnr(tab_bufs, bufnr)
   return group
 endfunction
 
-function! airline#extensions#tabline#add_label(dict, type, right)
+function! airline#extensions#tabline#add_label(dict, type)
   if get(g:, 'airline#extensions#tabline#show_tab_type', 1)
-    call a:dict.add_section_spaced('airline_tablabel'.
-          \ (a:right ? '_right' : ''),
+    call a:dict.add_section_spaced('airline_tablabel',
           \ get(g:, 'airline#extensions#tabline#'.a:type.'_label', a:type))
-  endif
-endfunction
-
-function! airline#extensions#tabline#add_tab_label(dict)
-  if get(g:, 'airline#extensions#tabline#show_tab_count', 1) && tabpagenr('$') > 1
-    call a:dict.add_section_spaced('airline_tabmod', printf('%s %d/%d', "tab", tabpagenr(), tabpagenr('$')))
   endif
 endfunction

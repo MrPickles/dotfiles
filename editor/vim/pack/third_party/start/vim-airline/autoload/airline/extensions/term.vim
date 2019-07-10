@@ -1,10 +1,10 @@
-" MIT License. Copyright (c) 2013-2019 Bailey Ling et al.
+" MIT License. Copyright (c) 2013-2018 Bailey Ling et al.
 " vim: et ts=2 sts=2 sw=2
 
 scriptencoding utf-8
 
 function! airline#extensions#term#apply(...)
-  if &buftype == 'terminal' || bufname('%')[0] == '!'
+  if &buftype == 'terminal'
     let spc = g:airline_symbols.space
 
     let name=get(g:airline_mode_map, 't', 't')
@@ -33,11 +33,7 @@ function! s:termname()
     return matchstr(bufname, 'term.*:\zs.*')
   else
     " get rid of leading '!'
-    if bufname[0] is# '!'
-      return bufname[1:]
-    else
-      return bufname
-    endif
+    return bufname[1:]
   endif
 endfunction
 

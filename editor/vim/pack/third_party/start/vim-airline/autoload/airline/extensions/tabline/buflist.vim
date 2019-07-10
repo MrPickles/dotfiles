@@ -1,4 +1,4 @@
-" MIT License. Copyright (c) 2013-2019 Bailey Ling et al.
+" MIT License. Copyright (c) 2013-2018 Bailey Ling et al.
 " vim: et ts=2 sts=2 sw=2
 
 scriptencoding utf-8
@@ -14,11 +14,7 @@ endfunction
 
 " paths in excludes list
 function! s:ExcludePaths(nr, exclude_paths)
-  let bname = bufname(a:nr)
-  if empty(bname)
-    return 0
-  endif
-  let bpath = fnamemodify(bname, ":p")
+  let bpath = fnamemodify(bufname(a:nr), ":p")
   for f in a:exclude_paths
     if bpath =~# f | return 1 | endif
   endfor

@@ -1,4 +1,4 @@
-" MIT License. Copyright (c) 2013-2019 Bailey Ling et al.
+" MIT License. Copyright (c) 2013-2018 Bailey Ling et al.
 " vim: et ts=2 sts=2 sw=2
 
 scriptencoding utf-8
@@ -33,13 +33,9 @@ function! airline#extensions#tabline#buffers#off()
 endfunction
 
 function! airline#extensions#tabline#buffers#on()
-  let terminal_event = has("nvim") ? 'TermOpen' : 'TerminalOpen'
   augroup airline_tabline_buffers
     autocmd!
     autocmd BufDelete * call airline#extensions#tabline#buflist#clean()
-    if exists("##".terminal_event)
-      exe 'autocmd '. terminal_event. ' * call airline#extensions#tabline#buflist#clean()'
-    endif
     autocmd User BufMRUChange call airline#extensions#tabline#buflist#clean()
   augroup END
 endfunction
@@ -69,7 +65,7 @@ function! airline#extensions#tabline#buffers#get()
     let show_buf_label_first = 1
   endif
   if show_buf_label_first
-    call airline#extensions#tabline#add_label(b, 'buffers', 0)
+    call airline#extensions#tabline#add_label(b, 'buffers')
   endif
 
   let b.tab_bufs = tabpagebuflist(tabpagenr())
@@ -120,7 +116,7 @@ function! airline#extensions#tabline#buffers#get()
 
     if get(g:, 'airline#extensions#tabline#buffer_idx_mode', 0)
       if len(s:number_map) > 0
-        return space. s:get_number(a:i) . '%(%{airline#extensions#tabline#get_buffer_name('.bufnum.')}%)' . s:spc
+        return space. get(s:number_map, a:i+1, '') . '%(%{airline#extensions#tabline#get_buffer_name('.bufnum.')}%)' . s:spc
       else
         return '['.(a:i+1).s:spc.'%(%{airline#extensions#tabline#get_buffer_name('.bufnum.')}%)'.']'
       endif
@@ -137,35 +133,24 @@ function! airline#extensions#tabline#buffers#get()
   call b.split()
   call b.add_section('airline_tabfill', '')
   if !show_buf_label_first
-    call airline#extensions#tabline#add_label(b, 'buffers', 1)
+    call airline#extensions#tabline#add_label(b, 'buffers')
   endif
 
-  call airline#extensions#tabline#add_tab_label(b)
+  if tabpagenr('$') > 1
+    call b.add_section_spaced('airline_tabmod', printf('%s %d/%d', "tab", tabpagenr(), tabpagenr('$')))
+  endif
 
   let s:current_bufnr = cur
   let s:column_width = &columns
   let s:current_tabline = b.build()
   let s:current_visible_buffers = copy(b.buffers)
-  " Do not remove from s:current_visible_buffers, this breaks s:select_tab()
-  "if b._right_title <= last_buffer
-  "  call remove(s:current_visible_buffers, b._right_title, last_buffer)
-  "endif
-  "if b._left_title > 0
-  "  call remove(s:current_visible_buffers, 0, b._left_title)
-  "endif
+  if b._right_title <= last_buffer
+    call remove(s:current_visible_buffers, b._right_title, last_buffer)
+  endif
+  if b._left_title > 0
+    call remove(s:current_visible_buffers, 0, b._left_title)
+  endif
   return s:current_tabline
-endfunction
-
-function! s:get_number(index)
-  if len(s:number_map) == 0
-    return a:index
-  endif
-  let bidx_mode = get(g:, 'airline#extensions#tabline#buffer_idx_mode', 0)
-  if bidx_mode > 1
-    return join(map(split(a:index+11, '\zs'), 'get(s:number_map, v:val, "")'), '')
-  else
-    return get(s:number_map, a:index+1, '')
-  endif
 endfunction
 
 function! s:select_tab(buf_index)
@@ -174,6 +159,7 @@ function! s:select_tab(buf_index)
         \ ['vimfiler', 'nerdtree']), &ft)
     return
   endif
+
   let idx = a:buf_index
   if s:current_visible_buffers[0] == -1
     let idx = idx + 1
@@ -181,8 +167,8 @@ function! s:select_tab(buf_index)
 
   let buf = get(s:current_visible_buffers, idx, 0)
   if buf != 0
-     exec 'b!' . buf
-   endif
+    exec 'b!' . buf
+  endif
 endfunction
 
 function! s:jump_to_tab(offset)
@@ -194,21 +180,18 @@ function! s:jump_to_tab(offset)
 endfunction
 
 function! s:map_keys()
-  let bidx_mode = get(g:, 'airline#extensions#tabline#buffer_idx_mode', 1)
-  if bidx_mode > 0
-    if bidx_mode == 1
-      for i in range(1, 9)
-        exe printf('noremap <silent> <Plug>AirlineSelectTab%d :call <SID>select_tab(%d)<CR>', i, i-1)
-      endfor
-    else
-      for i in range(11, 99)
-        exe printf('noremap <silent> <Plug>AirlineSelectTab%d :call <SID>select_tab(%d)<CR>', i, i-11)
-      endfor
-    endif
+  if get(g:, 'airline#extensions#tabline#buffer_idx_mode', 1)
+    noremap <silent> <Plug>AirlineSelectTab1 :call <SID>select_tab(0)<CR>
+    noremap <silent> <Plug>AirlineSelectTab2 :call <SID>select_tab(1)<CR>
+    noremap <silent> <Plug>AirlineSelectTab3 :call <SID>select_tab(2)<CR>
+    noremap <silent> <Plug>AirlineSelectTab4 :call <SID>select_tab(3)<CR>
+    noremap <silent> <Plug>AirlineSelectTab5 :call <SID>select_tab(4)<CR>
+    noremap <silent> <Plug>AirlineSelectTab6 :call <SID>select_tab(5)<CR>
+    noremap <silent> <Plug>AirlineSelectTab7 :call <SID>select_tab(6)<CR>
+    noremap <silent> <Plug>AirlineSelectTab8 :call <SID>select_tab(7)<CR>
+    noremap <silent> <Plug>AirlineSelectTab9 :call <SID>select_tab(8)<CR>
     noremap <silent> <Plug>AirlineSelectPrevTab :<C-u>call <SID>jump_to_tab(-v:count1)<CR>
     noremap <silent> <Plug>AirlineSelectNextTab :<C-u>call <SID>jump_to_tab(v:count1)<CR>
-    " Enable this for debugging
-    " com! AirlineBufferList :echo map(copy(s:current_visible_buffers), {i,k -> k.": ".bufname(k)})
   endif
 endfunction
 
@@ -224,7 +207,7 @@ function! airline#extensions#tabline#buffers#clickbuf(minwid, clicks, button, mo
       elseif a:button is# 'm'
         " middle button - delete buffer
 
-        if get(g:, 'airline#extensions#tabline#middle_click_preserves_windows', 0) == 0 || winnr('$') == 1
+        if get(g:, 'airline#extensions#tabline#middle_click_preserves_windows', 0) == 0
           " just simply delete the clicked buffer. This will cause windows
           " associated with the clicked buffer to be closed.
           silent execute 'bdelete' a:minwid

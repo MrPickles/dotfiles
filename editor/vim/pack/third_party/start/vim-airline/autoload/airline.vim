@@ -1,4 +1,4 @@
-" MIT License. Copyright (c) 2013-2019 Bailey Ling et al.
+" MIT License. Copyright (c) 2013-2018 Bailey Ling et al.
 " vim: et ts=2 sts=2 sw=2
 
 scriptencoding utf-8
@@ -180,8 +180,7 @@ function! s:invoke_funcrefs(context, funcrefs)
   if err == 1
     let a:context.line = builder.build()
     let s:contexts[a:context.winnr] = a:context
-    let option = get(g:, 'airline_statusline_ontop', 0) ? '&tabline' : '&statusline'
-    call setwinvar(a:context.winnr, option, '%!airline#statusline('.a:context.winnr.')')
+    call setwinvar(a:context.winnr, '&statusline', '%!airline#statusline('.a:context.winnr.')')
   endif
 endfunction
 
@@ -191,11 +190,12 @@ function! airline#statusline(winnr)
   if has_key(s:contexts, a:winnr)
     return '%{airline#check_mode('.a:winnr.')}'.s:contexts[a:winnr].line
   endif
+
   " in rare circumstances this happens...see #276
   return ''
 endfunction
 
-" Check if mode has changed
+" Check if mode as changed
 function! airline#check_mode(winnr)
   if !has_key(s:contexts, a:winnr)
     return ''
@@ -226,11 +226,7 @@ function! airline#check_mode(winnr)
     else
       let l:mode = ['normal']
     endif
-    if exists("*VMInfos") && !empty(VMInfos())
-      " Vim plugin Multiple Cursors https://github.com/mg979/vim-visual-multi
-      let l:m = 'multi'
-    endif
-    if index(['Rv', 'no', 'ni', 'ix', 'ic', 'multi'], l:m) == -1
+    if index(['Rv', 'no', 'ni', 'ix', 'ic'], l:m) == -1
       let l:m = l:m[0]
     endif
     let w:airline_current_mode = get(g:airline_mode_map, l:m, l:m)
@@ -268,18 +264,4 @@ function! airline#check_mode(winnr)
   endif
 
   return ''
-endfunction
-
-function! airline#update_tabline()
-  if get(g:, 'airline_statusline_ontop', 0)
-    call airline#extensions#tabline#redraw()
-  endif
-endfunction
-
-function! airline#mode_changed()
-  " airline#visual_active
-  " Boolean: for when to get visual wordcount
-  " needed for the wordcount extension
-  let g:airline#visual_active = (mode() =~? '[vs]')
-  call airline#update_tabline()
 endfunction

@@ -1,4 +1,4 @@
-" MIT License. Copyright (c) 2013-2019 Bailey Ling et al.
+" MIT License. Copyright (c) 2013-2018 Bailey Ling et al.
 " vim: et ts=2 sts=2 sw=2
 
 scriptencoding utf-8
@@ -24,7 +24,7 @@ else
 endif
 
 function! airline#extensions#wordcount#formatters#default#to_string(wordcount)
-  if airline#util#winwidth() >= 80
+  if winwidth(0) >= 80
     if a:wordcount > 999
       " Format number according to locale, e.g. German: 1.245 or English: 1,245
       let wordcount = substitute(a:wordcount, '\d\@<=\(\(\d\{3\}\)\+\)$', s:decimal_group.'&', 'g')

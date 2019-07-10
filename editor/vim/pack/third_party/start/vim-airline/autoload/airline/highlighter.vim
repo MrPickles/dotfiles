@@ -1,4 +1,4 @@
-" MIT License. Copyright (c) 2013-2019 Bailey Ling Christian Brabandt et al.
+" MIT License. Copyright (c) 2013-2018 Bailey Ling et al.
 " vim: et ts=2 sts=2 sw=2
 
 scriptencoding utf-8
@@ -76,11 +76,11 @@ function! airline#highlighter#get_highlight(group, ...)
     let fg = s:get_syn(a:group, 'fg')
     let bg = s:get_syn(a:group, 'bg')
     let bold = synIDattr(synIDtrans(hlID(a:group)), 'bold')
-    if reverse
-      let res = s:get_array(bg, fg, bold ? ['bold'] : a:000)
-    else
-      let res = s:get_array(fg, bg, bold ? ['bold'] : a:000)
+    let opts = a:000
+    if bold
+      let opts = ['bold']
     endif
+    let res = reverse ? s:get_array(bg, fg, opts) : s:get_array(fg, bg, opts)
   endif
   let s:hl_groups[a:group] = res
   return res
