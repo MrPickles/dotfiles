@@ -8,14 +8,14 @@
 usage="Usage: $0 [-h] [-t <build|clean>]"
 
 if [[ "$#" -lt 1 ]]; then
-  echo $usage
+  echo "$usage"
   exit
 fi
 
 while getopts :ht: option; do
   case $option in
     h)
-      echo $usage
+      echo "$usage"
       echo
       echo "OPTIONS"
       echo "-h            Output verbose usage message"
@@ -28,7 +28,7 @@ while getopts :ht: option; do
       elif [[ "clean" =~ ^${OPTARG} ]]; then
         BUILD=
       else
-        echo $usage >&2
+        echo "$usage" >&2
         exit 1
       fi;;
     \?)
@@ -61,26 +61,26 @@ declare -a FILES_TO_SYMLINK=(
 print_success() {
   if [[ $BUILD ]]; then
     # Print output in green
-    printf "\e[0;32m  [✔] $1\e[0m\n"
+    printf "\e[0;32m  [✔] %s\e[0m\n" "$1"
   else
     # Print output in cyan
-    printf "\e[0;36m  [✔] Unlinked $1\e[0m\n"
+    printf "\e[0;36m  [✔] Unlinked %s\e[0m\n" "$1"
   fi
 }
 
 print_error() {
   if [[ $BUILD ]]; then
     # Print output in red
-    printf "\e[0;31m  [✖] $1 $2\e[0m\n"
+    printf "\e[0;31m  [✖] %s %s\e[0m\n" "$1" "$2"
   else
     # Print output in red
-    printf "\e[0;31m  [✖] Failed to unlink $1 $2\e[0m\n"
+    printf "\e[0;31m  [✖] Failed to unlink %s %s\e[0m\n" "$1" "$2"
   fi
 }
 
 print_question() {
   # Print output in yellow
-  printf "\e[0;33m  [?] $1\e[0m"
+  printf "\e[0;33m  [?] %s\e[0m" "$1"
 }
 
 execute() {
@@ -89,17 +89,18 @@ execute() {
 }
 
 print_result() {
-  [ $1 -eq 0 ] \
-    && print_success "$2" \
-    || print_error "$2"
+  if [ "$1" -eq 0 ]; then
+    print_success "$2"
+  else
+    print_error "$2"
+  fi
 
-  [ "$3" == "true" ] && [ $1 -ne 0 ] \
-    && exit
+  [ "$3" == "true" ] && [ "$1" -ne 0 ] && exit
 }
 
 ask_for_confirmation() {
   print_question "$1 [y/N] "
-  read -n 1
+  read -r -n 1
   printf "\n"
 }
 
@@ -111,7 +112,7 @@ answer_is_yes() {
 
 install_zsh() {
   # Test to see if zshell is installed.
-  if [ -z $(which zsh) ]; then
+  if [ -z "$(command -v zsh)" ]; then
     # If zsh isn't installed, get the platform of the current machine and
     # install zsh with the appropriate package manager.
     platform=$(uname);
@@ -127,21 +128,21 @@ install_zsh() {
     fi
   fi
   # Set the default shell to zsh if it isn't currently set to zsh
-  if [[ ! $(echo $SHELL) == $(which zsh) ]]; then
-    chsh -s $(which zsh)
+  if [[ ! "$SHELL" == "$(command -v zsh)" ]]; then
+    chsh -s "$(command -v zsh)"
   fi
   # Clone Oh My Zsh if it isn't already present
   if [[ ! -d $HOME/.oh-my-zsh/ ]]; then
-    git clone --depth=1 https://github.com/robbyrussell/oh-my-zsh.git $HOME/.oh-my-zsh
+    git clone --depth=1 https://github.com/robbyrussell/oh-my-zsh.git "$HOME/.oh-my-zsh"
   fi
   # Clone Powerlevel10k if it isn't already present.
   if [[ ! -d $HOME/.oh-my-zsh/custom/themes/powerlevel10k ]]; then
-    git clone https://github.com/romkatv/powerlevel10k.git $HOME/.oh-my-zsh/custom/themes/powerlevel10k
+    git clone https://github.com/romkatv/powerlevel10k.git "$HOME/.oh-my-zsh/custom/themes/powerlevel10k"
   fi
 }
 
 # Symlink (or unlink) the dotfiles.
-for i in ${FILES_TO_SYMLINK[@]}; do
+for i in "${FILES_TO_SYMLINK[@]}"; do
   sourceFile="$(pwd)/$i"
   targetFile="$HOME/.$(printf "%s" "$i" | sed "s/.*\/\(.*\)/\1/g")"
 
@@ -168,7 +169,7 @@ done
 
 if [[ $BUILD ]]; then
   # Prompt to switch to zsh and oh-my-zsh if not active on terminal.
-  if [ ! -f /bin/zsh -a ! -f /usr/bin/zsh -o ! -d $HOME/.oh-my-zsh/custom/themes/powerlevel10k ]; then
+  if [ ! -f /bin/zsh ] && [ ! -f /usr/bin/zsh ] || [ ! -d "$HOME/.oh-my-zsh/custom/themes/powerlevel10k" ]; then
     ask_for_confirmation "Switch to zsh and oh-my-zsh?"
     if answer_is_yes; then
       install_zsh
