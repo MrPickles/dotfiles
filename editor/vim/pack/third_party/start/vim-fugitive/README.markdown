@@ -10,9 +10,10 @@ version of the file side by side with the working tree version and use
 Vim's diff handling capabilities to stage a subset of the file's
 changes.
 
-Bring up the output of `git status` with `:Gstatus`.  Press `-` to
-`add`/`reset` a file's changes, or `p` to `add`/`reset` `--patch`.  And guess
-what `:Gcommit` does!
+Bring up an enhanced version of `git status` with `:Gstatus`.  Press `-` to
+`add`/`reset` a file's changes, or `=` to expand an inline diff and operate on
+individual hunks.  Use `:Gcommit %` to commit the current file, editing the
+commit message inside the currently running Vim.
 
 `:Gblame` brings up an interactive vertical split with `git blame`
 output.  Press enter on a line to edit the commit where the line
@@ -36,16 +37,17 @@ making it like `git add` when called from a work tree file and like
 `git checkout` when called from the index or a blob in history.
 
 Use `:Gbrowse` to open the current file on the web front-end of your favorite
-hosting provider, with optional line range (try it in visual mode!).  Built-in
-support is provided for `git instaweb`, and plugins are available for popular
-providers such as [GitHub][rhubarb.vim], [GitLab][fugitive-gitlab.vim], and
-[Bitbucket][fubitive.vim].
+hosting provider, with optional line range (try it in visual mode!).  Plugins
+are available for popular providers such as [GitHub][rhubarb.vim],
+[GitLab][fugitive-gitlab.vim], [Bitbucket][fubitive.vim], and
+[Gitee][fugitive-gitee.vim].
 
 [rhubarb.vim]: https://github.com/tpope/vim-rhubarb
 [fugitive-gitlab.vim]: https://github.com/shumphrey/fugitive-gitlab.vim
 [fubitive.vim]: https://github.com/tommcdo/vim-fubitive
+[fugitive-gitee.vim]: https://github.com/linuxsuren/fugitive-gitee.vim
 
-Add `%{fugitive#statusline()}` to `'statusline'` to get an indicator
+Add `%{FugitiveStatusline()}` to `'statusline'` to get an indicator
 with the current branch in (surprise!) your statusline.
 
 Last but not least, there's `:Git` for running any arbitrary command,
@@ -69,45 +71,13 @@ and paste:
     git clone https://github.com/tpope/vim-fugitive.git
     vim -u NONE -c "helptags vim-fugitive/doc" -c q
 
-If your Vim version is below 7.2, I recommend also installing
-[vim-git](https://github.com/tpope/vim-git) for syntax highlighting and
-other Git niceties.
-
 ## FAQ
 
-> I installed the plugin and started Vim.  Why don't any of the commands
-> exist?
+> Why don't any of the commands exist?
 
-Fugitive cares about the current file, not the current working
-directory.  Edit a file from the repository.
-
-> I opened a new tab.  Why don't any of the commands exist?
-
-Fugitive cares about the current file, not the current working
-directory.  Edit a file from the repository.
-
-> Why is `:Gbrowse` not using the right browser?
-
-`:Gbrowse` delegates to `git web--browse`, which is less than perfect
-when it comes to finding the right browser.  You can tell it the correct
-browser to use with `git config --global web.browser ...`.  On OS X, for
-example, you might want to set this to `open`.  See `git web--browse --help`
-for details.
-
-> Here's a patch that automatically opens the quickfix window after
-> `:Ggrep`.
-
-This is a great example of why I recommend asking before patching.
-There are valid arguments to be made both for and against automatically
-opening the quickfix window.  Whenever I have to make an arbitrary
-decision like this, I ask what Vim would do.  And Vim does not open a
-quickfix window after `:grep`.
-
-Luckily, it's easy to implement the desired behavior without changing
-fugitive.vim.  The following autocommand will cause the quickfix window
-to open after any grep invocation:
-
-    autocmd QuickFixCmdPost *grep* cwindow
+Fugitive cares about the current file, not the current working directory.
+Edit a file from the repository.  To avoid the blank window problem, favor
+commands like `:split` and `:tabedit` over commands like `:new` and `:tabnew`.
 
 ## Self-Promotion
 
