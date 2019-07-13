@@ -370,54 +370,6 @@ Plugin.GetExtensionRegistry()                  *Plugin.GetExtensionRegistry()*
   |maktaba#extension#GetRegistry()| instead, rather than depend upon the
   plugin directly.
 
-                                                            *maktaba.Selector*
-Representation of a set of data for a user to select from, e.g. list of files.
-It can be created with |maktaba#selector#Create()|, configured with syntax
-highlighting, key mappings, etc. and shown as a vim window.
-
-Selector.WithMappings({keymappings})                 *Selector.WithMappings()*
-  Set {keymappings} to use in the selector window. Must have the form:
->
-    'keyToPress': [
-        ActionFunction({line}, [datum]),
-        'SelectorWindowAction',
-        'Help Text']
-<
-  Where the "ActionFunction" is the name of a function you specify, which
-  takes one or two arguments:
-    1. line: The contents of the line on which the "keyToPress" was pressed.
-    2. datum: data associated with the line when selector was created, if line
-      was initialized as a 2-item list.
-
-  And where the "SelectorWindowAction" must be one of the following:
-  "Close" -- close the SelectorWindow before completing the action
-  "Return" -- Return to previous window and keep the Selector Window open
-  "NoOp" -- Perform no action (keeping the SelectorWindow open).
-
-Selector.WithSyntax({ApplySyntax})                     *Selector.WithSyntax()*
-  Configures an {ApplySyntax} function to be called in the selector window.
-  This will by applied in addition to standard syntax rules for rendering the
-  help header, etc.
-
-Selector.WithExtraOptions({ApplyExtraOptions})   *Selector.WithExtraOptions()*
-  Configures {ApplyExtraOptions} for additional window-local settings for
-  selector window. If not configured, the default extra options just disable
-  'number'.
-
-Selector.WithName({name})                                *Selector.WithName()*
-  Configures {name} to show as the window name on the selector. If not
-  configured, the default name is "__SelectorWindow__".
-
-Selector.Show([minheight], [maxheight], [position])          *Selector.Show()*
-  Shows a selector window for the |maktaba.Selector| with [minheight],
-  [maxheight], and [position].
-  [minheight] is 5 if omitted.
-  [maxheight] is 25 if omitted.
-  [position] is 'botright' if omitted.
-
-Selector.ToggleHelp()                                  *Selector.ToggleHelp()*
-  Toggle whether verbose help is shown for the selector.
-
                                                              *maktaba.Setting*
 Parses {text} into a setting object. The setting object can be applied to a
 plugin to affect the plugin flags as described in {text}. Setting syntax is as
@@ -1678,14 +1630,6 @@ maktaba#rtp#Load({dir})                                   *maktaba#rtp#Load()*
 maktaba#rtp#DirDefinesFiletypes({dir})     *maktaba#rtp#DirDefinesFiletypes()*
   Whether or not runtimepath directory {dir} defines a new filetype.
 
-maktaba#selector#Create({infolist})                *maktaba#selector#Create()*
-  Creates a |maktaba.Selector| from {infolist} that can be configured and
-  shown.
-
-  Each entry in {infolist} may be either a line to display, or a 2-item list
-  containing `[LINE, DATA]`. If present, DATA will be passed to the action
-  function as a second argument.
-
 maktaba#setting#ParseHandle({text})            *maktaba#setting#ParseHandle()*
   Parses a flag handle off of {text}, returns a tuple containing [flagname,
   foci, leftover]. See |maktaba#setting#Handle()|; the only difference is that
@@ -1847,8 +1791,7 @@ maktaba#value#EmptyValue({value})                 *maktaba#value#EmptyValue()*
 
 maktaba#value#TypeName({value})                     *maktaba#value#TypeName()*
   Returns the type of {value} as a string. One of "number", "string",
-  "funcref", "list", "dictionary", "float", "boolean", "null", "none", "job",
-  or "channel". See also |type()|.
+  "funcref", "list", "dictionary", or "float". See also |type()|.
 
 maktaba#value#TypeMatches({value}, {reference})  *maktaba#value#TypeMatches()*
   1 if {value} has the same type as {reference}, 0 otherwise.
@@ -1988,28 +1931,23 @@ For when someone tries to do something they shouldn't.
 For when someone expected something to be there, and it wasn't.
 
                                                        *ERROR(NotImplemented)*
-For attempts to use functionality that is not supported, usually for cases
-where an interface implies support that isn't implemented due to technical
-limitations.
+For attempts to use functionality that is not yet supported.
 
                                                             *ERROR(WrongType)*
-For when a caller tried to use the wrong type of arguments to a function.
+For when someone tried to use the wrong type of arguments.
 
                                                              *ERROR(BadValue)*
-For when a caller tried to pass an unusable value to a function.
+For when someone tried to use insane values.
 
                                                      *ERROR(InvalidArguments)*
 For when a function is given the wrong number of arguments. Prefer
 |ERROR(WrongType)| and |ERROR(BadValue)| when relevant.
 
                                                        *ERROR(MissingFeature)*
-For use when this vim instance is missing support for necessary functionality,
-e.g. when a |has()| check fails or |v:servername| wasn't set.
+For use when a |has()| check fails.
 
                                                               *ERROR(Failure)*
-For use in code that should never be reached. Should only be thrown to
-indicate there's a bug in the plugin, and should never be caught or declared
-with `@throws`.
+For use in code that should never be reached.
 
 ==============================================================================
 PYTHON                                                        *maktaba-python*

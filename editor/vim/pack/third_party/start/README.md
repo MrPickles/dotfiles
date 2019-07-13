@@ -14,5 +14,5 @@ Below are where the original repositories can be found:
 * [vim-devicons](https://github.com/ryanoasis/vim-devicons)
 * [vim-fugitive](https://github.com/tpope/vim-fugitive)
 * [vim-gitgutter](https://github.com/airblade/vim-gitgutter)
-* [vim-maktaba](https://github.com/google/vim-maktaba)
+* [vim-maktaba](https://github.com/google/vim-maktaba) @ [v0.15.0](https://github.com/google/vim-maktaba/releases/tag/v0.15.0)
 * [vim-polyglot](https://github.com/sheerun/vim-polyglot) @ [v3.9.0](https://github.com/sheerun/vim-polyglot/releases/tag/v3.9.0)
