@@ -3,12 +3,76 @@ if exists("g:loaded_nerdtree_autoload")
 endif
 let g:loaded_nerdtree_autoload = 1
 
-function! nerdtree#version()
-    return '5.0.0'
+let s:rootNERDTreePath = resolve(expand("<sfile>:p:h:h"))
+function! nerdtree#version(...)
+    let l:changelog = readfile(join([s:rootNERDTreePath, "CHANGELOG.md"], nerdtree#slash()))
+    let l:text = 'Unknown'
+    let l:line = 0
+    while l:line <= len(l:changelog)
+        if l:changelog[l:line] =~ '\d\+\.\d\+'
+            let l:text = substitute(l:changelog[l:line], '.*\(\d\+.\d\+\).*', '\1', '')
+            let l:text .= substitute(l:changelog[l:line+1], '^.\{-}\(\.\d\+\).\{-}:\(.*\)', a:0>0 ? '\1:\2' : '\1', '')
+            break
+        endif
+        let l:line += 1
+    endwhile
+    return l:text
 endfunction
 
 " SECTION: General Functions {{{1
 "============================================================
+
+"FUNCTION: nerdtree#redraw(bang)
+" Redraws the screen (Neovim uses the mode statement). If bang is TRUE, use
+" redraw! instead of redraw.
+function! nerdtree#redraw(bang)
+    if has('nvim')
+        mode
+    else
+        if a:bang
+            redraw!
+        else
+            redraw
+        endif
+    endif
+endfunction
+
+"FUNCTION: nerdtree#slash()
+" Returns the directory separator based on OS and &shellslash
+function! nerdtree#slash()
+    if nerdtree#runningWindows()
+        if exists('+shellslash') && &shellslash
+            return '/'
+        endif
+
+        return '\'
+    endif
+
+    return '/'
+endfunction
+
+"FUNCTION: nerdtree#and(x,y) {{{2
+" Implements and() function for Vim <= 7.2
+function! nerdtree#and(x,y)
+    if exists("*and")
+        return and(a:x, a:y)
+    else
+        let l:x = a:x
+        let l:y = a:y
+        let l:n = 0
+        let l:result = 0
+        while l:x > 0 && l:y > 0
+            if (l:x % 2) && (l:y % 2)
+                let l:result += float2nr(pow(2, l:n))
+            endif
+            echomsg l:x . ", " . l:y . " => " l:result
+            let l:x = float2nr(l:x / 2)
+            let l:y = float2nr(l:y / 2)
+            let l:n += 1
+        endwhile
+        return l:result
+    endif
+endfunction
 
 "FUNCTION: nerdtree#checkForBrowse(dir) {{{2
 "inits a window tree in the current buffer if appropriate
@@ -61,7 +125,6 @@ endfunction
 function! nerdtree#compareNodesBySortKey(n1, n2)
     let sortKey1 = a:n1.path.getSortKey()
     let sortKey2 = a:n2.path.getSortKey()
-
     let i = 0
     while i < min([len(sortKey1), len(sortKey2)])
         " Compare chunks upto common length.
@@ -73,9 +136,9 @@ function! nerdtree#compareNodesBySortKey(n1, n2)
             elseif sortKey1[i] ># sortKey2[i]
                 return 1
             endif
-        elseif sortKey1[i] == type(0)
+        elseif type(sortKey1[i]) == v:t_number
             return -1
-        elseif sortKey2[i] == type(0)
+        elseif type(sortKey2[i]) == v:t_number
             return 1
         endif
         let i = i + 1
@@ -155,6 +218,11 @@ function! nerdtree#runningWindows()
     return has("win16") || has("win32") || has("win64")
 endfunction
 
+"FUNCTION: nerdtree#runningCygwin(dir) {{{2
+function! nerdtree#runningCygwin()
+    return has("win32unix")
+endfunction
+
 " SECTION: View Functions {{{1
 "============================================================
 
@@ -164,8 +232,8 @@ endfunction
 "Args:
 "msg: the message to echo
 function! nerdtree#echo(msg)
-    redraw
-    echomsg "NERDTree: " . a:msg
+    call nerdtree#redraw(0)
+    echomsg empty(a:msg) ? "" : ("NERDTree: " . a:msg)
 endfunction
 
 "FUNCTION: nerdtree#echoError {{{2

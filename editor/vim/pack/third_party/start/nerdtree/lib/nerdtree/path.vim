@@ -7,28 +7,32 @@
 " ============================================================================
 
 
-" This constant is used throughout this script for sorting purposes.
-let s:NERDTreeSortStarIndex = index(g:NERDTreeSortOrder, '*')
-lockvar s:NERDTreeSortStarIndex
-
 let s:Path = {}
 let g:NERDTreePath = s:Path
 
-" FUNCTION: Path.AbsolutePathFor(str) {{{1
-function! s:Path.AbsolutePathFor(str)
-    let prependCWD = 0
+" FUNCTION: Path.AbsolutePathFor(pathStr) {{{1
+function! s:Path.AbsolutePathFor(pathStr)
+    let l:prependWorkingDir = 0
+
     if nerdtree#runningWindows()
-        let prependCWD = a:str !~# '^.:\(\\\|\/\)' && a:str !~# '^\(\\\\\|\/\/\)'
+        let l:prependWorkingDir = a:pathStr !~# '^.:\(\\\|\/\)\?' && a:pathStr !~# '^\(\\\\\|\/\/\)'
     else
-        let prependCWD = a:str !~# '^/'
+        let l:prependWorkingDir = a:pathStr !~# '^/'
     endif
 
-    let toReturn = a:str
-    if prependCWD
-        let toReturn = getcwd() . s:Path.Slash() . a:str
+    let l:result = a:pathStr
+
+    if l:prependWorkingDir
+        let l:result = getcwd()
+
+        if l:result[-1:] == s:Path.Slash()
+            let l:result = l:result . a:pathStr
+        else
+            let l:result = l:result . s:Path.Slash() . a:pathStr
+        endif
     endif
 
-    return toReturn
+    return l:result
 endfunction
 
 " FUNCTION: Path.bookmarkNames() {{{1
@@ -41,10 +45,10 @@ endfunction
 
 " FUNCTION: Path.cacheDisplayString() {{{1
 function! s:Path.cacheDisplayString() abort
-    let self.cachedDisplayString = self.getLastPathComponent(1)
+    let self.cachedDisplayString = g:NERDTreeNodeDelimiter . self.getLastPathComponent(1)
 
     if self.isExecutable
-        let self.cachedDisplayString = self.cachedDisplayString . '*'
+        let self.cachedDisplayString = self.addDelimiter(self.cachedDisplayString) . '*'
     endif
 
     let self._bookmarkNames = []
@@ -54,15 +58,24 @@ function! s:Path.cacheDisplayString() abort
         endif
     endfor
     if !empty(self._bookmarkNames) && g:NERDTreeMarkBookmarks == 1
-        let self.cachedDisplayString .= ' {' . join(self._bookmarkNames) . '}'
+        let self.cachedDisplayString = self.addDelimiter(self.cachedDisplayString) . ' {' . join(self._bookmarkNames) . '}'
     endif
 
     if self.isSymLink
-        let self.cachedDisplayString .=  ' -> ' . self.symLinkDest
+        let self.cachedDisplayString = self.addDelimiter(self.cachedDisplayString) . ' -> ' . self.symLinkDest
     endif
 
     if self.isReadOnly
-        let self.cachedDisplayString .=  ' ['.g:NERDTreeGlyphReadOnly.']'
+        let self.cachedDisplayString = self.addDelimiter(self.cachedDisplayString) . ' ['.g:NERDTreeGlyphReadOnly.']'
+    endif
+endfunction
+
+" FUNCTION: Path.addDelimiter() {{{1
+function! s:Path.addDelimiter(line)
+    if a:line =~# '\(.*' . g:NERDTreeNodeDelimiter . '\)\{2}'
+        return a:line
+    else
+        return a:line . g:NERDTreeNodeDelimiter
     endif
 endfunction
 
@@ -244,7 +257,13 @@ function! s:Path.delete()
             throw "NERDTree.PathDeletionError: Could not delete directory: '" . self.str() . "'"
         endif
     else
-        let success = delete(self.str())
+        if exists('g:NERDTreeRemoveFileCmd')
+            let cmd = g:NERDTreeRemoveFileCmd . self.str({'escape': 1})
+            let success = system(cmd)
+        else
+            let success = delete(self.str())
+        endif
+
         if success != 0
             throw "NERDTree.PathDeletionError: Could not delete file: '" . self.str() . "'"
         endif
@@ -366,7 +385,8 @@ function! s:Path.getSortOrderIndex()
         endif
         let i = i + 1
     endwhile
-    return s:NERDTreeSortStarIndex
+
+    return index(g:NERDTreeSortOrder, '*')
 endfunction
 
 " FUNCTION: Path._splitChunks(path) {{{1
@@ -387,7 +407,17 @@ endfunction
 " FUNCTION: Path.getSortKey() {{{1
 " returns a key used in compare function for sorting
 function! s:Path.getSortKey()
-    if !exists("self._sortKey")
+    let l:ascending = index(g:NERDTreeSortOrder,'[[timestamp]]')
+    let l:descending = index(g:NERDTreeSortOrder,'[[-timestamp]]')
+    if !exists("self._sortKey") || g:NERDTreeSortOrder !=# g:NERDTreeOldSortOrder || l:ascending >= 0 || l:descending >= 0
+        let self._sortKey = [self.getSortOrderIndex()]
+
+        if l:descending >= 0
+            call insert(self._sortKey, -getftime(self.str()), l:descending == 0 ? 0 : len(self._sortKey))
+        elseif l:ascending >= 0
+            call insert(self._sortKey, getftime(self.str()), l:ascending == 0 ? 0 : len(self._sortKey))
+        endif
+
         let path = self.getLastPathComponent(1)
         if !g:NERDTreeSortHiddenFirst
             let path = substitute(path, '^[._]', '', '')
@@ -395,16 +425,31 @@ function! s:Path.getSortKey()
         if !g:NERDTreeCaseSensitiveSort
             let path = tolower(path)
         endif
-        if !g:NERDTreeNaturalSort
-            let self._sortKey = [self.getSortOrderIndex(), path]
-        else
-            let self._sortKey = [self.getSortOrderIndex()] + self._splitChunks(path)
-        endif
-    endif
 
+        call extend(self._sortKey, (g:NERDTreeNaturalSort ? self._splitChunks(path) : [path]))
+    endif
     return self._sortKey
 endfunction
 
+" FUNCTION: Path.isHiddenUnder(path) {{{1
+function! s:Path.isHiddenUnder(path)
+
+    if !self.isUnder(a:path)
+        return 0
+    endif
+
+    let l:startIndex = len(a:path.pathSegments)
+    let l:segments = self.pathSegments[l:startIndex : ]
+
+    for l:segment in l:segments
+
+        if l:segment =~# '^\.'
+            return 1
+        endif
+    endfor
+
+    return 0
+endfunction
 
 " FUNCTION: Path.isUnixHiddenFile() {{{1
 " check for unix hidden files
@@ -519,20 +564,23 @@ endfunction
 " Args:
 " path: the other path obj to compare this with
 function! s:Path.equals(path)
-    return self.str() ==# a:path.str()
+    if nerdtree#runningWindows()
+        return self.str() ==? a:path.str()
+    else
+        return self.str() ==# a:path.str()
+    endif
 endfunction
 
-" FUNCTION: Path.New() {{{1
-" The Constructor for the Path object
-function! s:Path.New(path)
-    let newPath = copy(self)
+" FUNCTION: Path.New(pathStr) {{{1
+function! s:Path.New(pathStr)
+    let l:newPath = copy(self)
 
-    call newPath.readInfoFromDisk(s:Path.AbsolutePathFor(a:path))
+    call l:newPath.readInfoFromDisk(s:Path.AbsolutePathFor(a:pathStr))
 
-    let newPath.cachedDisplayString = ""
-    let newPath.flagSet = g:NERDTreeFlagSet.New()
+    let l:newPath.cachedDisplayString = ''
+    let l:newPath.flagSet = g:NERDTreeFlagSet.New()
 
-    return newPath
+    return l:newPath
 endfunction
 
 " FUNCTION: Path.Slash() {{{1
@@ -637,6 +685,8 @@ function! s:Path.rename(newPath)
         throw "NERDTree.InvalidArgumentsError: Invalid newPath for renaming = ". a:newPath
     endif
 
+    call s:Path.createParentDirectories(a:newPath)
+
     let success =  rename(self.str(), a:newPath)
     if success != 0
         throw "NERDTree.PathRenameError: Could not rename: '" . self.str() . "'" . 'to:' . a:newPath
@@ -693,8 +743,10 @@ function! s:Path.str(...)
 
     if has_key(options, 'truncateTo')
         let limit = options['truncateTo']
-        if len(toReturn) > limit-1
-            let toReturn = toReturn[(len(toReturn)-limit+1):]
+        if strdisplaywidth(toReturn) > limit-1
+            while strdisplaywidth(toReturn) > limit-1 && strchars(toReturn) > 0
+                let toReturn = substitute(toReturn, '^.', '', '')
+            endwhile
             if len(split(toReturn, '/')) > 1
                 let toReturn = '</' . join(split(toReturn, '/')[1:], '/') . '/'
             else
@@ -790,7 +842,7 @@ function! s:Path.tabnr()
     let str = self.str()
     for t in range(tabpagenr('$'))
         for b in tabpagebuflist(t+1)
-            if str == expand('#' . b . ':p')
+            if str ==# expand('#' . b . ':p')
                 return t+1
             endif
         endfor

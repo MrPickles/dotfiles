@@ -21,12 +21,19 @@ function! s:TreeDirNode.AbsoluteTreeRoot()
 endfunction
 
 " FUNCTION: TreeDirNode.activate([options]) {{{1
-unlet s:TreeDirNode.activate
 function! s:TreeDirNode.activate(...)
-    let opts = a:0 ? a:1 : {}
-    call self.toggleOpen(opts)
-    call self.getNerdtree().render()
-    call self.putCursorHere(0, 0)
+    let l:options = (a:0 > 0) ? a:1 : {}
+
+    call self.toggleOpen(l:options)
+
+    " Note that we only re-render the NERDTree for this node if we did NOT
+    " create a new node and render it in a new window or tab.  In the latter
+    " case, rendering the NERDTree for this node could overwrite the text of
+    " the new NERDTree!
+    if !has_key(l:options, 'where') || empty(l:options['where'])
+        call self.getNerdtree().render()
+        call self.putCursorHere(0, 0)
+    endif
 endfunction
 
 " FUNCTION: TreeDirNode.addChild(treenode, inOrder) {{{1
@@ -92,7 +99,8 @@ function! s:TreeDirNode.displayString()
     let l:label = ''
     let l:cascade = self.getCascade()
     for l:dirNode in l:cascade
-        let l:label .= l:dirNode.path.displayString()
+        let l:next = l:dirNode.path.displayString()
+        let l:label .= l:label == '' ? l:next : substitute(l:next,'^.','','')
     endfor
 
     " Select the appropriate open/closed status indicator symbol.
@@ -144,6 +152,32 @@ function! s:TreeDirNode.getCascade()
     let visChild = vc[0]
 
     return [self] + visChild.getCascade()
+endfunction
+
+" FUNCTION: TreeDirNode.getCascadeRoot() {{{1
+" Return the first directory node in the cascade in which this directory node
+" is rendered.
+function! s:TreeDirNode.getCascadeRoot()
+
+    " Don't search above the current NERDTree root node.
+    if self.isRoot()
+        return self
+    endif
+
+    let l:cascadeRoot = self
+    let l:parent = self.parent
+
+    while !empty(l:parent) && !l:parent.isRoot()
+
+        if index(l:parent.getCascade(), self) == -1
+            break
+        endif
+
+        let l:cascadeRoot = l:parent
+        let l:parent = l:parent.parent
+    endwhile
+
+    return l:cascadeRoot
 endfunction
 
 " FUNCTION: TreeDirNode.getChildCount() {{{1
@@ -220,6 +254,13 @@ function! s:TreeDirNode.getChildIndex(path)
     return -1
 endfunction
 
+" FUNCTION: TreeDirNode.getDirChildren() {{{1
+" Return a list of all child nodes from "self.children" that are of type
+" TreeDirNode. This function supports http://github.com/scrooloose/nerdtree-project-plugin.git.
+function! s:TreeDirNode.getDirChildren()
+    return filter(copy(self.children), 'v:val.path.isDirectory == 1')
+endfunction
+
 " FUNCTION: TreeDirNode._glob(pattern, all) {{{1
 " Return a list of strings naming the descendants of the directory in this
 " TreeDirNode object that match the specified glob pattern.
@@ -240,7 +281,7 @@ function! s:TreeDirNode._glob(pattern, all)
     if self.path.str() == getcwd()
         let l:pathSpec = ','
     else
-        let l:pathSpec = fnamemodify(self.path.str({'format': 'Glob'}), ':.')
+        let l:pathSpec = escape(fnamemodify(self.path.str({'format': 'Glob'}), ':.'), ',')
 
         " On Windows, the drive letter may be removed by "fnamemodify()".
         if nerdtree#runningWindows() && l:pathSpec[0] == g:NERDTreePath.Slash()
@@ -271,9 +312,11 @@ function! s:TreeDirNode._glob(pattern, all)
         for l:file in l:globList
             let l:tail = fnamemodify(l:file, ':t')
 
-            " Double the modifier if only a separator was stripped.
+            " If l:file has a trailing slash, then its :tail will be ''. Use
+            " :h to drop the slash and the empty string after it; then use :t
+            " to get the directory name.
             if l:tail == ''
-                let l:tail = fnamemodify(l:file, ':t:t')
+                let l:tail = fnamemodify(l:file, ':h:t')
             endif
 
             if l:tail == '.' || l:tail == '..'
@@ -334,11 +377,25 @@ function! s:TreeDirNode.hasVisibleChildren()
 endfunction
 
 " FUNCTION: TreeDirNode.isCascadable() {{{1
-" true if this dir has only one visible child - which is also a dir
+" true if this dir has only one visible child that is also a dir
+" false if this dir is bookmarked or symlinked. Why? Two reasons:
+"  1. If cascaded, we don't know which dir is bookmarked or is a symlink.
+"  2. If the parent is a symlink or is bookmarked, you end up with unparsable
+"     text, and NERDTree cannot get the path of any child node.
 function! s:TreeDirNode.isCascadable()
     if g:NERDTreeCascadeSingleChildDir == 0
         return 0
     endif
+
+    if self.path.isSymLink
+        return 0
+    endif
+
+    for i in g:NERDTreeBookmark.Bookmarks()
+        if i.path.equals(self.path)
+            return 0
+        endif
+    endfor
 
     let c = self.getVisibleChildren()
     return len(c) == 1 && c[0].path.isDirectory
@@ -375,9 +432,7 @@ function! s:TreeDirNode._initChildren(silent)
 
     call self.sortChildren()
 
-    if !a:silent && len(files) > g:NERDTreeNotificationThreshold
-        call nerdtree#echo("Please wait, caching a large dir ... DONE (". self.getChildCount() ." nodes cached).")
-    endif
+    call nerdtree#echo("")
 
     if invalidFilesFound
         call nerdtree#echoWarning(invalidFilesFound . " file(s) could not be loaded into the NERD tree")
@@ -565,6 +620,11 @@ function! s:TreeDirNode.reveal(path, ...)
 
     if self.path.equals(a:path.getParent())
         let n = self.findNode(a:path)
+        " We may be looking for a newly-saved file that isn't in the tree yet.
+        if n == {}
+            call self.refresh()
+            let n = self.findNode(a:path)
+        endif
         if has_key(opts, "open")
             call n.open()
         endif
@@ -600,8 +660,12 @@ endfunction
 " FUNCTION: TreeDirNode.sortChildren() {{{1
 " Sort "self.children" by alphabetical order and directory priority.
 function! s:TreeDirNode.sortChildren()
+    if count(g:NERDTreeSortOrder, '*') < 1
+        call add(g:NERDTreeSortOrder, '*')
+    endif
     let CompareFunc = function("nerdtree#compareNodesBySortKey")
     call sort(self.children, CompareFunc)
+    let g:NERDTreeOldSortOrder = g:NERDTreeSortOrder
 endfunction
 
 " FUNCTION: TreeDirNode.toggleOpen([options]) {{{1
