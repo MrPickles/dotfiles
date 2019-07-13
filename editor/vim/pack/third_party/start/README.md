@@ -8,7 +8,7 @@ Below are where the original repositories can be found:
 * [fzf.vim](https://github.com/junegunn/fzf.vim)
 * [nerdtree](https://github.com/scrooloose/nerdtree)
 * [nerdtree-git-plugin](https://github.com/Xuyuanp/nerdtree-git-plugin)
-* [vim-airline](https://github.com/vim-airline/vim-airline)
+* [vim-airline](https://github.com/vim-airline/vim-airline) @ [v0.10](https://github.com/vim-airline/vim-airline/releases/tag/v0.10)
 * [vim-bazel](https://github.com/bazelbuild/vim-bazel)
 * [vim-colors-solarized](https://github.com/altercation/vim-colors-solarized)
 * [vim-devicons](https://github.com/ryanoasis/vim-devicons)
