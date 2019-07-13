@@ -129,18 +129,12 @@ if _has fzf; then
   elif _has rg; then
     # Use ripgrep for fzf.
     export FZF_DEFAULT_COMMAND='rg --files --hidden'
-  elif _has ag; then
-    # Use ag for fzf.
-    export FZF_DEFAULT_COMMAND='ag -g ""'
   fi
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
   if _has fd; then
     # Use fd for fzf directory search.
     export FZF_ALT_C_COMMAND='fd --type d --color never'
-  elif _has blsd; then
-    # Use blsd for fzf directory search.
-    export FZF_ALT_C_COMMAND='blsd'
   fi
 
   # Source fzf-cd plugin.

@@ -112,18 +112,8 @@ if executable('rg')
   nnoremap <Space> :Rg<CR>
   nnoremap <leader><Space> :Rg!<CR>
 
-  " Use rg over ag and grep and ack if available.
+  " Use rg for :grep if available. But we should prefer to use :Rg.
   set grepprg=rg\ --vimgrep\ --color=never\ --no-heading\ --hidden
-  " Use rg in ack.vim
-  let g:ackprg = 'rg --vimgrep'
-elseif executable('ag')
-  " Use ag over grep and ack if available.
-  set grepprg=ag\ --nogroup\ --nocolor
-  " Use ag in ack.vim
-  let g:ackprg = 'ag --vimgrep'
-elseif executable("ack")
-  " Use ack instead of grep if available
-  set grepprg=ack\ -H\ --nogroup\ --nocolor\ --ignore-dir=tmp\ --ignore-dir=coverage
 endif
 
 " Set up vim airline
