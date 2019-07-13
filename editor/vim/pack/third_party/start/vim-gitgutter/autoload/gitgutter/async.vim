@@ -11,10 +11,13 @@ function! gitgutter#async#available()
 endfunction
 
 
-function! gitgutter#async#execute(cmd) abort
+function! gitgutter#async#execute(cmd, bufnr, handler) abort
+  call gitgutter#debug#log('[async] '.a:cmd)
+
   let options = {
         \   'stdoutbuffer': [],
-        \   'buffer': gitgutter#utility#bufnr()
+        \   'buffer': a:bufnr,
+        \   'handler': a:handler
         \ }
   let command = s:build_command(a:cmd)
 
@@ -57,34 +60,16 @@ function! s:on_stdout_nvim(_job_id, data, _event) dict abort
   endif
 endfunction
 
-function! s:on_stderr_nvim(_job_id, _data, _event) dict abort
-  " Backward compatibility for nvim < 0.2.0
-  if !has('nvim-0.2.0')
-    let current_buffer = gitgutter#utility#bufnr()
-    call gitgutter#utility#set_buffer(self.buffer)
-    if gitgutter#utility#is_active()
-      call gitgutter#hunk#reset()
-    endif
-    call gitgutter#utility#set_buffer(current_buffer)
-    return
+function! s:on_stderr_nvim(_job_id, data, _event) dict abort
+  if a:data != ['']  " With Neovim there is always [''] reported on stderr.
+    call self.handler.err(self.buffer)
   endif
-
-  call s:buffer_exec(self.buffer, function('gitgutter#hunk#reset'))
 endfunction
 
-function! s:on_exit_nvim(_job_id, _data, _event) dict abort
-  " Backward compatibility for nvim < 0.2.0
-  if !has('nvim-0.2.0')
-    let current_buffer = gitgutter#utility#bufnr()
-    call gitgutter#utility#set_buffer(self.buffer)
-    if gitgutter#utility#is_active()
-      call gitgutter#handle_diff(gitgutter#utility#stringify(self.stdoutbuffer))
-    endif
-    call gitgutter#utility#set_buffer(current_buffer)
-    return
+function! s:on_exit_nvim(_job_id, exit_code, _event) dict abort
+  if !a:exit_code
+    call self.handler.out(self.buffer, join(self.stdoutbuffer, "\n"))
   endif
-
-  call s:buffer_exec(self.buffer, function('gitgutter#handle_diff', [gitgutter#utility#stringify(self.stdoutbuffer)]))
 endfunction
 
 
@@ -92,22 +77,21 @@ function! s:on_stdout_vim(_channel, data) dict abort
   call add(self.stdoutbuffer, a:data)
 endfunction
 
-function! s:on_stderr_vim(_channel, _data) dict abort
-  call s:buffer_exec(self.buffer, function('gitgutter#hunk#reset'))
+function! s:on_stderr_vim(channel, _data) dict abort
+  call self.handler.err(self.buffer)
 endfunction
 
-function! s:on_exit_vim(_channel) dict abort
-  call s:buffer_exec(self.buffer, function('gitgutter#handle_diff', [gitgutter#utility#stringify(self.stdoutbuffer)]))
-endfunction
+function! s:on_exit_vim(channel) dict abort
+  let job = ch_getjob(a:channel)
+  while 1
+    if job_status(job) == 'dead'
+      let exit_code = job_info(job).exitval
+      break
+    endif
+    sleep 5m
+  endwhile
 
-
-function! s:buffer_exec(buffer, fn)
-  let current_buffer = gitgutter#utility#bufnr()
-  call gitgutter#utility#set_buffer(a:buffer)
-
-  if gitgutter#utility#is_active()
-    call a:fn()
+  if !exit_code
+    call self.handler.out(self.buffer, join(self.stdoutbuffer, "\n"))
   endif
-
-  call gitgutter#utility#set_buffer(current_buffer)
 endfunction
