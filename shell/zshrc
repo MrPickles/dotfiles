@@ -128,16 +128,13 @@ if _has fzf; then
   if _has fd; then
     # Use fd for fzf.
     export FZF_DEFAULT_COMMAND='fd --type f --follow --hidden'
+    # Use fd for fzf directory search.
+    export FZF_ALT_C_COMMAND='fd --type d --color never'
   elif _has rg; then
     # Use ripgrep for fzf.
     export FZF_DEFAULT_COMMAND='rg --files --hidden'
   fi
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-
-  if _has fd; then
-    # Use fd for fzf directory search.
-    export FZF_ALT_C_COMMAND='fd --type d --color never'
-  fi
 
   # Source fzf-cd plugin.
   if [[ -f ~/.zsh-interactive-cd.plugin.zsh ]]; then
