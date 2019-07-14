@@ -21,5 +21,3 @@
 [pager]
   # Disable paging for `git branch`.
   branch = false
-[include]
-  path = ~/.gitconfig.local
