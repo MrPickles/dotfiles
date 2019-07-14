@@ -116,6 +116,8 @@ if _has fzf; then
     # Source fzf scripts via Homebrew.
     source /usr/local/opt/fzf/shell/key-bindings.zsh
     source /usr/local/opt/fzf/shell/completion.zsh
+  elif [ -e /usr/share/doc/fzf/examples/key-bindings.zsh ]; then
+    source /usr/share/doc/fzf/examples/key-bindings.zsh
   elif [ -e ~/.fzf ]; then
     # Source fzf scripts via via local installation.
     _append_to_path ~/.fzf/bin
