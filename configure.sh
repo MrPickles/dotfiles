@@ -185,16 +185,16 @@ if [[ $BUILD ]]; then
 
     git config --global color.ui true
 
-    git config --global color.diff-highlight.oldNormal    "red bold"
-    git config --global color.diff-highlight.oldHighlight "red bold 52"
-    git config --global color.diff-highlight.newNormal    "green bold"
-    git config --global color.diff-highlight.newHighlight "green bold 22"
+    git config --global color.diff-highlight.oldNormal    "red"
+    git config --global color.diff-highlight.oldHighlight "red 52"
+    git config --global color.diff-highlight.newNormal    "green"
+    git config --global color.diff-highlight.newHighlight "green 22"
 
     git config --global color.diff.meta       "yellow"
-    git config --global color.diff.frag       "magenta bold"
-    git config --global color.diff.commit     "yellow bold"
-    git config --global color.diff.old        "red bold"
-    git config --global color.diff.new        "green bold"
+    git config --global color.diff.frag       "magenta"
+    git config --global color.diff.commit     "yellow"
+    git config --global color.diff.old        "red"
+    git config --global color.diff.new        "green"
     git config --global color.diff.whitespace "red reverse"
   fi
 fi
