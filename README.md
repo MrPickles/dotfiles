@@ -104,6 +104,8 @@ The setting can be found in the advanced preferences.
 #### Downloading Fonts for Linux
 
 Similarly to that of MacOS, you'll need to fetch modified fonts.
+We'll install the same font that we use for MacOS, although setting it up is
+rather different.
 
 ```shell
 mkdir -p ~/.local/share/fonts
@@ -113,6 +115,8 @@ cd ~/.local/share/fonts
 curl -fLo "Droid Sans Mono Nerd Font Complete.otf" \
   https://github.com/ryanoasis/nerd-fonts/raw/2.0.0/patched-fonts/DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf
 ```
+
+After downloading the font, set it to be the font that your terminal apps uses.
 
 #### Solarized on Ubuntu Terminal
 
