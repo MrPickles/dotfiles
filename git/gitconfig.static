@@ -22,7 +22,7 @@
   # Disable paging for `git branch`.
   branch = false
   # Use diff-so-fancy if available
-  diff = (type diff-so-fancy &> /dev/null && diff-so-fancy | less --tabs=4 -RFX) || less
-  show = (type diff-so-fancy &> /dev/null && diff-so-fancy | less --tabs=4 -RFX) || less
+  diff = command diff-so-fancy && diff-so-fancy | less --tabs=4 -RFX || less
+  show = command diff-so-fancy && diff-so-fancy | less --tabs=4 -RFX || less
 [include]
   path = ~/.gitconfig.local
