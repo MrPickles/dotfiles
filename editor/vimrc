@@ -104,7 +104,10 @@ endif " has("autocmd")
 
 if executable('fzf')
   " Remap ctrl-P to execute fzf :)
-  nnoremap <silent> <C-p> :FZF<CR>
+  nnoremap <silent> <C-p> :Files<CR>
+
+  command! -bang -nargs=? -complete=dir Files
+    \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 endif
 
 if executable('rg')
@@ -114,6 +117,8 @@ if executable('rg')
 
   " Use rg for :grep if available. But we should prefer to use :Rg.
   set grepprg=rg\ --vimgrep\ --color=never\ --no-heading\ --hidden
+
+  let $FZF_DEFAULT_COMMAND = 'rg --hidden -l ""'
 endif
 
 " Set up vim airline
