@@ -145,13 +145,20 @@ if _has fzf; then
   if _has tree; then
     # Show subdir tree for directories.
     export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
-    # Show previews for files and directories.
-    # Having `highlight` installed will have syntax highlighting for files.
-    export FZF_CTRL_T_OPTS="--preview '(highlight -O ansi -l {} 2> /dev/null || cat {} || tree -C {}) 2> /dev/null | head -200'"
   fi
 
   # Bind alt-j/k/d/u to moving the preview window for fzf.
   export FZF_DEFAULT_OPTS="--bind alt-k:preview-up,alt-j:preview-down,alt-u:preview-page-up,alt-d:preview-page-down"
+
+  # Show previews for files and directories.
+  # Having `bat` or `highlight` (or any of the other binaries below) installed
+  # enables syntax highlighting.
+  export FZF_CTRL_T_OPTS="--preview '(bat --style=numbers --color=always {} || highlight -O ansi -l {} || coderay {} || rougify {} || cat {}) 2> /dev/null | head -200'"
+
+  if _has bat; then
+    # Export theme for http://github.com/sharkdp/bat.
+    export BAT_THEME="TwoDark"
+  fi
 fi
 
 # Alias hub and git, such that we can use hub commands with git.

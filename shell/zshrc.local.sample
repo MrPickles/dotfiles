@@ -16,7 +16,9 @@
 # Get the nth line from your output.
 # function line() { sed "$1q;d" $2 }
 
-# Alias https://github.com/sharkdp/bat to `cat`.
-# alias cat='bat --theme=TwoDark'
+# Alias https://github.com/sharkdp/bat to `cat`. Note that this may break
+# scripts or i/o redirection since `bat` has a configurable pager.
+# alias cat='bat'
+
 # Alias https://github.com/sharkdp/hexyl to `hexdump`.
 # alias hexdump='hexyl'
