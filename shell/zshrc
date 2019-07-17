@@ -149,6 +149,9 @@ if _has fzf; then
     # Having `highlight` installed will have syntax highlighting for files.
     export FZF_CTRL_T_OPTS="--preview '(highlight -O ansi -l {} 2> /dev/null || cat {} || tree -C {}) 2> /dev/null | head -200'"
   fi
+
+  # Bind alt-j/k/d/u to moving the preview window for fzf.
+  export FZF_DEFAULT_OPTS="--bind alt-k:preview-up,alt-j:preview-down,alt-u:preview-page-up,alt-d:preview-page-down"
 fi
 
 # Alias hub and git, such that we can use hub commands with git.
