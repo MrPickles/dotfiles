@@ -8,8 +8,6 @@ These dotfiles are best used with zsh, [oh-my-zsh][oh-my-zsh], and the
 [solarized][solarized] colorscheme.
 The configuration has powerline-based fonts status bars for vim and tmux, and
 uses [Powerlevel10k][powerlevel10k] as its zsh theme.
-Thus you'll need to patch to a font that supports powerline and Font Awesome
-symbols.
 
 ## Prequisites
 
