@@ -2,6 +2,8 @@
 
 These are my personal dotfiles.
 
+![Screenshot of my dotfiles](.images/screenshot.png)
+
 These dotfiles are best used with zsh, [oh-my-zsh][oh-my-zsh], and the
 [solarized][solarized] colorscheme.
 The configuration has powerline-based fonts status bars for vim and tmux, and
