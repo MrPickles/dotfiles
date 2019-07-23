@@ -123,6 +123,9 @@ if _has fzf; then
     _append_to_path ~/.fzf/bin
     source ~/.fzf/shell/key-bindings.zsh
     source ~/.fzf/shell/completion.zsh
+  elif [ -f ~/.fzf.zsh ]; then
+    # Auto-generated completion script when installing from custom path.
+    source ~/.fzf.zsh
   fi
 
   if _has fd; then
