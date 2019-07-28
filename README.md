@@ -175,9 +175,9 @@ The install script will run the configuration script, which fetches oh-my-zsh
 and symlinks the dotfiles to your home directory.
 
 ```shell
-curl andrew.cloud/dotfiles.sh | sh
+curl https://andrew.cloud/dotfiles.sh | sh
 # or
-wget -qO- andrew.cloud/dotfiles.sh | sh
+wget -qO- https://andrew.cloud/dotfiles.sh | sh
 ```
 
 Alternatively, you can manually clone the repository and run the `configure.sh`
