@@ -3,6 +3,7 @@
   ci = commit
   di = diff
   st = status
+  br = branch
 [color]
   diff = auto
   status = auto
