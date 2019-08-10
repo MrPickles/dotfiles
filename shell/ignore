@@ -9,3 +9,10 @@ Library/
 
 # Vim swapfiles
 *.swp
+
+# Ctags
+tags
+tags.lock
+tags.temp
+tags.temp.tmp
+tags.files

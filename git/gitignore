@@ -16,3 +16,7 @@ Thumbs.db
 
 # Ctags
 tags
+tags.lock
+tags.temp
+tags.temp.tmp
+tags.files
