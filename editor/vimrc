@@ -119,6 +119,8 @@ if executable('rg')
   set grepprg=rg\ --vimgrep\ --color=never\ --no-heading\ --hidden
 
   let $FZF_DEFAULT_COMMAND = 'rg --hidden -l ""'
+
+  let g:gutentags_file_list_command = 'rg --files'
 endif
 
 " Set up vim airline
