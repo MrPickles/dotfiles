@@ -22,3 +22,10 @@
 
 # Alias https://github.com/sharkdp/hexyl to `hexdump`.
 # alias hexdump='hexyl'
+
+# Use Neovim instead of normal vim
+#
+# if _has nvim; then
+#   alias vim="nvim"
+#   alias vi="nvim"
+# fi
