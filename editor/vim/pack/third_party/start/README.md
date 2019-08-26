@@ -11,7 +11,7 @@ Below are where the original repositories can be found:
 * [vim-bazel](https://github.com/bazelbuild/vim-bazel) @ [ecafb17](https://github.com/bazelbuild/vim-bazel/tree/ecafb17d5d1d3756e5ac0bd9f4812a450b8c91a3)
 * [vim-colors-solarized](https://github.com/altercation/vim-colors-solarized) @ [528a59f](https://github.com/altercation/vim-colors-solarized/tree/528a59f26d12278698bb946f8fb82a63711eec21)
 * [vim-devicons](https://github.com/ryanoasis/vim-devicons) @ [0c9e6fa](https://github.com/ryanoasis/vim-devicons/tree/0c9e6faaf246767c850eb92f48c4bdc068cdf235)
-* [vim-fugitive](https://github.com/tpope/vim-fugitive) @ [d0049b4](https://github.com/tpope/vim-fugitive/tree/d0049b4417cf20af6d98b8f1e0febcc7c6a6f2bb)
+* [vim-fugitive](https://github.com/tpope/vim-fugitive) @ [v3.0](https://github.com/tpope/vim-fugitive/releases/tag/v3.0)
 * [vim-gitgutter](https://github.com/airblade/vim-gitgutter) @ [9147174](https://github.com/airblade/vim-gitgutter/tree/91471746fe687ee867877508dfd809460dab5698)
 * [vim-gutentags](https://github.com/ludovicchabant/vim-gutentags) @ [eecb136](https://github.com/ludovicchabant/vim-gutentags/tree/eecb136fae97e30d5f01e71f0d3b775c8b017385)
 * [vim-maktaba](https://github.com/google/vim-maktaba) @ [v0.15.0](https://github.com/google/vim-maktaba/releases/tag/v0.15.0)
