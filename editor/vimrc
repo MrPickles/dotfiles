@@ -137,6 +137,29 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
 let g:airline#extensions#tabline#show_buffers = 0
 
+" Load plugins
+call plug#begin()
+
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
+Plug 'junegunn/fzf.vim'
+
+Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+
+Plug 'Xuyuanp/nerdtree-git-plugin'
+
+Plug 'vim-airline/vim-airline', { 'tag': 'v0.10' }
+
+Plug 'google/vim-maktaba', { 'tag': 'v0.15.0' }
+Plug 'bazelbuild/vim-bazel'
+
+Plug 'altercation/vim-colors-solarized'
+Plug 'ryanoasis/vim-devicons'
+Plug 'tpope/vim-fugitive', { 'tag': 'v3.0' }
+Plug 'airblade/vim-gitgutter'
+Plug 'sheerun/vim-polyglot', { 'tag': 'v3.9.0' }
+
+call plug#end()
+
 " Local config
 if filereadable(glob("~/.vimrc.local"))
   source ~/.vimrc.local
