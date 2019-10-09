@@ -194,6 +194,15 @@ currently using a different shell.
 chsh -s $(which zsh)
 ```
 
+### Vim
+
+We use the [vim-plug][] as our editor plugin manager.
+When first opening Vim, run the following command.
+
+```
+:PlugInstall
+```
+
 ## Customizing
 
 You can customize zsh, vim, tmux, and git for each specific machine.
@@ -233,3 +242,4 @@ chsh -s $(which bash) # optionally change shell back to bash
 [bat]: <https://github.com/sharkdp/bat>
 [itermcolors]: <https://raw.githubusercontent.com/altercation/solarized/e40cd4130e2a82f9b03ada1ca378b7701b1a9110/iterm2-colors-solarized/Solarized%20Dark.itermcolors>
 [powerlevel10k]: <https://github.com/romkatv/powerlevel10k>
+[vim-plug]: <https://github.com/junegunn/vim-plug>
