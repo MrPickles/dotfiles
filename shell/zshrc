@@ -109,6 +109,11 @@ source $ZSH/oh-my-zsh.sh
 # Update completion scripts (which should be defined by homebrew and oh-my-zsh).
 rm -f ~/.zcompdump && compinit
 
+# Source fzf scripts via via local installation.
+if [ -e ~/.fzf ]; then
+  _append_to_path ~/.fzf/bin
+fi
+
 # Configure fzf (if available).
 if _has fzf; then
   # Source fzf key bindings and auto-completion.
@@ -119,8 +124,6 @@ if _has fzf; then
   elif [ -e /usr/share/doc/fzf/examples/key-bindings.zsh ]; then
     source /usr/share/doc/fzf/examples/key-bindings.zsh
   elif [ -e ~/.fzf ]; then
-    # Source fzf scripts via via local installation.
-    _append_to_path ~/.fzf/bin
     source ~/.fzf/shell/key-bindings.zsh
     source ~/.fzf/shell/completion.zsh
   elif [ -f ~/.fzf.zsh ]; then
