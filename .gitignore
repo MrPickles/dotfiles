@@ -1,3 +1,6 @@
+# Vim artifacts.
 .netrwhist
 .VimballRecord
 
+# Ignore plugins downloaded via vim-plug.
+editor/vim/plugged
