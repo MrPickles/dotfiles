@@ -82,7 +82,8 @@ if (&t_Co > 2 || has("gui_running"))
   " Color scheme
   syntax enable
   set background=dark
-  colorscheme solarized
+  " solarized won't exist if we didn't run :PlugInstall
+  silent! colorscheme solarized
 endif
 
 " Only do this part when compiled with support for autocommands.
