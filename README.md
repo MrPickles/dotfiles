@@ -18,9 +18,6 @@ These dotfiles contain the following software dependencies:
 
 There currently is no Windows support.
 However, MacOS and most flavors of Linux should work fine.
-These dotfiles use Vim's new [native package manager][vim8] in order to
-distribute modules in an organized fashion, so versions of Vim before 8 will not
-function properly.
 
 ## Setting up your Local Machine
 
@@ -229,7 +226,6 @@ chsh -s $(which bash) # optionally change shell back to bash
 
 [solarized]: <http://ethanschoonover.com/solarized>
 [homebrew]: <http://brew.sh/>
-[vim8]: <https://github.com/vim/vim/blob/753289f9bf71c0528f00d803a39d017184640e9d/runtime/doc/version8.txt>
 [oh-my-zsh]: <https://github.com/robbyrussell/oh-my-zsh>
 [diff-so-fancy]: <https://github.com/so-fancy/diff-so-fancy>
 [nerd-fonts]: <https://github.com/ryanoasis/nerd-fonts>
