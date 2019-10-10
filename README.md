@@ -2,6 +2,10 @@
 
 These are my personal dotfiles.
 
+```
+curl https://andrew.cloud/dotfiles.sh | bash
+```
+
 ![Screenshot of my dotfiles](.images/screenshot.png)
 
 These dotfiles are intended for use with zsh, [oh-my-zsh][oh-my-zsh], and the
