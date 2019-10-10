@@ -52,6 +52,8 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 
 Plug 'vim-airline/vim-airline', { 'tag': 'v0.10' }
 
+Plug 'neoclide/coc.nvim', { 'branch': 'release' }
+
 Plug 'sheerun/vim-polyglot', { 'tag': 'v3.9.0' }
 Plug 'google/vim-maktaba', { 'tag': 'v0.15.0' }
 Plug 'bazelbuild/vim-bazel'
