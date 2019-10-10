@@ -2,6 +2,10 @@
 
 These are my personal dotfiles.
 
+```
+curl https://andrew.cloud/dotfiles.sh | bash
+```
+
 ![Screenshot of my dotfiles](.images/screenshot.png)
 
 These dotfiles are intended for use with zsh, [oh-my-zsh][oh-my-zsh], and the
@@ -170,9 +174,9 @@ The install script will run the configuration script, which fetches oh-my-zsh
 and symlinks the dotfiles to your home directory.
 
 ```shell
-curl https://andrew.cloud/dotfiles.sh | sh
+curl https://andrew.cloud/dotfiles.sh | bash
 # or
-wget -qO- https://andrew.cloud/dotfiles.sh | sh
+wget -qO- https://andrew.cloud/dotfiles.sh | bash
 ```
 
 Alternatively, you can manually clone the repository and run the `configure.sh`
