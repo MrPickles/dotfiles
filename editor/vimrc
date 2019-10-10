@@ -52,7 +52,7 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 
 Plug 'vim-airline/vim-airline', { 'tag': 'v0.10' }
 
-if has('node')
+if executable('node')
   Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 endif
 
@@ -166,7 +166,7 @@ let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
 let g:airline#extensions#tabline#show_buffers = 0
 
 " coc.nvim config
-if has('node')
+if executable('node')
   " if hidden is not set, TextEdit might fail.
   set hidden
 
