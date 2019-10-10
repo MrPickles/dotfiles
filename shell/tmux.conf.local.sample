@@ -1,6 +1,6 @@
-# Enable mouse
-# Note that this will interfere with mouse selection. In iterm2, hold down opt
-# to enable normal mouse selection while mouse mode is on in tmux.
-# set -g mouse on
-# Enable sane scrolling.
-# set -g terminal-overrides 'xterm*:smcup@:rmcup@'
+# This is an example of a local tmux.conf file. It should include any additional
+# configurations that you want specific to a machine. This file should go in
+# your home directory as ~/.tmux.conf.local.
+
+# Toggle mouse mode with m
+# bind m set -g mouse

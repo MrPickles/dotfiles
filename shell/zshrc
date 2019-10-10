@@ -54,6 +54,18 @@ setopt rmstarsilent # silence rm * confirmation
 
 # Use 256 color for tmux.
 alias tmux="TERM=screen-256color-bce tmux"
+# Attempt to take over existing sessions before creating a new tmux session.
+alias t="tmux a -d 2> /dev/null || tmux"
+
+# Use Python 3! https://pythonclock.org
+alias python="python3"
+alias pip="pip3"
+
+# Use Neovim instead of classic vim (if available)
+if _has nvim; then
+  alias vim="nvim"
+  alias vi="nvim"
+fi
 
 # Explicity bind home and end keys (in case of terminal compatibility issues)
 bindkey "${terminfo[khome]}" beginning-of-line
