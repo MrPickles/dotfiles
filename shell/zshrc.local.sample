@@ -4,9 +4,6 @@
 
 # DEFAULT_USER="foobar" # Set default username.
 
-# Attempt to take over existing sessions before creating a new tmux session.
-# alias tmux="tmux a -d 2> /dev/null || tmux"
-
 # Go environment variables for homebrew installation.
 # export GOPATH=$HOME/.golang
 # export GOROOT=/usr/local/opt/go/libexec
@@ -22,10 +19,3 @@
 
 # Alias https://github.com/sharkdp/hexyl to `hexdump`.
 # alias hexdump='hexyl'
-
-# Use Neovim instead of normal vim
-#
-# if _has nvim; then
-#   alias vim="nvim"
-#   alias vi="nvim"
-# fi
