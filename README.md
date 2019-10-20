@@ -47,6 +47,13 @@ from various sources.
 We'll use the Meslo Nerd Font, as recommended by Powerlevel10k.
 Please follow the [installation instructions][font-instructions] from that
 repository.
+Alternatively, you can use Homebrew to install the fonts and manually set them
+in your profile.
+
+```shell
+brew tap homebrew/cask-fonts
+brew cask install font-meslo-nerd-font
+```
 
 The Powerline symbols included in the font might not align well.
 As a remedy, iTerm has a `Use built-in Powerline glyphs` option to substitute
