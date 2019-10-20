@@ -51,7 +51,6 @@ Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'Xuyuanp/nerdtree-git-plugin'
 
 Plug 'vim-airline/vim-airline', { 'tag': 'v0.10' }
-Plug 'vim-airline/vim-airline-themes'
 Plug 'edkolev/tmuxline.vim'
 
 if executable('node')
@@ -166,7 +165,6 @@ let g:airline_symbols.readonly = ''
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
 let g:airline#extensions#tabline#show_buffers = 0
-let g:airline_theme='dracula'
 
 " coc.nvim config
 if executable('node')
