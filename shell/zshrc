@@ -88,8 +88,8 @@ POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(
   status
   root_indicator
   background_jobs
-  battery
   time
+  battery
   vi_mode
 )
 POWERLEVEL9K_PROMPT_ON_NEWLINE=true
@@ -109,6 +109,8 @@ POWERLEVEL9K_SHORTEN_DELIMITER=""
 POWERLEVEL9K_SHORTEN_STRATEGY="truncate_from_right"
 
 POWERLEVEL9K_BATTERY_VERBOSE=false
+# https://user-images.githubusercontent.com/704406/43988708-64c0fa52-9d4c-11e8-8cf9-c4d4b97a5200.png
+POWERLEVEL9K_BATTERY_BACKGROUND='grey19'
 
 # Source local version of zshrc.
 if [[ -f ~/.zshrc.local ]]; then
@@ -124,6 +126,10 @@ rm -f ~/.zcompdump && compinit
 # Source fzf scripts via via local installation.
 if [ -e ~/.fzf ]; then
   _append_to_path ~/.fzf/bin
+fi
+
+if _has rg; then
+  export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
 fi
 
 # Configure fzf (if available).

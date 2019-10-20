@@ -52,6 +52,7 @@ declare -a FILES_TO_SYMLINK=(
   'shell/ignore'
   'shell/tmux.conf'
   'shell/zshrc'
+  'shell/ripgreprc'
 
   'third_party/Gdbinit/gdbinit'
   'third_party/zsh-interactive-cd/zsh-interactive-cd.plugin.zsh'
