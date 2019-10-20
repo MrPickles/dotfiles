@@ -44,16 +44,9 @@ This font aggregator is nice in the sense that it collects many different glyphs
 from various sources.
 (We'll be using a lot of different symbols!)
 
-Fortunately, a lot of the heavy lifting has been done by the
-[Powerlevel10k][powerlevel10k] repository.
-The configuration script can set up fonts for you.
-After cloning all repositories, run the following command and follow the wizard
-to install the necessary fonts.
-You do not need to create an actual config.
-
-```shell
-p10k configure
-```
+We'll use the Meslo Nerd Font, as recommended by Powerlevel10k.
+Please follow the [installation instructions][font-instructions] from that
+repository.
 
 The Powerline symbols included in the font might not align well.
 As a remedy, iTerm has a `Use built-in Powerline glyphs` option to substitute
@@ -96,13 +89,8 @@ The setting can be found in the advanced preferences.
 
 Similarly to that of MacOS, you'll need to fetch modified fonts.
 We'll install the same font that we use for MacOS, through the same methods.
-
-```shell
-p10k configure
-```
-
-Just follow the instructions up to downloading the fonts, and then you can exit
-the wizard.
+Please follow the steps from the Powerlevel10k [instructions][font-instructions]
+to use the appropriate fonts.
 
 #### Solarized on Ubuntu Terminal
 
@@ -226,4 +214,5 @@ chsh -s $(which bash) # optionally change shell back to bash
 [bat]: <https://github.com/sharkdp/bat>
 [itermcolors]: <https://raw.githubusercontent.com/altercation/solarized/e40cd4130e2a82f9b03ada1ca378b7701b1a9110/iterm2-colors-solarized/Solarized%20Dark.itermcolors>
 [powerlevel10k]: <https://github.com/romkatv/powerlevel10k>
+[font-instructions]: <https://github.com/romkatv/powerlevel10k#recommended-meslo-nerd-font-patched-for-powerlevel10k>
 [vim-plug]: <https://github.com/junegunn/vim-plug>
