@@ -63,7 +63,11 @@ Plug 'bazelbuild/vim-bazel'
 Plug 'altercation/vim-colors-solarized'
 Plug 'ryanoasis/vim-devicons'
 
+Plug 'tpope/vim-scriptease'
+Plug 'tpope/vim-sensible'
+
 Plug 'tpope/vim-fugitive', { 'tag': 'v3.0' }
+Plug 'tpope/vim-rhubarb'
 Plug 'airblade/vim-gitgutter'
 call plug#end()
 
