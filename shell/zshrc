@@ -71,6 +71,10 @@ fi
 bindkey "${terminfo[khome]}" beginning-of-line
 bindkey "${terminfo[kend]}" end-of-line
 
+# Decrease delay in entering normal mode in shell.
+# https://www.johnhawthorn.com/2012/09/vi-escape-delays/
+KEYTIMEOUT=1
+
 if [[ -z "$TMUX" ]]; then
   export TERM="xterm-256color"
 fi
