@@ -65,7 +65,6 @@ Plug 'ryanoasis/vim-devicons'
 
 Plug 'tpope/vim-scriptease'
 Plug 'tpope/vim-sensible'
-Plug 'liuchengxu/vista.vim'
 
 Plug 'tpope/vim-fugitive', { 'tag': 'v3.0' }
 Plug 'tpope/vim-rhubarb'
