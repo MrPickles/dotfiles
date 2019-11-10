@@ -12,6 +12,7 @@ plugins=(
   history-substring-search
   colored-man-pages
   vi-mode
+  git-auto-fetch
 )
 
 # Returns whether the given command is executable or aliased.
@@ -82,6 +83,7 @@ fi
 # Powerlevel10k configs.
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
   os_icon
+  root_indicator
   context
   vcs
   dir_writeable
@@ -90,7 +92,6 @@ POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(
   command_execution_time
   status
-  root_indicator
   background_jobs
   time
   battery
