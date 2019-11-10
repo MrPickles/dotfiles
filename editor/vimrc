@@ -50,7 +50,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'Xuyuanp/nerdtree-git-plugin'
 
-Plug 'vim-airline/vim-airline', { 'tag': 'v0.10' }
+Plug 'vim-airline/vim-airline', { 'tag': 'v0.11' }
 
 if executable('node')
   Plug 'neoclide/coc.nvim', { 'branch': 'release' }
