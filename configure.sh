@@ -115,7 +115,7 @@ answer_is_yes() {
 }
 
 install_zsh() {
-  # Test to see if zshell is installed.
+  # Test to see if zsh is installed.
   if [ -z "$(command -v zsh)" ]; then
     # If zsh isn't installed, get the platform of the current machine and
     # install zsh with the appropriate package manager.
@@ -125,7 +125,7 @@ install_zsh() {
         sudo yum install zsh
       fi
       if [[ -f /etc/debian_version ]]; then
-        sudo apt-get install zsh
+        sudo apt-get -y install zsh
       fi
     elif [[ $platform == 'Darwin' ]]; then
       brew install zsh
@@ -198,13 +198,8 @@ for i in "${FULL_PATH_FILES_TO_SYMLINK[@]}"; do
 done
 
 if [[ $BUILD ]]; then
-  # Prompt to switch to zsh and oh-my-zsh if not active on terminal.
-  if [ ! -f /bin/zsh ] && [ ! -f /usr/bin/zsh ] || [ ! -d "$HOME/.oh-my-zsh/custom/themes/powerlevel10k" ]; then
-    ask_for_confirmation "Switch to zsh and oh-my-zsh?"
-    if answer_is_yes; then
-      install_zsh
-    fi
-  fi
+  # Install zsh (if not available) and oh-my-zsh and p10k.
+  install_zsh
 
   # Link static gitignore.
   git config --global include.path ~/.gitconfig.static
