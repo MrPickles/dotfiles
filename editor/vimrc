@@ -95,6 +95,10 @@ if (&t_Co > 2 || has("gui_running"))
   set background=dark
   " solarized won't exist if we didn't run :PlugInstall
   silent! colorscheme solarized
+  " Make vueSurroundingTag coloring match htmlTag. This is a hack. We match the rule found below:
+  " https://github.com/altercation/vim-colors-solarized/blob/528a59f26d12278698bb946f8fb82a63711eec21/colors/solarized.vim#L762
+  " Unfortunately my VimScript isn't good enough to make this not hardcoded... :(
+  hi! vueSurroundingTag cterm=NONE term=NONE ctermfg=10 ctermbg=NONE
 endif
 
 " Only do this part when compiled with support for autocommands.
