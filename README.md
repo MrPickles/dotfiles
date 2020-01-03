@@ -100,6 +100,12 @@ If using iTerm, setting `Scroll wheel sends arrow keys when in alternate screen
 mode.` to `Yes` will allow trackpad scrolling while in Vim.
 The setting can be found in the advanced preferences.
 
+#### Enabling the Meta Key on iTerm
+
+If using iTerm, you may want to set the option key mode to `Esc+` to make it be
+a meta key.
+It's used for a few shortcuts, such as resizing tmux panes.
+
 ### Linux
 
 #### Downloading Fonts for Linux
