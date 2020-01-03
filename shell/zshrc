@@ -175,8 +175,8 @@ if _has fzf; then
     export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
   fi
 
-  # Bind alt-j/k/d/u to moving the preview window for fzf.
-  export FZF_DEFAULT_OPTS="--bind alt-k:preview-up,alt-j:preview-down,alt-u:preview-page-up,alt-d:preview-page-down"
+  # Bind ctrl-j/k/d/u to moving the preview window for fzf.
+  export FZF_DEFAULT_OPTS="--bind ctrl-k:preview-up,ctrl-j:preview-down,ctrl-u:preview-page-up,ctrl-d:preview-page-down"
 
   # Show previews for files and directories.
   # Having `bat` or `highlight` (or any of the other binaries below) installed
