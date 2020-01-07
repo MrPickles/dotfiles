@@ -142,6 +142,9 @@ install_zsh() {
   # Clone Powerlevel10k if it isn't already present.
   if [[ ! -d $HOME/.oh-my-zsh/custom/themes/powerlevel10k ]]; then
     git clone https://github.com/romkatv/powerlevel10k.git "$HOME/.oh-my-zsh/custom/themes/powerlevel10k"
+  else
+    # Pull any p10k updates.
+    git -C "$HOME/.oh-my-zsh/custom/themes/powerlevel10k" pull --quiet
   fi
 }
 
