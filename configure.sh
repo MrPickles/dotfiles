@@ -55,7 +55,6 @@ declare -a FILES_TO_SYMLINK=(
   'shell/ripgreprc'
 
   'third_party/Gdbinit/gdbinit'
-  'third_party/zsh-interactive-cd/zsh-interactive-cd.plugin.zsh'
 )
 
 declare -a FULL_PATH_FILES_TO_SYMLINK=(

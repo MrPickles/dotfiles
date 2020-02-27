@@ -13,6 +13,7 @@ plugins=(
   colored-man-pages
   vi-mode
   git-auto-fetch
+  zsh-interactive-cd
 )
 
 # Returns whether the given command is executable or aliased.
@@ -163,11 +164,6 @@ if _has fzf; then
     export FZF_DEFAULT_COMMAND='rg --files --hidden'
   fi
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-
-  # Source fzf-cd plugin.
-  if [[ -f ~/.zsh-interactive-cd.plugin.zsh ]]; then
-    source ~/.zsh-interactive-cd.plugin.zsh
-  fi
 
   # Display source tree and file preview for CTRL-T and ALT-C.
   if _has tree; then
