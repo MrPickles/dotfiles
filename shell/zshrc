@@ -6,14 +6,14 @@ ZSH_THEME='powerlevel10k/powerlevel10k'
 
 plugins=(
   git
-  bundler
   brew
-  gem
   history-substring-search
   colored-man-pages
   vi-mode
   git-auto-fetch
   zsh-interactive-cd
+  fd
+  ripgrep
 )
 
 # Returns whether the given command is executable or aliased.
