@@ -185,13 +185,13 @@ curl https://andrew.cloud/dotfiles.sh | bash
 wget -qO- https://andrew.cloud/dotfiles.sh | bash
 ```
 
-Alternatively, you can manually clone the repository and run the `configure.sh`
+Alternatively, you can manually clone the repository and run the `setup.sh`
 script.
 
 ```shell
 git clone --depth=1 git@github.com:MrPickles/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
-./configure.sh -t build
+./setup.sh -t build
 ```
 
 You will also likely need to manually change your shell to `zsh` if you are
@@ -229,7 +229,7 @@ If you wish to remove those, you will have to manually delete them.
 
 ```shell
 cd ~/.dotfiles
-./configure.sh -t clean
+./setup.sh -t clean
 rm -rf ~/.oh-my-zsh # optionally remove oh-my-zsh
 chsh -s $(which bash) # optionally change shell back to bash
 ```

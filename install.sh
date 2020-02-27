@@ -26,6 +26,6 @@
   fi
 
   cd "$basedir" || exit
-  . configure.sh -t build
+  . setup.sh -t build
 
 } # This ensures the entire script is downloaded.
