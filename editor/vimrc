@@ -70,6 +70,8 @@ Plug 'psliwka/vim-smoothie'
 Plug 'tpope/vim-fugitive', { 'tag': 'v3.0' }
 Plug 'tpope/vim-rhubarb'
 Plug 'airblade/vim-gitgutter'
+
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() } }
 call plug#end()
 
 " Map ctrl-n to toggle NERDTree.
