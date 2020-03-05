@@ -42,9 +42,6 @@ export EDITOR='vim'
 
 DISABLE_UPDATE_PROMPT=true
 
-# for Homebrew installed rbenv
-if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
-
 bindkey -v # vi mode for shell
 bindkey -e # enable C-x-e for shell editor
 # key bindings for history search
@@ -183,11 +180,6 @@ if _has fzf; then
     # Export theme for http://github.com/sharkdp/bat.
     export BAT_THEME="TwoDark"
   fi
-fi
-
-# Alias hub and git, such that we can use hub commands with git.
-if _has hub; then
-  eval "$(hub alias -s)"
 fi
 
 # Dircolors must be set last, since oh-my-zsh seems to rewrite those values.
