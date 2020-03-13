@@ -125,39 +125,29 @@ source $ZSH/oh-my-zsh.sh
 # Source fzf scripts via via local installation.
 if [ -e ~/.fzf ]; then
   _append_to_path ~/.fzf/bin
+  # Source fzf key bindings and auto-completion.
+  source ~/.fzf/shell/key-bindings.zsh
+  source ~/.fzf/shell/completion.zsh
 fi
 
 if _has rg; then
   export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
 fi
 
+if _has bat; then
+  # Export theme for http://github.com/sharkdp/bat.
+  export BAT_THEME="TwoDark"
+fi
+
 # Configure fzf (if available).
 if _has fzf; then
-  # Source fzf key bindings and auto-completion.
-  if [ -e /usr/local/opt/fzf/shell/completion.zsh ]; then
-    # Source fzf scripts via Homebrew.
-    source /usr/local/opt/fzf/shell/key-bindings.zsh
-    source /usr/local/opt/fzf/shell/completion.zsh
-  elif [ -e /usr/share/doc/fzf/examples/key-bindings.zsh ]; then
-    source /usr/share/doc/fzf/examples/key-bindings.zsh
-  elif [ -e ~/.fzf ]; then
-    source ~/.fzf/shell/key-bindings.zsh
-    source ~/.fzf/shell/completion.zsh
-  elif [ -f ~/.fzf.zsh ]; then
-    # Auto-generated completion script when installing from custom path.
-    source ~/.fzf.zsh
-  fi
-
   if _has fd; then
     # Use fd for fzf.
     export FZF_DEFAULT_COMMAND='fd --type f --follow --hidden'
+    export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
     # Use fd for fzf directory search.
     export FZF_ALT_C_COMMAND='fd --type d --color never'
-  elif _has rg; then
-    # Use ripgrep for fzf.
-    export FZF_DEFAULT_COMMAND='rg --files --hidden'
   fi
-  export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
   # Display source tree and file preview for CTRL-T and ALT-C.
   if _has tree; then
@@ -172,11 +162,6 @@ if _has fzf; then
   # Having `bat` or `highlight` (or any of the other binaries below) installed
   # enables syntax highlighting.
   export FZF_CTRL_T_OPTS="--preview '(bat --style=numbers --color=always {} || highlight -O ansi -l {} || coderay {} || rougify {} || cat {}) 2> /dev/null | head -200'"
-
-  if _has bat; then
-    # Export theme for http://github.com/sharkdp/bat.
-    export BAT_THEME="TwoDark"
-  fi
 fi
 
 # Dircolors must be set last, since oh-my-zsh seems to rewrite those values.
