@@ -122,9 +122,6 @@ fi
 # Source Oh-My-ZSH.
 source $ZSH/oh-my-zsh.sh
 
-# Update completion scripts (which should be defined by homebrew and oh-my-zsh).
-rm -f ~/.zcompdump && compinit
-
 # Source fzf scripts via via local installation.
 if [ -e ~/.fzf ]; then
   _append_to_path ~/.fzf/bin
