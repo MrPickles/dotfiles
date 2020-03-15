@@ -91,6 +91,7 @@ POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(
   command_execution_time
   status
   background_jobs
+  virtualenv
   time
   battery
   vi_mode
@@ -113,6 +114,8 @@ POWERLEVEL9K_SHORTEN_STRATEGY="truncate_from_right"
 POWERLEVEL9K_BATTERY_VERBOSE=false
 # https://user-images.githubusercontent.com/704406/43988708-64c0fa52-9d4c-11e8-8cf9-c4d4b97a5200.png
 POWERLEVEL9K_BATTERY_BACKGROUND='grey19'
+
+POWERLEVEL9K_VIRTUALENV_BACKGROUND='green4'
 
 # Source local version of zshrc.
 if [[ -f ~/.zshrc.local ]]; then
