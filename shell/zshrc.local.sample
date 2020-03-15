@@ -22,7 +22,3 @@
 
 # Update completion scripts (which should be defined by homebrew and oh-my-zsh).
 # rm -f ~/.zcompdump && compinit
-
-# Use Python 3! https://pythonclock.org
-# alias python="python3"
-# alias pip="pip3"
