@@ -44,7 +44,8 @@ This font aggregator is nice in the sense that it collects many different glyphs
 from various sources.
 (We'll be using a lot of different symbols!)
 
-Follow the [Powerlevel10k font instructions] to install the proper fonts.
+Follow the [Powerlevel10k font instructions][p10k-fonts] to install the proper
+fonts.
 
 ```shell
 p10k configure
