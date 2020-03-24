@@ -95,19 +95,7 @@ Uncheck the `Brighten Bold Text` option in iTerm if all bold text is gray.
 #### Downloading Fonts for Linux
 
 Similarly to that of MacOS, you'll need to fetch modified fonts.
-We'll install the same font that we use for MacOS, although setting it up is
-rather different.
-
-```shell
-mkdir -p ~/.local/share/fonts
-cd ~/.local/share/fonts
-# Download the Droid Sans Mono from the latest Nerd Font release.
-# We don't download from master due to lack of stability guarantees.
-curl -fLo "Droid Sans Mono Nerd Font Complete.otf" \
-  https://github.com/ryanoasis/nerd-fonts/raw/2.0.0/patched-fonts/DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf
-```
-
-After downloading the font, set it to be the font that your terminal apps uses.
+We'll install the same font that we use for MacOS.
 
 #### Solarized on Ubuntu Terminal
 
