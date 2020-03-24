@@ -44,34 +44,13 @@ This font aggregator is nice in the sense that it collects many different glyphs
 from various sources.
 (We'll be using a lot of different symbols!)
 
-You'll first want to install a pre-patched font.
-There are multiple ways to do this.
-If you prefer to use the browser, download `Droid Sans Mono Nerd Font
-Complete.otf` from the Nerd Fonts [prepatched fonts folder][prepatched].
-Clicking on the file from Finder after downloading it should be sufficient.
-
-Alternatively, if you have Homebrew, you can install it from the command line.
+Follow the [Powerlevel10k font instructions] to install the proper fonts.
 
 ```shell
-brew tap homebrew/cask-fonts
-brew cask install font-droidsansmono-nerd-font
+p10k configure
 ```
 
-Next, you'll want to configure iTerm to use the new font.
-
-1. Go to the `Text` tab in your current iTerm profile and select the option to
-   `Use a different font for non-ASCII text`.
-2. In the same tab, select `Droid Sans Mono Nerd Font` as the font for non-ASCII
-   text.
-
-The Powerline symbols included in the font might not align well.
-As a remedy, iTerm has a `Use built-in Powerline glyphs` option to substitute
-the characters with its own built-in alternative characters.
-I'd recommend checking that option.
-
 The Text section of my iTerm settings looks like the picture below.
-For ASCII text, I use `Menlo Regular` (which is a native font) and use `14pt`
-for all font types.
 
 ![Text section of iTerm settings](.images/iterm_options.png)
 
@@ -79,7 +58,7 @@ for all font types.
 
 The Solarized colors for iTerm can be found in its
 [official repository][solarized-repo].
-Import [`Solarized Dark.itermcolors`][itermcolors] as a colorscheme for iTerm.
+(You won't need to download it.)
 In the `Colors` section of your iTerm profile, use the `Solarized Dark` preset.
 
 #### Enable Copy/Paste in Tmux
@@ -105,6 +84,10 @@ The setting can be found in the advanced preferences.
 If using iTerm, you may want to set the option key mode to `Esc+` to make it be
 a meta key.
 It's used for a few shortcuts, such as resizing tmux panes.
+
+#### Bold Text Color
+
+Uncheck the `Brighten Bold Text` option in iTerm if all bold text is gray.
 
 ### Linux
 
@@ -239,7 +222,8 @@ chsh -s $(which bash) # optionally change shell back to bash
 [oh-my-zsh]: <https://github.com/robbyrussell/oh-my-zsh>
 [diff-so-fancy]: <https://github.com/so-fancy/diff-so-fancy>
 [nerd-fonts]: <https://github.com/ryanoasis/nerd-fonts>
-[prepatched]: <https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf>
+[p10k-fonts]:
+<https://github.com/romkatv/powerlevel10k/#meslo-nerd-font-patched-for-powerlevel10k>
 [gnome-terminal-colors-solarized]: <https://github.com/Anthony25/gnome-terminal-colors-solarized>
 [solarized-repo]: <https://github.com/altercation/solarized>
 [rg]: <https://github.com/BurntSushi/ripgrep>
