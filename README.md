@@ -96,31 +96,16 @@ Uncheck the `Brighten Bold Text` option in iTerm if all bold text is gray.
 
 Similarly to that of MacOS, you'll need to fetch modified fonts.
 We'll install the same font that we use for MacOS.
+Follow the [Powerlevel10k font instructions][p10k-fonts] to install the proper
+fonts.
 
 #### Solarized on Ubuntu Terminal
 
 To get Solarized on the Ubuntu Terminal, you will want to create a new profile.
-Then you will follow the instructions in
+The solarized colorscheme should be a default option on most modern terminals.
+If it's not default, follow the instructions in
 [gnome-terminal-colors-solarized][gnome-terminal-colors-solarized] to set the
 color scheme.
-
-Start by creating a new profile on the terminal emulator.
-
-![Creating a new terminal profile](.images/new_profile.png)
-
-Set that profile to be the default profile upon terminal open.
-
-![Using solarized as the default terminal](.images/new_terminal.png)
-
-Finally clone the
-[gnome-terminal-colors-solarized repo][gnome-terminal-colors-solarized] and
-follow its installation instructions.
-
-```shell
-git clone https://github.com/Anthony25/gnome-terminal-colors-solarized.git
-cd gnome-terminal-colors-solarized
-./set_dark.sh
-```
 
 ### Other optional tools
 
