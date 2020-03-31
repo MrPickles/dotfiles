@@ -23,15 +23,15 @@ _has() {
 
 # Prepend a directory to path, if it exists and isn't already in the path.
 _prepend_to_path() {
-  if [ -d $1 -a -z ${PATH[(r)$1]} ]; then
-    PATH=($1 $PATH);
+  if [ -d $1 -a -z ${path[(r)$1]} ]; then
+    path=($1 $path);
   fi
 }
 
 # Append a directory to path, if it exists and isn't already in the path.
 _append_to_path() {
-  if [ -d $1 -a -z ${PATH[(r)$1]} ]; then
-    PATH=($PATH $1);
+  if [ -d $1 -a -z ${path[(r)$1]} ]; then
+    path=($path $1);
   fi
 }
 
