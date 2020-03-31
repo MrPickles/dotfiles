@@ -5,8 +5,8 @@
 # DEFAULT_USER="foobar" # Set default username.
 
 # Go environment variables for homebrew installation.
-# export GOPATH=$HOME/.golang
-# export GOROOT=/usr/local/opt/go/libexec
+# GOPATH=$HOME/.golang
+# GOROOT=/usr/local/opt/go/libexec
 # _append_to_path $GOPATH/bin
 # _append_to_path $GOROOT/bin
 

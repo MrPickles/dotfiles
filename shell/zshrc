@@ -23,22 +23,22 @@ _has() {
 
 # Prepend a directory to path, if it exists and isn't already in the path.
 _prepend_to_path() {
-  if [ -d $1 -a -z ${path[(r)$1]} ]; then
-    path=($1 $path);
+  if [ -d $1 -a -z ${PATH[(r)$1]} ]; then
+    PATH=($1 $PATH);
   fi
 }
 
 # Append a directory to path, if it exists and isn't already in the path.
 _append_to_path() {
-  if [ -d $1 -a -z ${path[(r)$1]} ]; then
-    path=($path $1);
+  if [ -d $1 -a -z ${PATH[(r)$1]} ]; then
+    PATH=($PATH $1);
   fi
 }
 
 _prepend_to_path /usr/local/bin
 _prepend_to_path $HOME/.local/bin
 
-export EDITOR='vim'
+EDITOR='vim'
 
 DISABLE_UPDATE_PROMPT=true
 
@@ -75,7 +75,7 @@ bindkey "${terminfo[kend]}" end-of-line
 KEYTIMEOUT=1
 
 if [[ -z "$TMUX" ]]; then
-  export TERM="xterm-256color"
+  TERM="xterm-256color"
 fi
 
 # Powerlevel10k configs.
@@ -134,42 +134,42 @@ if [ -e ~/.fzf ]; then
 fi
 
 if _has rg; then
-  export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
+  RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
 fi
 
 if _has bat; then
   # Export theme for http://github.com/sharkdp/bat.
-  export BAT_THEME="TwoDark"
+  BAT_THEME="TwoDark"
 fi
 
 # Configure fzf (if available).
 if _has fzf; then
   if _has fd; then
     # Use fd for fzf.
-    export FZF_DEFAULT_COMMAND='fd --type f --follow --hidden'
-    export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+    FZF_DEFAULT_COMMAND='fd --type f --follow --hidden'
+    FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
     # Use fd for fzf directory search.
-    export FZF_ALT_C_COMMAND='fd --type d --color never'
+    FZF_ALT_C_COMMAND='fd --type d --color never'
   fi
 
   # Display source tree and file preview for CTRL-T and ALT-C.
   if _has tree; then
     # Show subdir tree for directories.
-    export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
+    FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
   fi
 
   # Bind alt-j/k/d/u to moving the preview window for fzf.
-  export FZF_DEFAULT_OPTS="--bind alt-k:preview-up,alt-j:preview-down,alt-u:preview-page-up,alt-d:preview-page-down"
+  FZF_DEFAULT_OPTS="--bind alt-k:preview-up,alt-j:preview-down,alt-u:preview-page-up,alt-d:preview-page-down"
 
   # Show previews for files and directories.
   # Having `bat` or `highlight` (or any of the other binaries below) installed
   # enables syntax highlighting.
-  export FZF_CTRL_T_OPTS="--preview '(bat --style=numbers --color=always {} || highlight -O ansi -l {} || coderay {} || rougify {} || cat {}) 2> /dev/null | head -200'"
+  FZF_CTRL_T_OPTS="--preview '(bat --style=numbers --color=always {} || highlight -O ansi -l {} || coderay {} || rougify {} || cat {}) 2> /dev/null | head -200'"
 fi
 
 # Dircolors must be set last, since oh-my-zsh seems to rewrite those values.
 if [[ "$(uname -s)" == "Linux" ]]; then
   eval `dircolors ~/.dircolors.256dark`;
 else
-  export LSCOLORS='ExFxBxDxCxegedabagacad'
+  LSCOLORS='ExFxBxDxCxegedabagacad'
 fi
