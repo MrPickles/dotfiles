@@ -134,12 +134,12 @@ if [ -e ~/.fzf ]; then
 fi
 
 if _has rg; then
-  RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
+  export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
 fi
 
 if _has bat; then
   # Export theme for http://github.com/sharkdp/bat.
-  BAT_THEME="TwoDark"
+  export BAT_THEME="TwoDark"
 fi
 
 # Configure fzf (if available).
