@@ -13,6 +13,7 @@
   autocrlf = input
   attributesfile = ~/.gitattributes
   excludesfile = ~/.gitignore
+  pager = delta --theme='Solarized (dark)' 2> /dev/null || less
 [apply]
   whitespace = nowarn
 [format]
