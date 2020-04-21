@@ -121,6 +121,7 @@ if has("autocmd")
   au Filetype python,bzl setl et ts=4 sw=4
   " Set shell script syntax highlighting for zsh-theme files
   au BufRead,BufNewFile *.zsh-theme set syntax=sh
+  au BufRead,BufNewFile *.gitconfig set syntax=gitconfig
   " For Haml
   au! BufRead,BufNewFile *.haml setfiletype haml
 

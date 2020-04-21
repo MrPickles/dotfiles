@@ -45,7 +45,7 @@ declare -a FILES_TO_SYMLINK=(
   'editor/vimrc'
 
   'git/gitattributes'
-  'git/gitconfig.static'
+  'git/main.gitconfig'
   'git/gitignore'
 
   'shell/dircolors.256dark'
@@ -200,6 +200,6 @@ if [[ $BUILD ]]; then
   # Install zsh (if not available) and oh-my-zsh and p10k.
   install_zsh
 
-  # Link static gitignore.
-  git config --global include.path ~/.gitconfig.static
+  # Link gitconfig.
+  git config --global include.path ~/.main.gitconfig
 fi
