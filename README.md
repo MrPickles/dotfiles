@@ -112,8 +112,8 @@ color scheme.
 There are a few recommended (but optional) tools you can install to improve your
 shell experience in general.
 
-* [`diff-so-fancy`][diff-so-fancy]: Diff-so-fancy is a diffing tool that gives a
-  nicer diff than the git default.
+* [`delta`][delta]: Delta is a diffing tool that gives a nicer diff than the git
+  default.
 * [`rg`][rg]: Ripgrep is a faster alternative over `ag`, `ack`, and `grep`.
   It has the exact same usage as `ag` and is likely more preferable in all use
   cases.
@@ -194,7 +194,7 @@ chsh -s $(which bash) # optionally change shell back to bash
 [solarized]: <http://ethanschoonover.com/solarized>
 [homebrew]: <http://brew.sh/>
 [oh-my-zsh]: <https://github.com/robbyrussell/oh-my-zsh>
-[diff-so-fancy]: <https://github.com/so-fancy/diff-so-fancy>
+[delta]: <https://github.com/dandavison/delta>
 [nerd-fonts]: <https://github.com/ryanoasis/nerd-fonts>
 [p10k-fonts]:
 <https://github.com/romkatv/powerlevel10k/#meslo-nerd-font-patched-for-powerlevel10k>
