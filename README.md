@@ -117,7 +117,7 @@ shell experience in general.
 * [`rg`][rg]: Ripgrep is a faster alternative over `ag`, `ack`, and `grep`.
   It has the exact same usage as `ag` and is likely more preferable in all use
   cases.
-* [`fzf`][fzf]: Fzf is a general purpose fuzzy funder.
+* [`fzf`][fzf]: Fzf is a general purpose fuzzy finder.
 * [`fd`][fd]: `fd` is a faster alternative to the `find` command.
   It works very well when paired with `fzf`.
 * `tree`: This will display the directory structure as a tree. We use it to
