@@ -102,6 +102,7 @@ if (&t_Co > 2 || has("gui_running"))
   " https://github.com/altercation/vim-colors-solarized/blob/528a59f26d12278698bb946f8fb82a63711eec21/colors/solarized.vim#L762
   " Unfortunately my VimScript isn't good enough to make this not hardcoded... :(
   hi! vueSurroundingTag cterm=NONE term=NONE ctermfg=10 ctermbg=NONE
+  let g:vue_pre_processors = ['pug', 'scss', 'typescript']
 endif
 
 " Only do this part when compiled with support for autocommands.
