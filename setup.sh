@@ -43,6 +43,7 @@ done
 declare -a FILES_TO_SYMLINK=(
   'editor/vim'
   'editor/vimrc'
+  'editor/coc.vim'
 
   'git/gitattributes'
   'git/main.gitconfig'
