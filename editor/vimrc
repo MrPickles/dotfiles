@@ -70,6 +70,7 @@ Plug 'psliwka/vim-smoothie'
 Plug 'tpope/vim-fugitive', { 'tag': 'v3.0' }
 Plug 'tpope/vim-rhubarb'
 Plug 'airblade/vim-gitgutter'
+Plug 'rhysd/git-messenger.vim'
 
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() } }
 Plug 'ruanyl/vim-gh-line'
