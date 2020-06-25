@@ -56,8 +56,8 @@ if executable('node')
   Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 endif
 
-Plug 'sheerun/vim-polyglot', { 'tag': 'v4.2.0' }
-Plug 'google/vim-maktaba', { 'tag': 'v0.15.0' }
+Plug 'sheerun/vim-polyglot', { 'tag': 'v4.4.3' }
+Plug 'google/vim-maktaba'
 Plug 'bazelbuild/vim-bazel'
 
 Plug 'altercation/vim-colors-solarized'
@@ -67,7 +67,7 @@ Plug 'tpope/vim-scriptease'
 Plug 'tpope/vim-sensible'
 Plug 'psliwka/vim-smoothie'
 
-Plug 'tpope/vim-fugitive', { 'tag': 'v3.0' }
+Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
 Plug 'airblade/vim-gitgutter'
 Plug 'rhysd/git-messenger.vim'
