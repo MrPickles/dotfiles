@@ -142,7 +142,7 @@ install_zsh() {
   # Clone Powerlevel10k if it isn't already present.
   if [[ ! -d $HOME/.oh-my-zsh/custom/themes/powerlevel10k ]]; then
     git clone --depth=1 \
-      --branch v1.11.0 \
+      --branch v1.13.0 \
       https://github.com/romkatv/powerlevel10k.git \
       "$HOME/.oh-my-zsh/custom/themes/powerlevel10k"
   fi
