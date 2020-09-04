@@ -56,7 +56,7 @@ if executable('node')
   Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 endif
 
-Plug 'sheerun/vim-polyglot', { 'tag': 'v4.8.0' }
+Plug 'sheerun/vim-polyglot', { 'tag': 'v4.9.2' }
 Plug 'google/vim-maktaba'
 Plug 'bazelbuild/vim-bazel'
 
