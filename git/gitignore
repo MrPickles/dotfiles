@@ -20,3 +20,6 @@ tags.lock
 tags.temp
 tags.temp.tmp
 tags.files
+
+# Vim-plug
+plug.vim.old
