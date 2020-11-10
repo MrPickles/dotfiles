@@ -13,7 +13,7 @@
   autocrlf = input
   attributesfile = ~/.gitattributes
   excludesfile = ~/.gitignore
-  pager = delta --theme='Solarized (dark)' 2> /dev/null || less
+  pager = delta 2> /dev/null || less
 [apply]
   whitespace = nowarn
 [format]
@@ -23,3 +23,9 @@
 [pager]
   # Disable paging for `git branch`.
   branch = false
+[delta]
+    syntax-theme = Solarized (dark)
+    line-numbers = true
+    side-by-side = true
+[interactive]
+    diffFilter = delta --color-only
