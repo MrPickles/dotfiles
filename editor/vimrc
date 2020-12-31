@@ -29,6 +29,10 @@ set completeopt=longest,menu
 set wildmode=list:longest,list:full
 set complete=.,t
 
+" Disable visual character for tabs and trailing spaces
+set listchars+=tab:»\ ,trail:·
+set list
+
 " Remap :w and :q to allow the capital letter versions.
 command! Q q
 command! W w
@@ -127,6 +131,7 @@ if has("autocmd")
   au BufRead,BufNewFile *.gitconfig set syntax=gitconfig
   " For Haml
   au! BufRead,BufNewFile *.haml setfiletype haml
+  au Filetype go set noexpandtab
 
   " Put these in an autocmd group, so that we can delete them easily.
   augroup vimrcEx
