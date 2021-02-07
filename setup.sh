@@ -6,11 +6,8 @@
 # oh-my-zsh. Otherwise, the script will simply remove all symlinks.
 
 usage="Usage: $0 [-h] [-t <build|clean>]"
-
-if [[ "$#" -lt 1 ]]; then
-  echo "$usage"
-  exit
-fi
+BUILD=true
+INTERACTIVE=
 
 while getopts :ht: option; do
   case $option in
@@ -23,6 +20,7 @@ while getopts :ht: option; do
       echo "-t clean      Remove all existing dotfiles symlinks"
       exit;;
     t)
+      INTERACTIVE=true
       if [[ "build" =~ ^${OPTARG} ]]; then
         BUILD=true
       elif [[ "clean" =~ ^${OPTARG} ]]; then
@@ -133,8 +131,11 @@ install_zsh() {
   fi
   # Set the default shell to zsh if it isn't currently set to zsh
   if [[ ! "$SHELL" == "$(command -v zsh)" ]]; then
-    chsh -s "$(command -v zsh)"
+    sudo chsh -s "$(command -v zsh)"
   fi
+}
+
+install_zsh_extras() {
   # Clone Oh My Zsh if it isn't already present
   if [[ ! -d $HOME/.oh-my-zsh/ ]]; then
     git clone --depth=1 https://github.com/robbyrussell/oh-my-zsh.git "$HOME/.oh-my-zsh"
@@ -156,7 +157,7 @@ link_file() {
     execute "ln -fs $sourceFile $targetFile" "$targetFile → $sourceFile"
   elif [ "$(readlink "$targetFile")" == "$sourceFile" ]; then
     print_success "$targetFile → $sourceFile"
-  else
+  elif [[ $INTERACTIVE ]]; then
     ask_for_confirmation "'$targetFile' already exists, do you want to overwrite it?"
     if answer_is_yes; then
       rm -rf "$targetFile"
@@ -164,6 +165,10 @@ link_file() {
     else
       print_error "$targetFile → $sourceFile"
     fi
+  else
+    # This this isn't interactive, create a backup of the original file.
+    execute "cp $targetFile $targetFile.bak" "$targetFile → $targetFile.bak"
+    execute "ln -fs $sourceFile $targetFile" "$targetFile → $sourceFile"
   fi
 }
 
@@ -202,7 +207,10 @@ done
 
 if [[ $BUILD ]]; then
   # Install zsh (if not available) and oh-my-zsh and p10k.
-  install_zsh
+  if [[ $INTERACTIVE ]]; then
+    install_zsh
+  fi
+  install_zsh_extras
 
   # Link gitconfig.
   git config --global include.path ~/.main.gitconfig
