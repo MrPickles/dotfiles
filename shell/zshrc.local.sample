@@ -20,5 +20,8 @@
 # Alias https://github.com/sharkdp/hexyl to `hexdump`.
 # alias hexdump='hexyl'
 
+# Alias https://github.com/ogham/exa to `exa`.
+# alias ls='exa'
+
 # Update completion scripts (which should be defined by homebrew and oh-my-zsh).
 # rm -f ~/.zcompdump && compinit

@@ -120,15 +120,13 @@ shell experience in general.
 * [`fzf`][fzf]: Fzf is a general purpose fuzzy finder.
 * [`fd`][fd]: `fd` is a faster alternative to the `find` command.
   It works very well when paired with `fzf`.
-* `tree`: This will display the directory structure as a tree. We use it to
-  improve the output of `ALT-C` from `fzf`.
+* [`exa`][exa]: An improved version of `ls`. We use its tree feature to
+  improve the output of `ALT-C` from `fzf` and directory tab completion.
 * [`bat`][bat]: An improved version of `cat`. We use it for the file previews
   when running `CTRL-T` from `fzf`.
 
 You should install all of these independently of this dotfile repo.
-(This also includes figuring out how to install them.)
-Most of these are Homebrew packages on MacOS (or a target in most Linux package
-managers).
+Figuring out how to install them is left as an exercise for the reader.
 
 ## Installation
 
@@ -206,3 +204,4 @@ chsh -s $(which bash) # optionally change shell back to bash
 [itermcolors]: https://raw.githubusercontent.com/altercation/solarized/e40cd4130e2a82f9b03ada1ca378b7701b1a9110/iterm2-colors-solarized/Solarized%20Dark.itermcolors
 [powerlevel10k]: https://github.com/romkatv/powerlevel10k
 [vim-plug]: https://github.com/junegunn/vim-plug
+[exa]: https://github.com/ogham/exa
