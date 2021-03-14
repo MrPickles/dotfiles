@@ -174,13 +174,6 @@ if _has fzf; then
   zstyle ':fzf-tab:*' switch-group ',' '.'
 fi
 
-# Dircolors must be set last, since oh-my-zsh seems to rewrite those values.
-if [[ "$(uname -s)" == "Linux" ]]; then
-  eval `dircolors ~/.dircolors.256dark`;
-else
-  LSCOLORS='ExFxBxDxCxegedabagacad'
-fi
-
 # Source local version of zshrc.
 if [[ -f ~/.zshrc.local ]]; then
   source ~/.zshrc.local
