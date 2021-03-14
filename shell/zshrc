@@ -73,11 +73,6 @@ if _has nvim; then
   alias vi="nvim"
 fi
 
-# Alias `exa` as default `ls` command (if available).
-if _has exa; then
-  alias ls="exa"
-fi
-
 # Explicity bind home and end keys (in case of terminal compatibility issues)
 bindkey "${terminfo[khome]}" beginning-of-line
 bindkey "${terminfo[kend]}" end-of-line
@@ -131,6 +126,11 @@ POWERLEVEL9K_VIRTUALENV_BACKGROUND='green4'
 
 # Source Oh-My-ZSH.
 source $ZSH/oh-my-zsh.sh
+
+# Alias `exa` as default `ls` command (if available).
+if _has exa; then
+  alias ls="exa"
+fi
 
 # Source fzf scripts via via local installation.
 if [ -e ~/.fzf ]; then
