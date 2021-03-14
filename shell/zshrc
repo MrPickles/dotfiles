@@ -22,9 +22,9 @@ plugins=(
   colored-man-pages
   vi-mode
   git-auto-fetch
-  zsh-interactive-cd
   fd
   ripgrep
+  fzf-tab
 )
 
 # Returns whether the given command is executable or aliased.
@@ -172,6 +172,11 @@ if _has fzf; then
   # Having `bat` or `highlight` (or any of the other binaries below) installed
   # enables syntax highlighting.
   FZF_CTRL_T_OPTS="--preview '(bat --style=numbers --color=always {} || highlight -O ansi -l {} || coderay {} || rougify {} || cat {}) 2> /dev/null | head -200'"
+
+  # Some basic fzf-tab configs.
+  zstyle ':fzf-tab:complete:cd:*' fzf-preview 'tree -C $realpath'
+  zstyle ':completion:*:descriptions' format '[%d]'
+  zstyle ':fzf-tab:*' switch-group ',' '.'
 fi
 
 # Dircolors must be set last, since oh-my-zsh seems to rewrite those values.

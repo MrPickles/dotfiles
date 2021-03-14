@@ -147,6 +147,11 @@ install_zsh_extras() {
       https://github.com/romkatv/powerlevel10k.git \
       "$HOME/.oh-my-zsh/custom/themes/powerlevel10k"
   fi
+  if [[ ! -d $HOME/.oh-my-zsh/custom/plugins/fzf-tab ]]; then
+    git clone --filter=blob:none \
+      https://github.com/Aloxaf/fzf-tab \
+      ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/fzf-tab
+  fi
 }
 
 link_file() {
