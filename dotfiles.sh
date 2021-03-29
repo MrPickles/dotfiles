@@ -3,9 +3,9 @@
 # This is the one-liner installation script for these dotfiles. To install,
 # run one of these two commands...
 #
-# curl -L dotfiles.andrew.cloud | bash
+# curl -L andrew.cloud/dotfiles.sh | bash
 # or
-# wget -qO- dotfiles.andrew.cloud | bash
+# wget -qO- andrew.cloud/dotfiles.sh | bash
 
 { # This ensures the entire script is downloaded.
 
