@@ -17,7 +17,7 @@
 [apply]
   whitespace = nowarn
 [format]
-  pretty = %C(auto)%h%Creset -%C(auto)%d%Creset %s %C(bold blue)<%an> %Cgreen(%cr)%Creset
+  pretty = %C(auto)%h%Creset -%C(auto)%d%Creset %s %C(blue)<%an> %Cgreen(%cr)%Creset
 [push]
   default = simple
 [pager]
