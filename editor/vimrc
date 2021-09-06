@@ -185,7 +185,7 @@ let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
 let g:airline#extensions#tabline#show_buffers = 0
 
 " coc.nvim config
-if exists(':CocInfo') && filereadable(glob("~/.coc.vim"))
+if !empty(glob("~/.vim/plugged/coc.nvim")) && filereadable(glob("~/.coc.vim"))
   source ~/.coc.vim
 endif
 
