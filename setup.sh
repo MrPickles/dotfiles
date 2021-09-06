@@ -154,6 +154,20 @@ install_zsh_extras() {
   fi
 }
 
+install_optional_extras() {
+  platform=$(uname);
+  if [[ $platform == 'Darwin' ]]; then
+    brew install ripgrep fd exa bat git-delta
+  elif [[ $platform == 'Linux' ]]; then
+    if [[ -f /etc/debian_version ]]; then
+      sudo apt-get install ripgrep bat exa fd-find
+      echo "Please install git-delta yourself."
+    else
+      echo "Unsupported OS. Install extras yourself... ¯\_(ツ)_/¯"
+    fi
+  fi
+}
+
 link_file() {
   local sourceFile=$1
   local targetFile=$2
@@ -214,6 +228,7 @@ if [[ $BUILD ]]; then
   # Install zsh (if not available) and oh-my-zsh and p10k.
   install_zsh
   install_zsh_extras
+  install_optional_extras
 
   # Link gitconfig.
   git config --global include.path ~/.main.gitconfig
