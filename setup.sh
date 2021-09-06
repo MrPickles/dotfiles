@@ -157,11 +157,11 @@ install_zsh_extras() {
 install_optional_extras() {
   platform=$(uname);
   if [[ $platform == 'Darwin' ]]; then
-    brew install ripgrep fd exa bat git-delta
+    brew install ripgrep fd exa bat git-delta neovim
   elif [[ $platform == 'Linux' ]]; then
     if [[ -f /etc/debian_version ]]; then
       # https://askubuntu.com/a/1300824
-      sudo apt-get -y -o Dpkg::Options::="--force-overwrite" install ripgrep bat fd-find
+      sudo apt-get -y -o Dpkg::Options::="--force-overwrite" install ripgrep bat fd-find neovim
       echo "Please install exa and git-delta yourself."
     else
       echo "Unsupported OS. Install extras yourself... ¯\_(ツ)_/¯"
