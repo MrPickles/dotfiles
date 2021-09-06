@@ -212,10 +212,8 @@ done
 
 if [[ $BUILD ]]; then
   # Install zsh (if not available) and oh-my-zsh and p10k.
-  if [[ $INTERACTIVE ]]; then
-    install_zsh
-    install_zsh_extras
-  fi
+  install_zsh
+  install_zsh_extras
 
   # Link gitconfig.
   git config --global include.path ~/.main.gitconfig
