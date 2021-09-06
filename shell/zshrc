@@ -123,14 +123,6 @@ POWERLEVEL9K_BATTERY_BACKGROUND='grey19'
 
 POWERLEVEL9K_VIRTUALENV_BACKGROUND='green4'
 
-# Source fzf scripts via via local installation.
-if [ -e ~/.vim/plugged/fzf ]; then
-  _append_to_path ~/.vim/plugged/fzf/bin
-  # Source fzf key bindings and auto-completion.
-  source ~/.vim/plugged/fzf/shell/key-bindings.zsh
-  source ~/.vim/plugged/fzf/shell/completion.zsh
-fi
-
 if _has rg; then
   export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
 fi
@@ -171,11 +163,6 @@ if _has fzf; then
   zstyle ':fzf-tab:*' switch-group ',' '.'
 fi
 
-# Source local zshrc configs.
-if [[ -f ~/.zshrc.local ]]; then
-  source ~/.zshrc.local
-fi
-
 # Source Oh-My-ZSH. All theme and plugin configs must come beforehand. This may have side-effects.
 source $ZSH/oh-my-zsh.sh
 
@@ -183,4 +170,18 @@ source $ZSH/oh-my-zsh.sh
 # This must come after OMZ. (The library overwrites this alias.)
 if _has exa; then
   alias ls="exa"
+fi
+
+# Source fzf scripts via via local installation.
+# OMZ overwrites some of these scripts, so this must come afterwards.
+if [ -e ~/.vim/plugged/fzf ]; then
+  _append_to_path ~/.vim/plugged/fzf/bin
+  # Source fzf key bindings and auto-completion.
+  source ~/.vim/plugged/fzf/shell/key-bindings.zsh
+  source ~/.vim/plugged/fzf/shell/completion.zsh
+fi
+
+# Source local zshrc configs.
+if [[ -f ~/.zshrc.local ]]; then
+  source ~/.zshrc.local
 fi
