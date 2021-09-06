@@ -123,11 +123,6 @@ POWERLEVEL9K_BATTERY_BACKGROUND='grey19'
 
 POWERLEVEL9K_VIRTUALENV_BACKGROUND='green4'
 
-# Alias `exa` as default `ls` command (if available).
-if _has exa; then
-  alias ls="exa"
-fi
-
 # Source fzf scripts via via local installation.
 if [ -e ~/.vim/plugged/fzf ]; then
   _append_to_path ~/.vim/plugged/fzf/bin
@@ -183,3 +178,9 @@ fi
 
 # Source Oh-My-ZSH. All theme and plugin configs must come beforehand. This may have side-effects.
 source $ZSH/oh-my-zsh.sh
+
+# Alias `exa` as default `ls` command (if available).
+# This must come after OMZ. (The library overwrites this alias.)
+if _has exa; then
+  alias ls="exa"
+fi
