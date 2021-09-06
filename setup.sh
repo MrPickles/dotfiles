@@ -160,7 +160,8 @@ install_optional_extras() {
     brew install ripgrep fd exa bat git-delta
   elif [[ $platform == 'Linux' ]]; then
     if [[ -f /etc/debian_version ]]; then
-      sudo apt-get -y install ripgrep bat fd-find
+      # https://askubuntu.com/a/1300824
+      sudo apt-get -y -o Dpkg::Options::="--force-overwrite" install ripgrep bat fd-find
       echo "Please install exa and git-delta yourself."
     else
       echo "Unsupported OS. Install extras yourself... ¯\_(ツ)_/¯"
