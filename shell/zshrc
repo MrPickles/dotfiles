@@ -24,7 +24,6 @@ plugins=(
   git-auto-fetch
   fd
   ripgrep
-  fzf-tab
 )
 
 # Returns whether the given command is executable or aliased.
@@ -124,20 +123,17 @@ POWERLEVEL9K_BATTERY_BACKGROUND='grey19'
 
 POWERLEVEL9K_VIRTUALENV_BACKGROUND='green4'
 
-# Source Oh-My-ZSH.
-source $ZSH/oh-my-zsh.sh
-
 # Alias `exa` as default `ls` command (if available).
 if _has exa; then
   alias ls="exa"
 fi
 
 # Source fzf scripts via via local installation.
-if [ -e ~/.fzf ]; then
-  _append_to_path ~/.fzf/bin
+if [ -e ~/.vim/plugged/fzf ]; then
+  _append_to_path ~/.vim/plugged/fzf/bin
   # Source fzf key bindings and auto-completion.
-  source ~/.fzf/shell/key-bindings.zsh
-  source ~/.fzf/shell/completion.zsh
+  source ~/.vim/plugged/fzf/shell/key-bindings.zsh
+  source ~/.vim/plugged/fzf/shell/completion.zsh
 fi
 
 if _has rg; then
@@ -174,12 +170,16 @@ if _has fzf; then
   FZF_CTRL_T_OPTS="--preview '(bat --style=numbers --color=always {} || highlight -O ansi -l {} || coderay {} || rougify {} || cat {}) 2> /dev/null | head -200'"
 
   # Some basic fzf-tab configs.
+  plugins+=(fzf-tab)
   zstyle ':fzf-tab:complete:cd:*' fzf-preview '(exa --tree --color=always $realpath || tree -C $realpath) 2> /dev/null'
   zstyle ':completion:*:descriptions' format '[%d]'
   zstyle ':fzf-tab:*' switch-group ',' '.'
 fi
 
-# Source local version of zshrc.
+# Source local zshrc configs.
 if [[ -f ~/.zshrc.local ]]; then
   source ~/.zshrc.local
 fi
+
+# Source Oh-My-ZSH. All theme and plugin configs must come beforehand. This may have side-effects.
+source $ZSH/oh-my-zsh.sh
