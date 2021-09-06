@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Configuration script to symlink the dotfiles or clean up the symlinks.
 # The script should take a target flag stating whether "build" or "clean". The

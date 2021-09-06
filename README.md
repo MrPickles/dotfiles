@@ -3,7 +3,7 @@
 These are my personal dotfiles.
 
 ```
-curl -L andrew.cloud/dotfiles.sh | bash
+curl -L andrew.cloud/dotfiles.sh | sh
 ```
 
 ![Screenshot of my dotfiles](.images/screenshot.png)
@@ -135,9 +135,9 @@ The install script will run the configuration script, which fetches oh-my-zsh
 and symlinks the dotfiles to your home directory.
 
 ```shell
-curl -L andrew.cloud/dotfiles.sh | bash
+curl -L andrew.cloud/dotfiles.sh | sh
 # or
-wget -qO- andrew.cloud/dotfiles.sh | bash
+wget -qO- andrew.cloud/dotfiles.sh | sh
 ```
 
 Alternatively, you can manually clone the repository and run the `setup.sh`

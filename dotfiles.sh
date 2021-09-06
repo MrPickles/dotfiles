@@ -1,11 +1,11 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # This is the one-liner installation script for these dotfiles. To install,
 # run one of these two commands...
 #
-# curl -L andrew.cloud/dotfiles.sh | bash
+# curl -L andrew.cloud/dotfiles.sh | sh
 # or
-# wget -qO- andrew.cloud/dotfiles.sh | bash
+# wget -qO- andrew.cloud/dotfiles.sh | sh
 
 { # This ensures the entire script is downloaded.
 
