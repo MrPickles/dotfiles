@@ -47,7 +47,6 @@ declare -a FILES_TO_SYMLINK=(
   'git/main.gitconfig'
   'git/gitignore'
 
-  'shell/dircolors.256dark'
   'shell/ignore'
   'shell/tmux.conf'
   'shell/zshrc'
