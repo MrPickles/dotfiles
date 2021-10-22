@@ -51,6 +51,7 @@ declare -a FILES_TO_SYMLINK=(
   'shell/tmux.conf'
   'shell/zshrc'
   'shell/ripgreprc'
+  'shell/p10k.zsh'
 
   'third_party/Gdbinit/gdbinit'
 )
