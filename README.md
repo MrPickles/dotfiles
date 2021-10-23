@@ -6,7 +6,7 @@ These are my personal dotfiles.
 curl -L andrew.cloud/dotfiles.sh | sh
 ```
 
-![Screenshot of my dotfiles](.images/screenshot.png)
+![Screenshot of my dotfiles](images/screenshot.png)
 
 These dotfiles are intended for use with zsh, [oh-my-zsh][oh-my-zsh], and the
 [solarized][solarized] colorscheme.
@@ -53,7 +53,7 @@ p10k configure
 
 The Text section of my iTerm settings looks like the picture below.
 
-![Text section of iTerm settings](.images/iterm_options.png)
+![Text section of iTerm settings](images/iterm_options.png)
 
 #### Solarized on iTerm
 
