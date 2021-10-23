@@ -166,11 +166,10 @@ if executable('rg')
   " Space key will open up search.
   nnoremap <Space> :Rg<CR>
   nnoremap <leader><Space> :Rg!<CR>
+endif
 
-  " Use rg for :grep if available. But we should prefer to use :Rg.
-  set grepprg=rg\ --vimgrep\ --color=never\ --no-heading\ --hidden
-
-  let $FZF_DEFAULT_COMMAND = 'rg --hidden -l ""'
+if executable('fd')
+  let $FZF_DEFAULT_COMMAND = 'fd --type f'
 endif
 
 " Set up vim airline
