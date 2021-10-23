@@ -39,7 +39,6 @@ while getopts :ht: option; do
 done
 
 declare -a FILES_TO_SYMLINK=(
-  'editor/vim'
   'editor/vimrc'
   'editor/coc.vim'
 
@@ -56,8 +55,14 @@ declare -a FILES_TO_SYMLINK=(
   'third_party/Gdbinit/gdbinit'
 )
 
-declare -a FULL_PATH_FILES_TO_SYMLINK=(
-  'config/nvim/init.vim'
+# Custom symlink sources/targets. These arrays should act as key-value pairs.
+CUSTOM_SYMLINK_SRCS=(
+  'editor/init.vim'
+  'third_party/vim-plug/plug.vim'
+)
+CUSTOM_SYMLINK_TARGETS=(
+  '.config/nvim/init.vim'
+  '.vim/autoload/plug.vim'
 )
 
 print_success() {
@@ -213,9 +218,9 @@ for i in "${FILES_TO_SYMLINK[@]}"; do
   fi
 done
 
-for i in "${FULL_PATH_FILES_TO_SYMLINK[@]}"; do
-  sourceFile="$(pwd)/$i"
-  targetFile="$HOME/.$i"
+for idx in "${!CUSTOM_SYMLINK_SRCS[@]}"; do
+  sourceFile="$(pwd)/${CUSTOM_SYMLINK_SRCS[$idx]}"
+  targetFile="${HOME}/${CUSTOM_SYMLINK_TARGETS[$idx]}"
 
   if [[ $BUILD ]]; then
     mkdir -p $(dirname $targetFile)
