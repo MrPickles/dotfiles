@@ -98,7 +98,7 @@ fi
 
 if _has bat; then
   # Export theme for http://github.com/sharkdp/bat.
-  export BAT_THEME="TwoDark"
+  export BAT_THEME="Solarized (dark)"
 fi
 
 # Configure fzf (if available).
