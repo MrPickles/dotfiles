@@ -1,4 +1,4 @@
-# Andrew's Dotfiles
+# The Official&trade; MrPickles Dotfiles Repository
 
 These are my personal dotfiles.
 
@@ -8,8 +8,8 @@ curl -L andrew.cloud/dotfiles.sh | sh
 
 ![Screenshot of my dotfiles](images/screenshot.png)
 
-These dotfiles are intended for use with zsh, [oh-my-zsh][oh-my-zsh], and the
-[solarized][solarized] colorscheme.
+These dotfiles are intended for use with zsh, [oh-my-zsh][], and the
+[solarized][] colorscheme.
 The configuration uses powerline-based status bars for vim and tmux and
 [Powerlevel10k][powerlevel10k] as its zsh theme.
 
@@ -18,7 +18,7 @@ The configuration uses powerline-based status bars for vim and tmux and
 These dotfiles contain the following software dependencies:
 
 * Linux or MacOS
-* Vim 8.0+ (or Neovim 0.3.1+)
+* Vim 8.0+ (or Neovim 0.6.0+)
 
 There currently is no Windows support.
 However, MacOS and most flavors of Linux should work fine.
@@ -32,8 +32,8 @@ These setup instructions only need to be done once on a local machine._
 New machines require two tasks to be done which are not part of the setup
 script:
 
-* installing (and using) Powerline/Font Awesome-compatible fonts, and
-* using the Solarized colorscheme.
+* Installing (and using) Powerline/FontAwesome-compatible fonts.
+* Using the Solarized colorscheme.
 
 ### MacOS
 
@@ -104,26 +104,24 @@ fonts.
 To get Solarized on the Ubuntu Terminal, you will want to create a new profile.
 The solarized colorscheme should be a default option on most modern terminals.
 If it's not default, follow the instructions in
-[gnome-terminal-colors-solarized][gnome-terminal-colors-solarized] to set the
-color scheme.
+[gnome-terminal-colors-solarized][] to set the color scheme.
 
 ### Other optional tools
 
 There are a few recommended (but optional) tools you can install to improve your
 shell experience in general.
 
-* [`delta`][delta]: Delta is a diffing tool that gives a nicer diff than the git
+* [`delta`][]: Delta is a diffing tool that gives a nicer diff than the git
   default.
-* [`rg`][rg]: Ripgrep is a faster alternative over `ag`, `ack`, and `grep`.
-  It has the exact same usage as `ag` and is likely more preferable in all use
-  cases.
-* [`fzf`][fzf]: Fzf is a general purpose fuzzy finder.
-* [`fd`][fd]: `fd` is a faster alternative to the `find` command.
-  It works very well when paired with `fzf`.
-* [`exa`][exa]: An improved version of `ls`. We use its tree feature to
-  improve the output of `ALT-C` from `fzf` and directory tab completion.
-* [`bat`][bat]: An improved version of `cat`. We use it for the file previews
-  when running `CTRL-T` from `fzf`.
+* [`rg`][]: Ripgrep is a faster alternative over `ag`, `ack`, and `grep`. It has
+  the exact same usage as `ag` and is likely more preferable in all use cases.
+* [`fzf`][]: Fzf is a general purpose fuzzy finder.
+* [`fd`][]: `fd` is a faster alternative to the `find` command. It works very
+  well when paired with `fzf`.
+* [`exa`][]: An improved version of `ls`. We use its tree feature to improve the
+  output of `<alt-c>` from `fzf` and directory tab completion.
+* [`bat`][]: An improved version of `cat`. We use it for the file previews when
+  running `<ctrl-t>` from `fzf`.
 
 You should install all of these independently of this dotfile repo.
 Figuring out how to install them is left as an exercise for the reader.
@@ -144,7 +142,7 @@ Alternatively, you can manually clone the repository and run the `setup.sh`
 script.
 
 ```shell
-git clone --depth=1 git@github.com:MrPickles/dotfiles.git ~/.dotfiles
+git clone --filter=blob:none git@github.com:MrPickles/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
 ./setup.sh -t build
 ```
@@ -154,15 +152,6 @@ currently using a different shell.
 
 ```shell
 chsh -s $(which zsh)
-```
-
-### Vim
-
-We use the [vim-plug][] as our editor plugin manager.
-When first opening Vim, run the following command.
-
-```
-:PlugInstall
 ```
 
 ## Customizing
@@ -203,5 +192,4 @@ chsh -s $(which bash) # optionally change shell back to bash
 [bat]: https://github.com/sharkdp/bat
 [itermcolors]: https://raw.githubusercontent.com/altercation/solarized/e40cd4130e2a82f9b03ada1ca378b7701b1a9110/iterm2-colors-solarized/Solarized%20Dark.itermcolors
 [powerlevel10k]: https://github.com/romkatv/powerlevel10k
-[vim-plug]: https://github.com/junegunn/vim-plug
 [exa]: https://github.com/ogham/exa
