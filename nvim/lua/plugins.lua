@@ -19,6 +19,7 @@ packer.startup(function(use)
   -- Performance-related plugins.
   use 'lewis6991/impatient.nvim'
   use 'nathom/filetype.nvim'
+  use 'tpope/vim-sensible'
 
   -- Cosmetics.
   use 'psliwka/vim-smoothie'
@@ -56,6 +57,8 @@ packer.startup(function(use)
     config = "require('plugin.treesitter')",
     run = ':TSUpdate',
   }
+  -- Vim Polyglot for the languages not supported by Treesitter.
+  use 'sheerun/vim-polyglot'
 
   -- Telescope for better searching and whatnot.
   use {
