@@ -38,7 +38,7 @@ while getopts :ht: option; do
   esac
 done
 
-declare -a FILES_TO_SYMLINK=(
+FILES_TO_SYMLINK=(
   'editor/vimrc'
   'editor/coc.vim'
 
@@ -53,12 +53,8 @@ declare -a FILES_TO_SYMLINK=(
   'shell/p10k.zsh'
 )
 
-# Custom symlink sources/targets. These arrays should act as key-value pairs.
-CUSTOM_SYMLINK_SRCS=(
+FOLDERS_TO_SYMLINK=(
   'nvim'
-)
-CUSTOM_SYMLINK_TARGETS=(
-  '.config/nvim'
 )
 
 print_success() {
@@ -214,12 +210,14 @@ for i in "${FILES_TO_SYMLINK[@]}"; do
   fi
 done
 
-for idx in "${!CUSTOM_SYMLINK_SRCS[@]}"; do
-  sourceFile="$(pwd)/${CUSTOM_SYMLINK_SRCS[$idx]}"
-  targetFile="${HOME}/${CUSTOM_SYMLINK_TARGETS[$idx]}"
+
+# Symlink (or unlink) folders in the ~/.config directory.
+mkdir -p ${HOME}/config
+for i in "${FOLDERS_TO_SYMLINK[@]}"; do
+  sourceFile="$(pwd)/$i"
+  targetFile="$HOME/.config/$(printf "%s" "$i" | sed "s/.*\/\(.*\)/\1/g")"
 
   if [[ $BUILD ]]; then
-    mkdir -p $(dirname $targetFile)
     link_file $sourceFile $targetFile
   else
     unlink_file $sourceFile $targetFile
@@ -236,4 +234,7 @@ if [[ $BUILD ]]; then
 
   # Link gitconfig.
   git config --global include.path ~/.main.gitconfig
+else
+  # Unlink gitconfig.
+  git config --global --unset include.path
 fi
