@@ -5,8 +5,9 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+# Set OMZ installation location.
 ZSH=$HOME/.oh-my-zsh
-
+DISABLE_UPDATE_PROMPT=true
 # Set zsh theme to be powerlevel10k with patched fontawesome symbols.
 POWERLEVEL9K_MODE='nerdfont-complete'
 ZSH_THEME='powerlevel10k/powerlevel10k'
@@ -22,6 +23,7 @@ if [[ -n "${_p10k_incompatible_emulators[(r)$TERM_PROGRAM]}" ]]; then
   ZSH_THEME='robbyrussell'
 fi
 
+# These are the OMZ plugins that we'll install.
 plugins=(
   git
   brew
@@ -52,34 +54,16 @@ _append_to_path() {
   fi
 }
 
+# Add common bin directories to path.
 _prepend_to_path /usr/local/bin
 _prepend_to_path $HOME/.local/bin
 
-EDITOR='vim'
-
-DISABLE_UPDATE_PROMPT=true
-
+# Set key bindings.
 bindkey -v # vi mode for shell
 bindkey -e # enable C-x-e for shell editor
-# key bindings for history search
+# Key bindings for history search.
 bindkey '\e[3~' delete-char
 bindkey '^R' history-incremental-search-backward
-
-setopt correct
-setopt rmstarsilent # silence rm * confirmation
-
-# Use 256 color for tmux.
-alias tmux="TERM=screen-256color-bce tmux"
-# Attempt to take over existing sessions before creating a new tmux session.
-TMUX_DEFAULT_SESSION="tmux"
-alias t="tmux a -d -t ${TMUX_DEFAULT_SESSION} 2> /dev/null || tmux new -s ${TMUX_DEFAULT_SESSION}"
-
-# Use Neovim instead of classic vim (if available)
-if _has nvim; then
-  alias vim="nvim"
-  alias vi="nvim"
-fi
-
 # Explicity bind home and end keys (in case of terminal compatibility issues)
 bindkey "${terminfo[khome]}" beginning-of-line
 bindkey "${terminfo[kend]}" end-of-line
@@ -88,7 +72,25 @@ bindkey "${terminfo[kend]}" end-of-line
 # https://www.johnhawthorn.com/2012/09/vi-escape-delays/
 KEYTIMEOUT=1
 
+setopt correct
+setopt rmstarsilent # silence rm * confirmation
+
+# Set Vim as the default editor.
+EDITOR="vim"
+# Use Neovim instead of classic Vim (if available)
+if _has nvim; then
+  alias vim="nvim"
+  alias vi="nvim"
+  EDITOR="nvim"
+fi
+
+# Use 256 color for tmux.
+alias tmux="TERM=screen-256color-bce tmux"
+# Attempt to take over existing sessions before creating a new tmux session.
+TMUX_DEFAULT_SESSION="tmux"
+alias t="tmux a -d -t ${TMUX_DEFAULT_SESSION} 2> /dev/null || tmux new -s ${TMUX_DEFAULT_SESSION}"
 if [[ -z "$TMUX" ]]; then
+  # Switch to xterm if we're in a tmux session.
   TERM="xterm-256color"
 fi
 
