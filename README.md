@@ -155,9 +155,12 @@ chsh -s $(which zsh)
 ## Customizing
 
 You can customize zsh, vim, tmux, and git for each specific machine.
-Just put any additional configurations in `~/.zshrc.local`, `~/.vimrc.local`,
-or `~/.tmux.conf.local`.
-Sample local configs are included in this repo.
+Just put any additional configurations in the following files:
+
+* `~/.zshrc.local`
+* `~/.vimrc.local`
+* `~/.tmux.conf.local`
+
 Custom git configurations can be placed in `~/.gitconfig`.
 The normal git config file is not put under version control, so it's safe to put
 machine-specific tokens in it.

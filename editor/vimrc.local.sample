@@ -1,8 +1,0 @@
-" This is an example of a local vimrc file. It should include any additional
-" configurations that you want specific to a machine. This file should go in
-" your home directory as ~/.vimrc.local.
-
-" set colorcolumn=80 " Set a line at 80 characters.
-
-" Hide search highlighting
-" map <Leader>h :set invhls <CR>

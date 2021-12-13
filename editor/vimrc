@@ -1,50 +1,5 @@
-" Use Vim settings, rather then Vi settings (much better!).
-" This must be first, because it changes other options as a side effect.
-set nocompatible
-
-set encoding=UTF-8
-
-" allow backspacing over everything in insert mode
-set backspace=indent,eol,start
-
-set nobackup
-set nowritebackup
-set history=50 " keep 50 lines of command line history
-set ruler " show the cursor position all the time
-set showcmd " display incomplete commands
-set incsearch " do incremental searching
-set nowrap " Switch wrap off for everything
-set number
-set numberwidth=5
-set laststatus=2 " Always display the status line
-
-" Softtabs, 2 spaces
-set tabstop=2
-set shiftwidth=2
-set expandtab
-
-" Tab completion options
-" (only complete to the longest unambiguous match, and show a menu)
-set completeopt=longest,menu
-set wildmode=list:longest,list:full
-set complete=.,t
-
-" Disable visual character for tabs and trailing spaces
-set listchars+=tab:»\ ,trail:·
-set list
-
-" Remap :w and :q to allow the capital letter versions.
-command! Q q
-command! W w
-command! WQ wq
-command! Wq wq
-command! WA wa
-command! Wa wa
-command! QA qa
-command! Qa qa
-command! Wqa wqa
-command! WQa wqa
-command! WQA wqa
+" This is a minimal Vim config that's geared to be useful on new machines.
+" All new configs will go into Neovim.
 
 " Bootstrap vim-plug.
 let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
@@ -55,147 +10,51 @@ endif
 
 " Load plugins
 call plug#begin()
+" Let Tim Pope set sensible defaults for us.
+Plug 'tpope/vim-sensible'
+
+" Optionally manage fzf here. Neovim does the same.
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
-Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
-Plug 'Xuyuanp/nerdtree-git-plugin'
-
-Plug 'vim-airline/vim-airline', { 'tag': 'v0.11' }
-
-if executable('node')
-  Plug 'neoclide/coc.nvim', { 'branch': 'release' }
-endif
-
-Plug 'sheerun/vim-polyglot', { 'tag': 'v4.17.0' }
-Plug 'google/vim-maktaba'
-Plug 'bazelbuild/vim-bazel'
-
-Plug 'altercation/vim-colors-solarized'
-Plug 'ryanoasis/vim-devicons'
-
-Plug 'tpope/vim-scriptease'
-Plug 'tpope/vim-sensible'
-Plug 'psliwka/vim-smoothie'
-
+" Git-release plugins.
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
 Plug 'airblade/vim-gitgutter'
-Plug 'rhysd/git-messenger.vim'
-Plug 'tveskag/nvim-blame-line'
 
-Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() } }
-Plug 'ruanyl/vim-gh-line'
+" Cosmetic plugins.
+Plug 'vim-airline/vim-airline', { 'tag': 'v0.11' }
+Plug 'sheerun/vim-polyglot', { 'tag': 'v4.17.0' }
+Plug 'altercation/vim-colors-solarized'
+Plug 'ryanoasis/vim-devicons'
+Plug 'psliwka/vim-smoothie'
 call plug#end()
 
-" Map ctrl-n to toggle NERDTree.
-map <C-n> :NERDTreeToggle<CR>
-
-" case only matters with mixed case expressions
+" Load some standard configs.
+set number
 set ignorecase
 set smartcase
-if exists("&wildignorecase")
-  set wildignorecase
-endif
-
-set mouse=a " Enable mouse.
-
-" Switch syntax highlighting on, when the terminal has colors
-" Also switch on highlighting the last used search pattern.
-if (&t_Co > 2 || has("gui_running"))
-  syntax on
-  set hlsearch
-
-  " Color scheme
-  syntax enable
-  set background=dark
-  " solarized won't exist if we didn't run :PlugInstall
-  silent! colorscheme solarized
-  " Make vueSurroundingTag coloring match htmlTag. This is a hack. We match the rule found below:
-  " https://github.com/altercation/vim-colors-solarized/blob/528a59f26d12278698bb946f8fb82a63711eec21/colors/solarized.vim#L762
-  " Unfortunately my VimScript isn't good enough to make this not hardcoded... :(
-  hi! vueSurroundingTag cterm=NONE term=NONE ctermfg=10 ctermbg=NONE
-  let g:vue_pre_processors = ['pug', 'scss', 'typescript']
-endif
-
-" Only do this part when compiled with support for autocommands.
-if has("autocmd")
-  " Enable file type detection.
-  " Use the default filetype settings, so that mail gets 'tw' set to 72,
-  " 'cindent' is on in C files, etc.
-  " Also load indent files, to automatically do language-dependent indenting.
-  filetype plugin indent on
-
-  set cino=N-s " do not indent after C++ namespace
-  " Set File type to 'text' for files ending in .txt
-  autocmd BufNewFile,BufRead *.txt setfiletype text
-  " Enable soft-wrapping for text files
-  autocmd FileType text,markdown,html,xhtml,eruby setlocal wrap linebreak nolist
-  " Set default tab width to 4 spaces in Python and Bazel
-  au Filetype python,bzl setl et ts=4 sw=4
-  " Set shell script syntax highlighting for zsh-theme files
-  au BufRead,BufNewFile *.zsh-theme set syntax=sh
-  au BufRead,BufNewFile *.gitconfig set syntax=gitconfig
-  " For Haml
-  au! BufRead,BufNewFile *.haml setfiletype haml
-  au Filetype go set noexpandtab
-
-  " Put these in an autocmd group, so that we can delete them easily.
-  augroup vimrcEx
-    au!
-    " When editing a file, always jump to the last known cursor position.
-    " Don't do it when the position is invalid or when inside an event handler
-    " (happens when dropping a file on gvim).
-    autocmd BufReadPost *
-      \ if line("'\"") > 0 && line("'\"") <= line("$") |
-      \   exe "normal g`\"" |
-      \ endif
-    " Automatically load .vimrc source when saved
-    autocmd BufWritePost .vimrc nested source $MYVIMRC
-  augroup END
-else
-  " always set autoindenting on
-  set autoindent
-endif " has("autocmd")
+set mouse=a
+set hlsearch
+set background=dark
+syntax on
+syntax enable
+colorscheme solarized
 
 if executable('fzf')
-  " Remap ctrl-P to execute fzf :)
+  " Remap ctrl-P to execute fzf.
   nnoremap <silent> <C-p> :Files<CR>
-
+  " Show previews with fzf window.
   command! -bang -nargs=? -complete=dir Files
     \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
-
-  " Remap ctrl-m (and enter key) to toggle open files.
-  nnoremap <silent> <C-m> :Windows<CR>
-endif
-
-if executable('rg')
-  " Space key will open up search.
-  nnoremap <Space> :Rg<CR>
-  nnoremap <leader><Space> :Rg!<CR>
 endif
 
 if executable('fd')
+  " Use fd for fzf searches.
   let $FZF_DEFAULT_COMMAND = 'fd --type f'
 endif
 
-" Set up vim airline
-let g:airline_powerline_fonts = 1
-if !exists('g:airline_symbols')
-  let g:airline_symbols = {}
-endif
-let g:airline_symbols.branch = ''
-let g:airline_symbols.readonly = ''
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
-let g:airline#extensions#tabline#show_buffers = 0
-
-" coc.nvim config
-if !empty(glob("~/.vim/plugged/coc.nvim")) && filereadable(glob("~/.coc.vim"))
-  source ~/.coc.vim
-endif
-
-" Local config
+" Source custom configs (not under version control).
 if filereadable(glob("~/.vimrc.local"))
   source ~/.vimrc.local
 endif

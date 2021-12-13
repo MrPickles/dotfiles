@@ -1,6 +1,0 @@
-# This is an example of a local tmux.conf file. It should include any additional
-# configurations that you want specific to a machine. This file should go in
-# your home directory as ~/.tmux.conf.local.
-
-# Toggle mouse mode with m
-# bind m set -g mouse
