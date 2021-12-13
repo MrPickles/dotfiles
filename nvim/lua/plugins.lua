@@ -85,7 +85,12 @@ packer.startup(function(use)
       {'nvim-telescope/telescope-fzf-native.nvim', run = 'make'},
     },
   }
+
+  -- We would still like Neovim to manage fzf installation.
   use {'junegunn/fzf', run = function() vim.fn['fzf#install']() end}
+
+  -- Language-specific plugins.
+  use 'tweekmonster/gofmt.vim'
 
   -- Automatically sync all packages if we're bootstrapping.
   if bootstrap then
