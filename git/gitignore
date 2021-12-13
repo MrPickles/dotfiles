@@ -1,25 +1,26 @@
-# Folder view configuration files
+# General
 .DS_Store
-Desktop.ini
+.AppleDouble
+.LSOverride
 
-# Thumbnail cache files
+# Icon must end with two \r
+Icon
+
+# Thumbnails
 ._*
-*~
-Thumbs.db
 
-# Files that might appear on external disks
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
 .Spotlight-V100
+.TemporaryItems
 .Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
 
-# Vim swap files
-*.swp
-
-# Ctags
-tags
-tags.lock
-tags.temp
-tags.temp.tmp
-tags.files
-
-# Vim-plug
-plug.vim.old
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk

@@ -1,3 +1,6 @@
-# Vim artifacts.
-.netrwhist
-.VimballRecord
+# Artifacts for vim-plug.
+plug.vim.old
+plugged
+
+# Artifacts for packer.
+packer_compiled.lua
