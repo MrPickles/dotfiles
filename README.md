@@ -111,17 +111,15 @@ If it's not default, follow the instructions in
 There are a few recommended (but optional) tools you can install to improve your
 shell experience in general.
 
-* [`delta`][]: Delta is a diffing tool that gives a nicer diff than the git
-  default.
-* [`rg`][]: Ripgrep is a faster alternative over `ag`, `ack`, and `grep`. It has
-  the exact same usage as `ag` and is likely more preferable in all use cases.
-* [`fzf`][]: Fzf is a general purpose fuzzy finder.
-* [`fd`][]: `fd` is a faster alternative to the `find` command. It works very
+* [`delta`][delta]: Delta is a diffing tool that works great with git.
+* [`rg`][rg]: Ripgrep is a faster alternative over `ag`, `ack`, and `grep`.
+* [`fzf`][fzf]: Fzf is a highly performant fuzzy finder.
+* [`fd`][fd]: `fd` is a faster alternative to the `find` command. It works very
   well when paired with `fzf`.
-* [`exa`][]: An improved version of `ls`. We use its tree feature to improve the
-  output of `<alt-c>` from `fzf` and directory tab completion.
-* [`bat`][]: An improved version of `cat`. We use it for the file previews when
-  running `<ctrl-t>` from `fzf`.
+* [`exa`][exa]: An improved version of `ls`. We use its tree feature to improve
+  the output of `<alt-c>` from `fzf` and directory tab completion.
+* [`bat`][bat]: An improved version of `cat`. We use it for the file previews
+  when running `<ctrl-t>` from `fzf`.
 
 You should install all of these independently of this dotfile repo.
 Figuring out how to install them is left as an exercise for the reader.
