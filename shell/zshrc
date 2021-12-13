@@ -148,6 +148,10 @@ if [ -e ~/.vim/plugged/fzf ]; then
   # Source fzf key bindings and auto-completion.
   source ~/.vim/plugged/fzf/shell/key-bindings.zsh
   source ~/.vim/plugged/fzf/shell/completion.zsh
+elif [ -e ~/.local/share/nvim/site/pack/packer/start/fzf/shell ]; then
+  _append_to_path ~/.local/share/nvim/site/pack/packer/start/fzf/bin
+  source ~/.local/share/nvim/site/pack/packer/start/fzf/shell/key-bindings.zsh
+  source ~/.local/share/nvim/site/pack/packer/start/fzf/shell/completion.zsh
 fi
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
