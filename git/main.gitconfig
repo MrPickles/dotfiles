@@ -9,7 +9,6 @@
   status = auto
   branch = auto
 [core]
-  editor = vim
   autocrlf = input
   attributesfile = ~/.gitattributes
   excludesfile = ~/.gitignore

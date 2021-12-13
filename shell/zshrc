@@ -76,12 +76,12 @@ setopt correct
 setopt rmstarsilent # silence rm * confirmation
 
 # Set Vim as the default editor.
-EDITOR="vim"
+export EDITOR="vim"
 # Use Neovim instead of classic Vim (if available)
 if _has nvim; then
   alias vim="nvim"
   alias vi="nvim"
-  EDITOR="nvim"
+  export EDITOR="nvim"
 fi
 
 # Use 256 color for tmux.
