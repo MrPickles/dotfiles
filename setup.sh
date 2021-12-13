@@ -51,8 +51,6 @@ declare -a FILES_TO_SYMLINK=(
   'shell/zshrc'
   'shell/ripgreprc'
   'shell/p10k.zsh'
-
-  'third_party/Gdbinit/gdbinit'
 )
 
 # Custom symlink sources/targets. These arrays should act as key-value pairs.
