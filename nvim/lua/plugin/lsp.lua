@@ -29,12 +29,16 @@ local on_attach = function(_, bufnr)
   buf_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
   buf_set_keymap('n', '<space>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
   buf_set_keymap('n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
+
+  require('lsp_signature').on_attach()
 end
 
 lsp_installer.on_server_ready(function(server)
+  local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
   local opts = {
     on_attach = on_attach,
     settings = lsp_servers.settings,
+    capabilities = capabilities,
   }
 
   -- This setup() function is exactly the same as lspconfig's setup function.

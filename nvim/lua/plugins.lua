@@ -49,7 +49,21 @@ packer.startup(function(use)
   use 'neovim/nvim-lspconfig'
   use {'williamboman/nvim-lsp-installer', config = "require('plugin.lsp')"}
   use 'ray-x/lsp_signature.nvim'
-  use 'hrsh7th/nvim-cmp'
+
+  -- Completion engine and dependencies.
+  use {
+    'hrsh7th/nvim-cmp',
+    requires = {
+      'hrsh7th/cmp-vsnip',
+      'hrsh7th/vim-vsnip',
+      'hrsh7th/cmp-nvim-lua',
+      'hrsh7th/cmp-nvim-lsp',
+      'hrsh7th/cmp-buffer',
+      'hrsh7th/cmp-path',
+      'hrsh7th/cmp-calc',
+    },
+    config = "require('plugin.cmp')"
+  }
 
   -- Treesitter for better syntax highlighting and whatnot.
   use {
