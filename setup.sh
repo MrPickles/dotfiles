@@ -58,11 +58,9 @@ declare -a FILES_TO_SYMLINK=(
 # Custom symlink sources/targets. These arrays should act as key-value pairs.
 CUSTOM_SYMLINK_SRCS=(
   'nvim'
-  'third_party/vim-plug/plug.vim'
 )
 CUSTOM_SYMLINK_TARGETS=(
   '.config/nvim'
-  '.vim/autoload/plug.vim'
 )
 
 print_success() {
