@@ -39,17 +39,15 @@ while getopts :ht: option; do
 done
 
 FILES_TO_SYMLINK=(
-  'editor/vimrc'
-  'editor/coc.vim'
-
   'git/gitattributes'
   'git/main.gitconfig'
   'git/gitignore'
 
   'shell/ignore'
-  'shell/tmux.conf'
-  'shell/zshrc'
   'shell/ripgreprc'
+  'shell/tmux.conf'
+  'shell/vimrc'
+  'shell/zshrc'
   'shell/p10k.zsh'
 )
 
