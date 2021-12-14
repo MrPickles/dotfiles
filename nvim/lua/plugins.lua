@@ -18,7 +18,8 @@ packer.startup(function(use)
 
   -- Performance-related plugins.
   use 'lewis6991/impatient.nvim'
-  use 'nathom/filetype.nvim'
+
+  -- Sensible defaults.
   use 'tpope/vim-sensible'
 
   -- Cosmetics.
