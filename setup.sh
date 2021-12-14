@@ -218,7 +218,7 @@ for i in "${FOLDERS_TO_SYMLINK[@]}"; do
   if [[ $BUILD ]]; then
     link_file "$sourceFile" "$targetFile"
   else
-    unlink_file "$sourceFile" $targetFile
+    unlink_file "$sourceFile" "$targetFile"
   fi
 done
 
