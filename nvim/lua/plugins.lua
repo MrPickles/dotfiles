@@ -22,10 +22,10 @@ packer.startup(function(use)
   -- Sensible defaults.
   use 'tpope/vim-sensible'
 
-  -- Cosmetics.
-  use 'psliwka/vim-smoothie'
+  -- Cosmetic plugins.
   use 'lukas-reineke/indent-blankline.nvim'
   use {'ishan9299/nvim-solarized-lua', config = "require('plugin.solarized')"}
+  use {'norcalli/nvim-colorizer.lua', config = "require('plugin.colorizer')"}
   use {
     'nvim-lualine/lualine.nvim',
     config = "require('plugin.lualine')",
@@ -36,11 +36,6 @@ packer.startup(function(use)
     config = "require('plugin.bufferline')",
     requires = 'kyazdani42/nvim-web-devicons',
   }
-  use {
-    'norcalli/nvim-colorizer.lua',
-    config = "require('plugin.colorizer')",
-  }
-
   use {
     'kyazdani42/nvim-tree.lua',
     config = "require('plugin.nvim-tree')",
@@ -107,6 +102,10 @@ packer.startup(function(use)
 
   -- Language-specific plugins.
   use 'tweekmonster/gofmt.vim'
+
+  -- Miscellaneous plugins.
+  use 'psliwka/vim-smoothie'
+  use {'nacro90/numb.nvim', config = "require('plugin.numb')"}
 
   -- Automatically sync all packages if we're bootstrapping.
   if bootstrap then
