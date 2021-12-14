@@ -145,7 +145,7 @@ install_zsh_extras() {
   if [[ ! -d $HOME/.oh-my-zsh/custom/plugins/fzf-tab ]]; then
     git clone --filter=blob:none \
       https://github.com/Aloxaf/fzf-tab \
-      ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/fzf-tab
+      "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/fzf-tab"
   fi
 }
 
@@ -202,23 +202,23 @@ for i in "${FILES_TO_SYMLINK[@]}"; do
   targetFile="$HOME/.$(printf "%s" "$i" | sed "s/.*\/\(.*\)/\1/g")"
 
   if [[ $BUILD ]]; then
-    link_file $sourceFile $targetFile
+    link_file "$sourceFile" "$targetFile"
   else
-    unlink_file $sourceFile $targetFile
+    unlink_file "$sourceFile" "$targetFile"
   fi
 done
 
 
 # Symlink (or unlink) folders in the ~/.config directory.
-mkdir -p ${HOME}/config
+mkdir -p "${HOME}/config"
 for i in "${FOLDERS_TO_SYMLINK[@]}"; do
   sourceFile="$(pwd)/$i"
   targetFile="$HOME/.config/$(printf "%s" "$i" | sed "s/.*\/\(.*\)/\1/g")"
 
   if [[ $BUILD ]]; then
-    link_file $sourceFile $targetFile
+    link_file "$sourceFile" "$targetFile"
   else
-    unlink_file $sourceFile $targetFile
+    unlink_file "$sourceFile" "$targetFile"
   fi
 done
 

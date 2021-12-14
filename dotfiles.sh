@@ -26,6 +26,7 @@
   fi
 
   cd "$basedir" || exit
+  # shellcheck source=setup.sh
   . setup.sh -t build
 
 } # This ensures the entire script is downloaded.
