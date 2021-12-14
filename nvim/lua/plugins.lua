@@ -26,10 +26,16 @@ packer.startup(function(use)
   use 'lukas-reineke/indent-blankline.nvim'
   use {'ishan9299/nvim-solarized-lua', config = "require('plugin.solarized')"}
   use {
-    'vim-airline/vim-airline',
-    config = "require('plugin.airline')",
-    requires = {'ryanoasis/vim-devicons'},
+    'nvim-lualine/lualine.nvim',
+    config = "require('plugin.lualine')",
+    requires = {'kyazdani42/nvim-web-devicons', opt = true}
   }
+  use {
+    'akinsho/bufferline.nvim',
+    config = "require('plugin.bufferline')",
+    requires = 'kyazdani42/nvim-web-devicons',
+  }
+
   use {
     'kyazdani42/nvim-tree.lua',
     config = "require('plugin.nvim-tree')",
