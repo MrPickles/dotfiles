@@ -36,6 +36,10 @@ packer.startup(function(use)
     config = "require('plugin.bufferline')",
     requires = 'kyazdani42/nvim-web-devicons',
   }
+  use {
+    'norcalli/nvim-colorizer.lua',
+    config = "require('plugin.colorizer')",
+  }
 
   use {
     'kyazdani42/nvim-tree.lua',
