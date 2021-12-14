@@ -1,4 +1,5 @@
 local cmp = require('cmp')
+local lspkind = require('lspkind')
 
 cmp.setup({
   -- Set the snippet generator. We use the "default" one written by the same author of this library.
@@ -34,4 +35,8 @@ cmp.setup({
     {name = 'path'},
     {name = 'calc'},
   }),
+  formatting = {
+    -- Format completions with an emoji.
+    format = lspkind.cmp_format(),
+  }
 })
