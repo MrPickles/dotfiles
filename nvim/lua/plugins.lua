@@ -29,7 +29,10 @@ packer.startup(function(use)
   use {
     'nvim-lualine/lualine.nvim',
     config = "require('plugin.lualine')",
-    requires = {'kyazdani42/nvim-web-devicons', opt = true}
+    requires = {
+      {'kyazdani42/nvim-web-devicons', opt = true},
+      'SmiteshP/nvim-gps',
+    },
   }
   use {
     'akinsho/bufferline.nvim',
@@ -77,6 +80,11 @@ packer.startup(function(use)
     'nvim-treesitter/nvim-treesitter',
     config = "require('plugin.treesitter')",
     run = ':TSUpdate',
+  }
+  use {
+    'SmiteshP/nvim-gps',
+    config = "require('plugin.gps')",
+    requires = 'nvim-treesitter/nvim-treesitter',
   }
   -- Vim Polyglot for the languages not supported by Treesitter.
   use 'sheerun/vim-polyglot'
