@@ -29,10 +29,7 @@ packer.startup(function(use)
   use {
     'nvim-lualine/lualine.nvim',
     config = "require('plugin.lualine')",
-    requires = {
-      {'kyazdani42/nvim-web-devicons', opt = true},
-      'SmiteshP/nvim-gps',
-    },
+    requires = {'kyazdani42/nvim-web-devicons', 'SmiteshP/nvim-gps'},
   }
   use {
     'akinsho/bufferline.nvim',
@@ -64,8 +61,7 @@ packer.startup(function(use)
   use {
     'hrsh7th/nvim-cmp',
     requires = {
-      'hrsh7th/cmp-vsnip',
-      'hrsh7th/vim-vsnip',
+      'L3MON4D3/LuaSnip',
       'hrsh7th/cmp-nvim-lua',
       'hrsh7th/cmp-nvim-lsp',
       'hrsh7th/cmp-buffer',

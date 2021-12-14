@@ -5,7 +5,7 @@ cmp.setup({
   -- Set the snippet generator. We use the "default" one written by the same author of this library.
   snippet = {
     expand = function(args)
-      vim.fn["vsnip#anonymous"](args.body)
+      require('luasnip').lsp_expand(args.body)
     end,
   },
   -- Configure keyboard shortcuts for the completion menu.
@@ -30,7 +30,7 @@ cmp.setup({
   sources = cmp.config.sources({
     {name = 'nvim_lsp'},
     {name = 'nvim_lua'},
-    {name = 'vsnip'},
+    {name = 'luasnip'},
     {name = 'buffer'},
     {name = 'path'},
     {name = 'calc'},
