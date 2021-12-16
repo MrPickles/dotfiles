@@ -13,5 +13,7 @@ require('bufferline').setup({
       local icon = level:match('error') and ' ' or ' '
       return " "..icon..count
     end,
+    show_close_icon = false,
+    show_tab_indicators = true,
   },
 })
