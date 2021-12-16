@@ -29,4 +29,4 @@ vim.api.nvim_set_keymap('n', '<C-n>', ':NvimTreeToggle<CR>', { noremap = true })
 
 -- Remap <ctrl-c> to <esc>. This prevents cmp-buffer from running into errors.
 -- https://github.com/hrsh7th/cmp-buffer/issues/30#issuecomment-994011089
-vim.api.nvim_set_keymap('i', '<C-c>', '<Esc>`^', { noremap = true })
+vim.api.nvim_set_keymap('i', '<C-c>', '<Esc>\\`^', { noremap = true })
