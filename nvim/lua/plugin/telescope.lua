@@ -1,4 +1,6 @@
-require('telescope').setup({
+local telescope = require('telescope')
+
+telescope.setup {
   defaults = {
     mappings = {
       i = {
@@ -7,6 +9,6 @@ require('telescope').setup({
       }
     }
   },
-})
+}
 
-require('telescope').load_extension('fzf')
+telescope.load_extension('fzf')

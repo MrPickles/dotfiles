@@ -1,6 +1,6 @@
 local gps = require('nvim-gps')
 
-require('lualine').setup({
+require('lualine').setup {
   sections = {
     lualine_b = {
       {'branch', icon = ''},
@@ -15,4 +15,4 @@ require('lualine').setup({
       {gps.get_location, cond = gps.is_available},
     },
   },
-})
+}

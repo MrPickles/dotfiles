@@ -1,4 +1,4 @@
-require('bufferline').setup({
+require('bufferline').setup {
   options = {
     offsets = {
       {
@@ -16,4 +16,4 @@ require('bufferline').setup({
     show_close_icon = false,
     show_tab_indicators = true,
   },
-})
+}

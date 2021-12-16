@@ -1,7 +1,7 @@
 local cmp = require('cmp')
 local lspkind = require('lspkind')
 
-cmp.setup({
+cmp.setup {
   -- Set the snippet generator. We use the "default" one written by the same author of this library.
   snippet = {
     expand = function(args)
@@ -39,4 +39,4 @@ cmp.setup({
     -- Format completions with an emoji.
     format = lspkind.cmp_format(),
   }
-})
+}
