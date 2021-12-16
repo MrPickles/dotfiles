@@ -26,3 +26,7 @@ vim.api.nvim_set_keymap('n', '<C-p>', ':Telescope find_files<cr>', { noremap = t
 vim.api.nvim_set_keymap('n', '<Space>', ':Telescope live_grep<cr>', { noremap = true })
 -- Set <ctrl-n> to toggle nvim-tree.
 vim.api.nvim_set_keymap('n', '<C-n>', ':NvimTreeToggle<CR>', { noremap = true })
+
+-- Remap <ctrl-c> to <esc>. This prevents cmp-buffer from running into errors.
+-- https://github.com/hrsh7th/cmp-buffer/issues/30#issuecomment-994011089
+vim.api.nvim_set_keymap('i', '<C-c>', '<Esc>`^', { noremap = true })
