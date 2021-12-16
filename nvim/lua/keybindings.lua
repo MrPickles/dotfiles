@@ -24,7 +24,5 @@ vim.api.nvim_set_keymap('n', '<C-h>', ':bprev<cr>', { noremap = true })
 vim.api.nvim_set_keymap('n', '<C-p>', ':Telescope find_files<cr>', { noremap = true })
 -- Set <space> to open Telescope grep.
 vim.api.nvim_set_keymap('n', '<Space>', ':Telescope live_grep<cr>', { noremap = true })
--- Set <ctrl-m> to open Telescope buffer search.
-vim.api.nvim_set_keymap('n', '<C-m>', ':Telescope buffers<cr>', { noremap = true })
 -- Set <ctrl-n> to toggle nvim-tree.
 vim.api.nvim_set_keymap('n', '<C-n>', ':NvimTreeToggle<CR>', { noremap = true })
