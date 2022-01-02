@@ -146,13 +146,13 @@ install_zsh_extras() {
   if [[ ! -d ${ft_path} ]]; then
     git clone --filter=blob:none \
       https://github.com/Aloxaf/fzf-tab \
-      ${ft_path}
+      "${ft_path}"
   fi
   fsh_path=${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting
   if [[ ! -d ${fsh_path} ]]; then
     git clone --filter=blob:none \
       https://github.com/zdharma-continuum/fast-syntax-highlighting.git \
-      ${fsh_path}
+      "${fsh_path}"
   fi
 }
 
