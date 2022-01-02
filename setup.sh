@@ -5,7 +5,7 @@
 # first option will symlink all of the dotfiles and attempt to install
 # oh-my-zsh. Otherwise, the script will simply remove all symlinks.
 
-usage="Usage: $0 [-h] [-t <build|clean>]"
+usage="Usage: $0 [-h] [-t <build|clean|shellcheck>]"
 BUILD=true
 INTERACTIVE=
 
@@ -25,6 +25,9 @@ while getopts :ht: option; do
         BUILD=true
       elif [[ "clean" =~ ^${OPTARG} ]]; then
         BUILD=
+      elif [[ "shellcheck" =~ ^${OPTARG} ]]; then
+        shellcheck -x -- *.sh
+        exit 0
       else
         echo "$usage" >&2
         exit 1
