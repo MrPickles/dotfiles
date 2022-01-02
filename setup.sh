@@ -142,10 +142,17 @@ install_zsh_extras() {
       https://github.com/romkatv/powerlevel10k.git \
       "$HOME/.oh-my-zsh/custom/themes/powerlevel10k"
   fi
-  if [[ ! -d $HOME/.oh-my-zsh/custom/plugins/fzf-tab ]]; then
+  ft_path=${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/fzf-tab
+  if [[ ! -d ${ft_path} ]]; then
     git clone --filter=blob:none \
       https://github.com/Aloxaf/fzf-tab \
-      "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/fzf-tab"
+      ${ft_path}
+  fi
+  fsh_path=${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting
+  if [[ ! -d ${fsh_path} ]]; then
+    git clone --filter=blob:none \
+      https://github.com/zdharma-continuum/fast-syntax-highlighting.git \
+      ${fsh_path}
   fi
 }
 

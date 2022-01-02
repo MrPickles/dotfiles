@@ -33,6 +33,7 @@ plugins=(
   git-auto-fetch
   fd
   ripgrep
+  fast-syntax-highlighting
 )
 
 # Returns whether the given command is executable or aliased.
