@@ -57,6 +57,7 @@ _append_to_path() {
 
 # Add common bin directories to path.
 _prepend_to_path /usr/local/bin
+_prepend_to_path /usr/local/sbin
 _prepend_to_path $HOME/.local/bin
 
 # Set key bindings.
