@@ -11,6 +11,7 @@ DISABLE_UPDATE_PROMPT=true
 # Set zsh theme to be powerlevel10k with patched fontawesome symbols.
 POWERLEVEL9K_MODE='nerdfont-complete'
 ZSH_THEME='powerlevel10k/powerlevel10k'
+export SHELL=$(which zsh)
 
 # Use a more universal theme for terminals without special font support.
 # https://apple.stackexchange.com/a/118500
