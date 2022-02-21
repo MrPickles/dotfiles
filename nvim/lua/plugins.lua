@@ -27,9 +27,8 @@ packer.startup(function(use)
   use {'ishan9299/nvim-solarized-lua', config = "require('plugin.solarized')"}
   use {'norcalli/nvim-colorizer.lua', config = "require('plugin.colorizer')"}
   use {
-    'nvim-lualine/lualine.nvim',
-    config = "require('plugin.lualine')",
-    requires = {'kyazdani42/nvim-web-devicons', 'SmiteshP/nvim-gps'},
+    'feline-nvim/feline.nvim',
+    config = "require('plugin.feline')",
   }
   use {
     'akinsho/bufferline.nvim',
