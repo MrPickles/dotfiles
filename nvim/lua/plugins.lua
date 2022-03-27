@@ -40,6 +40,7 @@ packer.startup(function(use)
     config = "require('plugin.nvim-tree')",
     requires = {'kyazdani42/nvim-web-devicons'},
   }
+  use 'liuchengxu/vista.vim'
 
   -- Plugins for git and version control.
   use 'tpope/vim-fugitive'
