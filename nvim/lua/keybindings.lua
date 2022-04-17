@@ -1,7 +1,8 @@
--- Abbreviate common packer commands.
+-- Abbreviate common commands.
 vim.cmd 'command! PI PackerInstall'
 vim.cmd 'command! PS PackerSync'
 vim.cmd 'command! PST PackerStatus'
+vim.cmd 'command! LSP LspInstallInfo'
 
 -- Alias most permutations of capitalized 'wqa' commands to work.
 vim.cmd 'command! Q q'
