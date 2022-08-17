@@ -37,6 +37,9 @@ plugins=(
   fast-syntax-highlighting
 )
 
+# Source Oh-My-ZSH. All theme and plugin configs must come beforehand. This may have side-effects.
+source $ZSH/oh-my-zsh.sh
+
 # Returns whether the given command is executable or aliased.
 _has() {
   return $(whence $1 >/dev/null)
@@ -106,6 +109,28 @@ if _has bat; then
   export BAT_THEME="Solarized (dark)"
 fi
 
+# Alias `exa` as default `ls` command (if available).
+# This must come after OMZ. (The library overwrites this alias.)
+if _has exa; then
+  alias ls="exa"
+fi
+
+# Source fzf scripts via via local installation.
+# OMZ overwrites some of these scripts, so this must come afterwards.
+fzf_paths=(
+  "${HOME}/.vim/plugged/fzf"
+  "${HOME}/.local/share/nvim/site/pack/packer/start/fzf"
+)
+for fzf_path in "${fzf_paths[@]}"; do
+  if [ -d $fzf_path ]; then
+    _append_to_path "${fzf_path}/bin"
+    # Source fzf key bindings and auto-completion.
+    source "${fzf_path}/shell/key-bindings.zsh"
+    source "${fzf_path}/shell/completion.zsh"
+    break
+  fi
+done
+
 # Configure fzf (if available).
 if _has fzf; then
   if _has fd; then
@@ -136,31 +161,6 @@ if _has fzf; then
   zstyle ':completion:*:descriptions' format '[%d]'
   zstyle ':fzf-tab:*' switch-group ',' '.'
 fi
-
-# Source Oh-My-ZSH. All theme and plugin configs must come beforehand. This may have side-effects.
-source $ZSH/oh-my-zsh.sh
-
-# Alias `exa` as default `ls` command (if available).
-# This must come after OMZ. (The library overwrites this alias.)
-if _has exa; then
-  alias ls="exa"
-fi
-
-# Source fzf scripts via via local installation.
-# OMZ overwrites some of these scripts, so this must come afterwards.
-fzf_paths=(
-  "${HOME}/.vim/plugged/fzf"
-  "${HOME}/.local/share/nvim/site/pack/packer/start/fzf"
-)
-for fzf_path in "${fzf_paths[@]}"; do
-  if [ -d $fzf_path ]; then
-    _append_to_path "${fzf_path}/bin"
-    # Source fzf key bindings and auto-completion.
-    source "${fzf_path}/shell/key-bindings.zsh"
-    source "${fzf_path}/shell/completion.zsh"
-    break
-  fi
-done
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
