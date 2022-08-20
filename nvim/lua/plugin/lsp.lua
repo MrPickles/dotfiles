@@ -55,19 +55,14 @@ util.on_setup = util.add_hook_after(util.on_setup, function(config)
   config.capabilities = vim.tbl_deep_extend("force", capabilities, config.capabilities or {})
 end)
 
-mason_lspconfig.setup_handlers {
-  function(server_name)
-    lspconfig[server_name].setup()
-  end,
-  ["sumneko_lua"] = function()
-    lspconfig.sumneko_lua.setup {
-      settings = {
-        Lua = {
-          diagnostics = {
-            globals = { "vim" },
-          },
+for _, server in ipairs(mason_lspconfig.get_installed_servers()) do
+  lspconfig[server].setup {
+    settings = {
+      Lua = {
+        diagnostics = {
+          globals = { "vim" },
         },
       },
-    }
-  end,
-}
+    },
+  }
+end
