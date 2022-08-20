@@ -24,21 +24,37 @@ packer.startup(function(use)
 
   -- Cosmetic plugins.
   use 'lukas-reineke/indent-blankline.nvim'
-  use {'ishan9299/nvim-solarized-lua', config = "require('plugin.solarized')"}
-  use {'norcalli/nvim-colorizer.lua', config = "require('plugin.colorizer')"}
+  use {
+    'ishan9299/nvim-solarized-lua',
+    config = function()
+      vim.cmd('colorscheme solarized')
+    end,
+  }
+  use {
+    'norcalli/nvim-colorizer.lua',
+    config = function()
+      require('colorizer').setup()
+    end,
+  }
   use {
     'feline-nvim/feline.nvim',
-    config = "require('plugin.feline')",
+    config = function()
+      require('feline').setup()
+    end,
   }
   use {
     'akinsho/bufferline.nvim',
-    config = "require('plugin.bufferline')",
     requires = 'kyazdani42/nvim-web-devicons',
+    config = function()
+      require('plugin.bufferline')
+    end,
   }
   use {
     'kyazdani42/nvim-tree.lua',
-    config = "require('plugin.nvim-tree')",
     requires = {'kyazdani42/nvim-web-devicons'},
+    config = function()
+      require('nvim-tree').setup()
+    end,
   }
   use 'liuchengxu/vista.vim'
 
@@ -48,7 +64,9 @@ packer.startup(function(use)
   use {
     'lewis6991/gitsigns.nvim',
     requires = {'nvim-lua/plenary.nvim'},
-    config = "require('plugin.gitsigns')",
+    config = function()
+      require('gitsigns').setup()
+    end,
   }
 
   -- LSP plugins.
@@ -61,7 +79,9 @@ packer.startup(function(use)
       'neovim/nvim-lspconfig',
       'ray-x/lsp_signature.nvim',
     },
-    config = "require('plugin.lsp')",
+    config = function()
+      require('plugin.lsp')
+    end,
   }
 
   -- Completion engine and dependencies.
@@ -76,7 +96,9 @@ packer.startup(function(use)
       'hrsh7th/cmp-calc',
       'onsails/lspkind-nvim',
     },
-    config = "require('plugin.cmp')"
+    config = function()
+      require('plugin.cmp')
+    end,
   }
 
   -- Treesitter for better syntax highlighting and whatnot.
@@ -87,8 +109,10 @@ packer.startup(function(use)
   }
   use {
     'SmiteshP/nvim-gps',
-    config = "require('plugin.gps')",
     requires = 'nvim-treesitter/nvim-treesitter',
+    config = function()
+      require('plugin.gps')
+    end,
   }
   -- Vim Polyglot for the languages not supported by Treesitter.
   use 'sheerun/vim-polyglot'
@@ -96,25 +120,40 @@ packer.startup(function(use)
   -- Telescope for better searching and whatnot.
   use {
     'nvim-telescope/telescope.nvim',
-    config = "require('plugin.telescope')",
     requires = {
       {'nvim-lua/plenary.nvim'},
       {'nvim-treesitter/nvim-treesitter'},
       {'kyazdani42/nvim-web-devicons'},
       {'nvim-telescope/telescope-fzf-native.nvim', run = 'make'},
     },
+    config = function()
+      require('plugin.telescope')
+    end,
   }
 
   -- We would still like Neovim to manage fzf installation.
-  use {'junegunn/fzf', run = function() vim.fn['fzf#install']() end}
+  use {
+    'junegunn/fzf',
+    run = function()
+      vim.fn['fzf#install']()
+    end,
+  }
 
   -- Language-specific plugins.
   use 'tweekmonster/gofmt.vim'
-  use {'bazelbuild/vim-bazel', requires = 'google/vim-maktaba'}
+  use {
+    'bazelbuild/vim-bazel',
+    requires = 'google/vim-maktaba',
+  }
 
   -- Miscellaneous plugins.
   use 'psliwka/vim-smoothie'
-  use {'nacro90/numb.nvim', config = "require('plugin.numb')"}
+  use {
+    'nacro90/numb.nvim',
+    config = function()
+      require('numb').setup()
+    end,
+  }
 
   -- Automatically sync all packages if we're bootstrapping.
   if bootstrap then
