@@ -1,5 +1,17 @@
-local lsp_installer = require('nvim-lsp-installer')
-local lsp_servers = require('lsp.servers')
+local ok, lspconfig = pcall(require, "lspconfig")
+if not ok then
+  return
+end
+local mason = require('mason')
+local mason_lspconfig = require('mason-lspconfig')
+local util = require('lspconfig.util')
+
+mason.setup()
+mason_lspconfig.setup {
+  ensure_installed = {
+    'sumneko_lua',
+  },
+}
 
 local function on_attach(_, bufnr)
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
@@ -33,18 +45,29 @@ local function on_attach(_, bufnr)
   require('lsp_signature').on_attach()
 end
 
-lsp_installer.on_server_ready(function(server)
+util.on_setup = util.add_hook_after(util.on_setup, function(config)
+  if config.on_attach then
+    config.on_attach = util.add_hook_after(config.on_attach, on_attach)
+  else
+    config.on_attach = on_attach
+  end
   local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
-  local opts = {
-    on_attach = on_attach,
-    settings = lsp_servers.settings,
-    capabilities = capabilities,
-  }
-
-  -- This setup() function is exactly the same as lspconfig's setup function.
-  -- Refer to https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
-  server:setup(opts)
+  config.capabilities = vim.tbl_deep_extend("force", capabilities, config.capabilities or {})
 end)
 
--- Install all hardcoded LSPs by default.
-lsp_servers.install_all()
+mason_lspconfig.setup_handlers {
+  function(server_name)
+    lspconfig[server_name].setup()
+  end,
+  ["sumneko_lua"] = function()
+    lspconfig.sumneko_lua.setup {
+      settings = {
+        Lua = {
+          diagnostics = {
+            globals = { "vim" },
+          },
+        },
+      },
+    }
+  end,
+}

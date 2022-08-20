@@ -52,9 +52,17 @@ packer.startup(function(use)
   }
 
   -- LSP plugins.
-  use 'neovim/nvim-lspconfig'
-  use {'williamboman/nvim-lsp-installer', config = "require('plugin.lsp')"}
-  use 'ray-x/lsp_signature.nvim'
+  use {
+    -- NOTE: Not all plugins have init.lua. Be careful about this.
+    -- Not all config directives will run, as a result.
+    'williamboman/mason.nvim',
+    requires = {
+      'williamboman/mason-lspconfig.nvim',
+      'neovim/nvim-lspconfig',
+      'ray-x/lsp_signature.nvim',
+    },
+    config = "require('plugin.lsp')",
+  }
 
   -- Completion engine and dependencies.
   use {

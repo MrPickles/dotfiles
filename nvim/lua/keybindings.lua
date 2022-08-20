@@ -3,7 +3,7 @@ vim.cmd 'command! PI PackerInstall'
 vim.cmd 'command! PS PackerSync'
 vim.cmd 'command! PST PackerStatus'
 vim.cmd 'command! LSP LspInstall'
-vim.cmd 'command! LS LspInstallInfo'
+vim.cmd 'command! LS Mason'
 
 -- Alias most permutations of capitalized 'wqa' commands to work.
 vim.cmd 'command! Q q'
