@@ -4,7 +4,6 @@ if not ok then
 end
 local mason = require('mason')
 local mason_lspconfig = require('mason-lspconfig')
-local util = require('lspconfig.util')
 
 mason.setup()
 mason_lspconfig.setup {
@@ -45,18 +44,11 @@ local function on_attach(_, bufnr)
   require('lsp_signature').on_attach()
 end
 
-util.on_setup = util.add_hook_after(util.on_setup, function(config)
-  if config.on_attach then
-    config.on_attach = util.add_hook_after(config.on_attach, on_attach)
-  else
-    config.on_attach = on_attach
-  end
-  local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
-  config.capabilities = vim.tbl_deep_extend("force", capabilities, config.capabilities or {})
-end)
-
+local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 for _, server in ipairs(mason_lspconfig.get_installed_servers()) do
   lspconfig[server].setup {
+    on_attach = on_attach,
+    capabilities = capabilities,
     settings = {
       Lua = {
         diagnostics = {
@@ -66,3 +58,7 @@ for _, server in ipairs(mason_lspconfig.get_installed_servers()) do
     },
   }
 end
+
+-- For some reason, LSPs sometimes don't attach if you open vim with the source file.
+-- Manually running the command seems to address the issue, at least.
+vim.cmd('LspStart')
