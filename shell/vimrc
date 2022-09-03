@@ -39,7 +39,7 @@ set hlsearch
 set background=dark
 syntax on
 syntax enable
-colorscheme solarized
+silent! colorscheme solarized
 
 if executable('fzf')
   " Remap ctrl-P to execute fzf.
