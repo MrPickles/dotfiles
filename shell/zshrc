@@ -118,12 +118,12 @@ fi
 # Source fzf scripts via via local installation.
 # OMZ overwrites some of these scripts, so this must come afterwards.
 fzf_paths=(
-  "${HOME}/.vim/plugged/fzf"
   "${HOME}/.local/share/nvim/site/pack/packer/start/fzf"
+  "${HOME}/.vim/plugged/fzf"
 )
 for fzf_path in "${fzf_paths[@]}"; do
   if [ -d $fzf_path ]; then
-    _append_to_path "${fzf_path}/bin"
+    _prepend_to_path "${fzf_path}/bin"
     # Source fzf key bindings and auto-completion.
     source "${fzf_path}/shell/key-bindings.zsh"
     source "${fzf_path}/shell/completion.zsh"
