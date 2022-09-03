@@ -61,4 +61,4 @@ end
 
 -- For some reason, LSPs sometimes don't attach if you open vim with the source file.
 -- Manually running the command seems to address the issue, at least.
-vim.cmd('LspStart')
+pcall(vim.cmd, 'LspStart')
