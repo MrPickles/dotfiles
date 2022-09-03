@@ -220,7 +220,7 @@ done
 
 
 # Symlink (or unlink) folders in the ~/.config directory.
-mkdir -p "${HOME}/config"
+mkdir -p "${HOME}/.config"
 for i in "${FOLDERS_TO_SYMLINK[@]}"; do
   sourceFile="$(pwd)/$i"
   targetFile="$HOME/.config/$(printf "%s" "$i" | sed "s/.*\/\(.*\)/\1/g")"
