@@ -106,7 +106,9 @@ packer.startup(function(use)
   use {
     'nvim-treesitter/nvim-treesitter',
     config = "require('plugin.treesitter')",
-    run = ':TSUpdate',
+    run = function()
+      require('nvim-treesitter.install').update({ with_sync = true })
+    end,
   }
   -- Show what function/class you're in.
   use 'nvim-treesitter/nvim-treesitter-context'
