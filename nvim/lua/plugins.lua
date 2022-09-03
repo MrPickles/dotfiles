@@ -78,6 +78,7 @@ packer.startup(function(use)
       'williamboman/mason-lspconfig.nvim',
       'neovim/nvim-lspconfig',
       'ray-x/lsp_signature.nvim',
+      --"SmiteshP/nvim-navic",
     },
     config = function()
       require('plugin.lsp')
@@ -107,13 +108,8 @@ packer.startup(function(use)
     config = "require('plugin.treesitter')",
     run = ':TSUpdate',
   }
-  use {
-    'SmiteshP/nvim-gps',
-    requires = 'nvim-treesitter/nvim-treesitter',
-    config = function()
-      require('plugin.gps')
-    end,
-  }
+  -- Show what function/class you're in.
+  use 'nvim-treesitter/nvim-treesitter-context'
   -- Vim Polyglot for the languages not supported by Treesitter.
   use 'sheerun/vim-polyglot'
 
