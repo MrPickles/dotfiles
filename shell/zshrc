@@ -94,11 +94,14 @@ fi
 alias tmux="TERM=screen-256color-bce tmux"
 # Attempt to take over existing sessions before creating a new tmux session.
 TMUX_DEFAULT_SESSION="tmux"
-alias t="tmux a -d -t ${TMUX_DEFAULT_SESSION} 2> /dev/null || tmux new -s ${TMUX_DEFAULT_SESSION}"
+alias t="tmux -u a -d -t ${TMUX_DEFAULT_SESSION} 2> /dev/null || tmux -u new -s ${TMUX_DEFAULT_SESSION}"
 if [[ -z "$TMUX" ]]; then
   # Switch to xterm if we're in a tmux session.
   TERM="xterm-256color"
 fi
+# Make sure we're using UTF-8.
+export LANG=en_US.UTF-8
+export LC_CTYPE=en_US.UTF-8
 
 if _has rg; then
   export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
