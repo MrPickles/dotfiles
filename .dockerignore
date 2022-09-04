@@ -1,0 +1,12 @@
+# Docker artifacts
+.dockerignore
+Dockerfile
+
+# Git artifacts
+.git
+.gitignore
+
+# Non-critical repo files
+dotfiles.sh
+LICENSE
+README
