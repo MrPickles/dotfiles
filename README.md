@@ -30,8 +30,8 @@ It'll otherwise work out of the box.
 
 These dotfiles contain the following software dependencies:
 
-* Linux or MacOS
-* Vim 8.0+ (or Neovim 0.6.0+)
+* Linux, MacOS, or WSL
+* Vim 8.0+ (or Neovim 0.7.0+)
 
 There currently is no Windows support.
 However, MacOS and most flavors of Linux should work fine.
