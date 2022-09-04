@@ -179,6 +179,25 @@ rm -rf ~/.oh-my-zsh # optionally remove oh-my-zsh
 chsh -s $(which bash) # optionally change shell back to bash
 ```
 
+## Docker
+
+These dotfiles are available as a [Docker image][docker-hub].
+It's the easiet way to emulate the development environment that I normally use.
+The image is a bit large (1 GB), so it's best saved for development uses only.
+
+To spin up a new container, make sure you have Docker installed and run the
+command below:
+
+```shell
+docker run -it docker.io/liuandrewk/dotfiles
+```
+
+If you'd like to build the image yourself locally, run the following command:
+
+```shell
+docker build -t liuandrewk/dotfiles .
+```
+
 [solarized]: http://ethanschoonover.com/solarized
 [homebrew]: http://brew.sh/
 [oh-my-zsh]: https://github.com/robbyrussell/oh-my-zsh
@@ -194,3 +213,4 @@ chsh -s $(which bash) # optionally change shell back to bash
 [itermcolors]: https://raw.githubusercontent.com/altercation/solarized/e40cd4130e2a82f9b03ada1ca378b7701b1a9110/iterm2-colors-solarized/Solarized%20Dark.itermcolors
 [powerlevel10k]: https://github.com/romkatv/powerlevel10k
 [exa]: https://github.com/ogham/exa
+[docker-hub]: https://hub.docker.com/repository/docker/liuandrewk/dotfiles
