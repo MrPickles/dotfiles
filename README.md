@@ -17,24 +17,16 @@ The configuration uses powerline-based status bars for vim and tmux and
 
 These dotfiles are available as a [Docker image][docker-hub].
 It's the easiest way to emulate the development environment that I normally use.
-The image is a bit large (1 GB), so it's best saved for development uses only.
-
-To spin up a new container, make sure you have Docker installed and run the
-command below.
-You will also want to have Powerline fonts in your terminal.
-It should otherwise work out of the box.
+To spin up a new container, install Docker and run the command below.
 
 ```shell
 docker run -it docker.io/liuandrewk/dotfiles
 ```
 
-If you'd like to build the image yourself locally, run the following command:
+You should also make sure to have Powerline fonts available in your terminal.
+It'll otherwise work out of the box.
 
-```shell
-docker build -t liuandrewk/dotfiles .
-```
-
-## Prequisites
+## Prerequisites
 
 These dotfiles contain the following software dependencies:
 
@@ -185,6 +177,18 @@ Just put any additional configurations in the following files:
 Custom git configurations can be placed in `~/.gitconfig`.
 The normal git config file is not put under version control, so it's safe to put
 machine-specific tokens in it.
+
+## Docker
+
+If you'd like to build the dotfiles as a Docker image locally, run the following
+command:
+
+```shell
+docker build -t liuandrewk/dotfiles .
+```
+
+The image will be a bit large (1 GB), so it's best saved for development
+purposes only.
 
 ## Teardown
 
