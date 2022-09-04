@@ -1,8 +1,7 @@
 # syntax=docker/dockerfile:1
-ARG USER=andy
 FROM ubuntu:latest
 
-RUN apt update && apt upgrade -y && apt install -y \
+RUN apt update && apt install -y \
   build-essential \
   curl \
   exa \
@@ -28,6 +27,7 @@ RUN wget https://github.com/dandavison/delta/releases/download/0.14.0/git-delta-
   && rm git-delta-musl_0.14.0_amd64.deb
 
 # Create a user with sudo privileges
+ARG USER=andy
 RUN useradd -rm -d /home/${USER} -s $(which zsh) -g root -G sudo ${USER}
 RUN chown -R ${USER} /home/${USER}
 RUN echo "${USER} ALL=(ALL:ALL) NOPASSWD: ALL" > /etc/sudoers.d/${USER}
