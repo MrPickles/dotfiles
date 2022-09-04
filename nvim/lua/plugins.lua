@@ -46,7 +46,7 @@ packer.startup(function(use)
     'akinsho/bufferline.nvim',
     requires = 'kyazdani42/nvim-web-devicons',
     config = function()
-      require('plugin.bufferline')
+      require('config.bufferline')
     end,
   }
   use {
@@ -80,7 +80,7 @@ packer.startup(function(use)
       'ray-x/lsp_signature.nvim',
     },
     config = function()
-      require('plugin.lsp')
+      require('config.lsp')
     end,
   }
 
@@ -97,14 +97,14 @@ packer.startup(function(use)
       'onsails/lspkind-nvim',
     },
     config = function()
-      require('plugin.cmp')
+      require('config.cmp')
     end,
   }
 
   -- Treesitter for better syntax highlighting and whatnot.
   use {
     'nvim-treesitter/nvim-treesitter',
-    config = "require('plugin.treesitter')",
+    config = "require('config.treesitter')",
     run = function()
       require('nvim-treesitter.install').update({ with_sync = true })
     end,
@@ -124,7 +124,7 @@ packer.startup(function(use)
       {'nvim-telescope/telescope-fzf-native.nvim', run = 'make'},
     },
     config = function()
-      require('plugin.telescope')
+      require('config.telescope')
     end,
   }
 
