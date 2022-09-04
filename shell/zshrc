@@ -104,6 +104,11 @@ if _has rg; then
   export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
 fi
 
+# The bat executable may sometime be called batcat.
+if _has batcat; then
+  alias bat="batcat"
+fi
+
 if _has bat; then
   # Export theme for http://github.com/sharkdp/bat.
   export BAT_THEME="Solarized (dark)"
