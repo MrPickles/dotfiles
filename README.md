@@ -213,4 +213,4 @@ docker build -t liuandrewk/dotfiles .
 [itermcolors]: https://raw.githubusercontent.com/altercation/solarized/e40cd4130e2a82f9b03ada1ca378b7701b1a9110/iterm2-colors-solarized/Solarized%20Dark.itermcolors
 [powerlevel10k]: https://github.com/romkatv/powerlevel10k
 [exa]: https://github.com/ogham/exa
-[docker-hub]: https://hub.docker.com/repository/docker/liuandrewk/dotfiles
+[docker-hub]: https://hub.docker.com/r/liuandrewk/dotfiles
