@@ -78,7 +78,6 @@ packer.startup(function(use)
       'williamboman/mason-lspconfig.nvim',
       'neovim/nvim-lspconfig',
       'ray-x/lsp_signature.nvim',
-      --"SmiteshP/nvim-navic",
     },
     config = function()
       require('plugin.lsp')
