@@ -13,6 +13,27 @@ These dotfiles are intended for use with zsh, [oh-my-zsh][], and the
 The configuration uses powerline-based status bars for vim and tmux and
 [Powerlevel10k][powerlevel10k] as its zsh theme.
 
+## Try it out in Docker
+
+These dotfiles are available as a [Docker image][docker-hub].
+It's the easiest way to emulate the development environment that I normally use.
+The image is a bit large (1 GB), so it's best saved for development uses only.
+
+To spin up a new container, make sure you have Docker installed and run the
+command below.
+You will also want to have Powerline fonts in your terminal.
+It should otherwise work out of the box.
+
+```shell
+docker run -it docker.io/liuandrewk/dotfiles
+```
+
+If you'd like to build the image yourself locally, run the following command:
+
+```shell
+docker build -t liuandrewk/dotfiles .
+```
+
 ## Prequisites
 
 These dotfiles contain the following software dependencies:
@@ -177,25 +198,6 @@ cd ~/.dotfiles
 ./setup.sh -t clean
 rm -rf ~/.oh-my-zsh # optionally remove oh-my-zsh
 chsh -s $(which bash) # optionally change shell back to bash
-```
-
-## Docker
-
-These dotfiles are available as a [Docker image][docker-hub].
-It's the easiet way to emulate the development environment that I normally use.
-The image is a bit large (1 GB), so it's best saved for development uses only.
-
-To spin up a new container, make sure you have Docker installed and run the
-command below:
-
-```shell
-docker run -it docker.io/liuandrewk/dotfiles
-```
-
-If you'd like to build the image yourself locally, run the following command:
-
-```shell
-docker build -t liuandrewk/dotfiles .
 ```
 
 [solarized]: http://ethanschoonover.com/solarized
