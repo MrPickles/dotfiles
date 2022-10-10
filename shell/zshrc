@@ -5,40 +5,9 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# Set OMZ installation location.
-ZSH=$HOME/.oh-my-zsh
-DISABLE_UPDATE_PROMPT=true
-# Set zsh theme to be powerlevel10k with patched fontawesome symbols.
-POWERLEVEL9K_MODE='nerdfont-complete'
-ZSH_THEME='powerlevel10k/powerlevel10k'
-export SHELL=$(which zsh)
-
-# Use a more universal theme for terminals without special font support.
-# https://apple.stackexchange.com/a/118500
-# https://stackoverflow.com/a/5203740/3344451
-_p10k_incompatible_emulators=(
-  Apple_Terminal
-  vscode
-)
-if [[ -n "${_p10k_incompatible_emulators[(r)$TERM_PROGRAM]}" ]]; then
-  ZSH_THEME='robbyrussell'
-fi
-
-# These are the OMZ plugins that we'll install.
-plugins=(
-  git
-  brew
-  history-substring-search
-  colored-man-pages
-  vi-mode
-  git-auto-fetch
-  fd
-  ripgrep
-  fast-syntax-highlighting
-)
-
-# Source Oh-My-ZSH. All theme and plugin configs must come beforehand. This may have side-effects.
-source $ZSH/oh-my-zsh.sh
+################################################################################
+# Generic helper functions
+################################################################################
 
 # Returns whether the given command is executable or aliased.
 _has() {
@@ -59,87 +28,44 @@ _append_to_path() {
   fi
 }
 
-# Add common bin directories to path.
-_prepend_to_path /usr/local/bin
-_prepend_to_path /usr/local/sbin
-_prepend_to_path $HOME/.local/bin
+################################################################################
+# Oh-My-ZSH prerequisite setup
+################################################################################
 
-# Set key bindings.
-bindkey -v # vi mode for shell
-bindkey -e # enable C-x-e for shell editor
-# Key bindings for history search.
-bindkey '\e[3~' delete-char
-bindkey '^R' history-incremental-search-backward
-# Explicity bind home and end keys (in case of terminal compatibility issues)
-bindkey "${terminfo[khome]}" beginning-of-line
-bindkey "${terminfo[kend]}" end-of-line
+# Set OMZ installation location.
+ZSH=$HOME/.oh-my-zsh
+DISABLE_UPDATE_PROMPT=true
+# Set zsh theme to be powerlevel10k with patched fontawesome symbols.
+POWERLEVEL9K_MODE='nerdfont-complete'
+ZSH_THEME='powerlevel10k/powerlevel10k'
 
-# Decrease delay in entering normal mode in shell.
-# https://www.johnhawthorn.com/2012/09/vi-escape-delays/
-KEYTIMEOUT=1
-
-setopt correct
-setopt rmstarsilent # silence rm * confirmation
-
-# Set Vim as the default editor.
-export EDITOR="vim"
-# Use Neovim instead of classic Vim (if available)
-if _has nvim; then
-  alias vim="nvim"
-  alias vi="nvim"
-  export EDITOR="nvim"
-fi
-
-# Use 256 color for tmux.
-alias tmux="TERM=screen-256color-bce tmux"
-# Attempt to take over existing sessions before creating a new tmux session.
-TMUX_DEFAULT_SESSION="tmux"
-alias t="tmux -u a -d -t ${TMUX_DEFAULT_SESSION} 2> /dev/null || tmux -u new -s ${TMUX_DEFAULT_SESSION}"
-if [[ -z "$TMUX" ]]; then
-  # Switch to xterm if we're in a tmux session.
-  TERM="xterm-256color"
-fi
-# Make sure we're using UTF-8.
-export LANG=en_US.UTF-8
-export LC_CTYPE=en_US.UTF-8
-
-if _has rg; then
-  export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
-fi
-
-# The bat executable may sometime be called batcat.
-if _has batcat; then
-  alias bat="batcat"
-fi
-
-if _has bat; then
-  # Export theme for http://github.com/sharkdp/bat.
-  export BAT_THEME="Solarized (dark)"
-fi
-
-# Alias `exa` as default `ls` command (if available).
-# This must come after OMZ. (The library overwrites this alias.)
-if _has exa; then
-  alias ls="exa"
-fi
-
-# Source fzf scripts via via local installation.
-# OMZ overwrites some of these scripts, so this must come afterwards.
-fzf_paths=(
-  "${HOME}/.local/share/nvim/site/pack/packer/start/fzf"
-  "${HOME}/.vim/plugged/fzf"
+# Use a more universal theme for terminals without special font support.
+# https://apple.stackexchange.com/a/118500
+# https://stackoverflow.com/a/5203740/3344451
+_p10k_incompatible_emulators=(
+  Apple_Terminal
+  vscode
 )
-for fzf_path in "${fzf_paths[@]}"; do
-  if [ -d $fzf_path ]; then
-    _prepend_to_path "${fzf_path}/bin"
-    # Source fzf key bindings and auto-completion.
-    source "${fzf_path}/shell/key-bindings.zsh"
-    source "${fzf_path}/shell/completion.zsh"
-    break
-  fi
-done
+if [[ -n "${_p10k_incompatible_emulators[(r)$TERM_PROGRAM]}" ]]; then
+  ZSH_THEME='robbyrussell'
+fi
 
-# Configure fzf (if available).
+# These are the default OMZ plugins that we'll install.
+plugins=(
+  git
+  brew
+  history-substring-search
+  colored-man-pages
+  vi-mode
+  git-auto-fetch
+  fd
+  ripgrep
+  fast-syntax-highlighting
+)
+
+################################################################################
+# FZF setup
+################################################################################
 if _has fzf; then
   if _has fd; then
     # Use fd for fzf.
@@ -169,6 +95,109 @@ if _has fzf; then
   zstyle ':completion:*:descriptions' format '[%d]'
   zstyle ':fzf-tab:*' switch-group ',' '.'
 fi
+
+################################################################################
+# Editor setup
+################################################################################
+
+# Set Vim as the default editor.
+export EDITOR="vim"
+# Use Neovim instead of classic Vim (if available)
+if _has nvim; then
+  alias vim="nvim"
+  alias vi="nvim"
+  export EDITOR="nvim"
+fi
+
+################################################################################
+# Tmux setup
+################################################################################
+
+# Use 256 color for tmux.
+alias tmux="TERM=screen-256color-bce tmux"
+# Attempt to take over existing sessions before creating a new tmux session.
+TMUX_DEFAULT_SESSION="tmux"
+alias t="tmux -u a -d -t ${TMUX_DEFAULT_SESSION} 2> /dev/null || tmux -u new -s ${TMUX_DEFAULT_SESSION}"
+if [[ -z "$TMUX" ]]; then
+  # Switch to xterm if we're in a tmux session.
+  TERM="xterm-256color"
+fi
+
+################################################################################
+# Set up other environment variables, aliases, and options
+################################################################################
+
+# Make sure we're using UTF-8.
+export LANG=en_US.UTF-8
+export LC_CTYPE=en_US.UTF-8
+
+export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
+# Export theme for http://github.com/sharkdp/bat.
+export BAT_THEME="Solarized (dark)"
+
+# The bat executable may sometimes be called batcat on Debian/Ubuntu.
+if _has batcat; then
+  alias bat="batcat"
+fi
+
+# Set shell options.
+setopt correct # enable spelling suggestions
+setopt rmstarsilent # silence rm * confirmation
+
+# Add common bin directories to path.
+_prepend_to_path /usr/local/bin
+_prepend_to_path /usr/local/sbin
+_prepend_to_path $HOME/.local/bin
+
+# Decrease delay in entering normal mode in shell.
+# https://www.johnhawthorn.com/2012/09/vi-escape-delays/
+KEYTIMEOUT=1
+
+################################################################################
+# Source Oh-My-ZSH.
+################################################################################
+
+# All theme and plugin configs must come beforehand.
+# Sourcing this may have side-effects, so order matters.
+# For the most part, it seems like bindkey gets overwritten.
+# Hence they must be after the OMZ sourcing.
+source $ZSH/oh-my-zsh.sh
+
+################################################################################
+# Actions with side-effects after sourcing Oh-My-ZSH
+################################################################################
+
+# Set key bindings.
+bindkey -v # vi mode for shell
+bindkey -e # enable C-x-e for shell editor
+# Key bindings for history search.
+bindkey '\e[3~' delete-char
+bindkey '^R' history-incremental-search-backward
+# Explicity bind home and end keys (in case of terminal compatibility issues)
+bindkey "${terminfo[khome]}" beginning-of-line
+bindkey "${terminfo[kend]}" end-of-line
+
+# Alias `exa` as default `ls` command (if available).
+# This must come after OMZ. (The library overwrites this alias.)
+if _has exa; then
+  alias ls="exa"
+fi
+
+# Source fzf scripts via via local installation.
+# OMZ overwrites some of these scripts, so this must come afterwards.
+fzf_paths=(
+  "${HOME}/.local/share/nvim/site/pack/packer/start/fzf"
+  "${HOME}/.vim/plugged/fzf"
+)
+for fzf_path in "${fzf_paths[@]}"; do
+  if [ -d $fzf_path ]; then
+    _prepend_to_path "${fzf_path}/bin"
+    # Source fzf key bindings and auto-completion.
+    source "${fzf_path}/shell/key-bindings.zsh"
+    source "${fzf_path}/shell/completion.zsh"
+    break
+  fi
+done
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
