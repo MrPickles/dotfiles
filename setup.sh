@@ -157,6 +157,12 @@ install_zsh_extras() {
       https://github.com/zdharma-continuum/fast-syntax-highlighting.git \
       "${fsh_path}"
   fi
+  za_path=${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+  if [[ ! -d ${za_path} ]]; then
+    git clone --filter=blob:none \
+      https://github.com/zsh-users/zsh-autosuggestions \
+      "${za_path}"
+  fi
 }
 
 install_optional_extras() {

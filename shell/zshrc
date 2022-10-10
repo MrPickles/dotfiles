@@ -61,6 +61,7 @@ plugins=(
   fd
   ripgrep
   fast-syntax-highlighting
+  zsh-autosuggestions
 )
 
 ################################################################################
