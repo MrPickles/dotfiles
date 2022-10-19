@@ -44,7 +44,7 @@ local function on_attach(_, bufnr)
   require('lsp_signature').on_attach()
 end
 
-local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+local capabilities = require("cmp_nvim_lsp").default_capabilities()
 for _, server in ipairs(mason_lspconfig.get_installed_servers()) do
   lspconfig[server].setup {
     on_attach = on_attach,
