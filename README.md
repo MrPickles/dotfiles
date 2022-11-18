@@ -31,7 +31,7 @@ It'll otherwise work out of the box.
 These dotfiles contain the following software dependencies:
 
 * Linux, MacOS, or WSL
-* Neovim 0.7 (preferred) or Vim 8
+* Neovim (latest stable version)
 
 There currently is no Windows support.
 However, MacOS and most flavors of Linux should work fine.
@@ -187,8 +187,14 @@ command:
 docker build -t liuandrewk/dotfiles .
 ```
 
-The image will be a bit large (1 GB), so it's best saved for development
-purposes only.
+Then you can run it with the command below:
+
+```shell
+docker run -it liuandrewk/dotfiles
+```
+
+Note that this will be an ephemeral instance. Make sure to mount a volume if
+you'd like to persist your work.
 
 ## Teardown
 

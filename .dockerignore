@@ -8,5 +8,6 @@ Dockerfile
 
 # Non-critical repo files
 dotfiles.sh
+images/
 LICENSE
-README
+README.md
