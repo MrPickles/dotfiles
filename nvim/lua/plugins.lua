@@ -132,6 +132,7 @@ packer.startup(function(use)
   -- We would still like Neovim to manage fzf installation.
   use {
     'junegunn/fzf',
+    tag = '*',
     run = function()
       vim.fn['fzf#install']()
     end,
