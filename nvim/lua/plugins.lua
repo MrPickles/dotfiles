@@ -5,8 +5,8 @@ local bootstrap = vim.fn.empty(vim.fn.glob(install_path)) > 0
 -- For new installations, we may not have packer.
 -- We need to manually clone and install the package manager.
 if bootstrap then
-  vim.api.nvim_command('!git clone --filter=blob:none https://github.com/wbthomason/packer.nvim '..install_path)
-  vim.api.nvim_command('packadd packer.nvim')
+  vim.cmd('!git clone --filter=blob:none https://github.com/wbthomason/packer.nvim '..install_path)
+  vim.cmd('packadd packer.nvim')
 end
 
 local packer = require('packer')
@@ -104,7 +104,9 @@ packer.startup(function(use)
   -- Treesitter for better syntax highlighting and whatnot.
   use {
     'nvim-treesitter/nvim-treesitter',
-    config = "require('config.treesitter')",
+    config = function()
+      require('config.treesitter')
+    end,
     run = function()
       local ts_update = require('nvim-treesitter.install').update({ with_sync = true })
       ts_update()

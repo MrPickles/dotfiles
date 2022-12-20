@@ -6,7 +6,6 @@ vim.opt.background = 'dark' -- Set to dark mode.
 vim.opt.wrap = false -- Disable line wrap.
 vim.opt.number = true -- Show line numbers
 vim.opt.termguicolors = true -- Match terminal colors with GUI program.
-vim.cmd 'syntax on'
 
 -- Indentation settings
 vim.opt.tabstop = 2 -- Make tabs 2 characters wide.
@@ -19,9 +18,10 @@ vim.opt.smartcase = true -- Check case for queries with uppercase letters.
 vim.opt.hlsearch = true -- Highlight matching search queries.
 
 -- Return to last edit position when opening files.
-vim.cmd[[
-autocmd BufReadPost *
-\ if line("'\"") > 0 && line("'\"") <= line("$") |
-\   exe "normal! g`\"" |
-\ endif
-]]
+vim.cmd([[
+  autocmd BufReadPost *
+  \ if line("'\"") > 0 && line("'\"") <= line("$") |
+  \   exe "normal! g`\"" |
+  \ endif
+]])
+vim.cmd('syntax on')
