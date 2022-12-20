@@ -41,12 +41,12 @@ cmp.setup {
   },
   -- Add sources to the completion engine. (These are the dependencies we configured.)
   sources = cmp.config.sources({
-    {name = 'nvim_lsp'},
-    {name = 'nvim_lua'},
-    {name = 'luasnip'},
-    {name = 'buffer'},
-    {name = 'path'},
-    {name = 'calc'},
+    { name = 'nvim_lsp' },
+    { name = 'nvim_lua' },
+    { name = 'luasnip' },
+    { name = 'buffer' },
+    { name = 'path' },
+    { name = 'calc' },
   }),
   formatting = {
     -- Format completions with an emoji.

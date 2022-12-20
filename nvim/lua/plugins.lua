@@ -1,17 +1,17 @@
-local install_path = vim.fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
-local compile_path = install_path..'/plugin/packer_compiled.lua'
+local install_path = vim.fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
+local compile_path = install_path .. '/plugin/packer_compiled.lua'
 local bootstrap = vim.fn.empty(vim.fn.glob(install_path)) > 0
 
 -- For new installations, we may not have packer.
 -- We need to manually clone and install the package manager.
 if bootstrap then
-  vim.cmd('!git clone --filter=blob:none https://github.com/wbthomason/packer.nvim '..install_path)
+  vim.cmd('!git clone --filter=blob:none https://github.com/wbthomason/packer.nvim ' .. install_path)
   vim.cmd('packadd packer.nvim')
 end
 
 local packer = require('packer')
 -- Specify a custom compile path, since we don't want it next to our configs.
-packer.init({compile_path = compile_path})
+packer.init({ compile_path = compile_path })
 packer.startup(function(use)
   -- Let packer.nvim manage itself.
   use 'wbthomason/packer.nvim'
@@ -51,7 +51,7 @@ packer.startup(function(use)
   }
   use {
     'kyazdani42/nvim-tree.lua',
-    requires = {'kyazdani42/nvim-web-devicons'},
+    requires = { 'kyazdani42/nvim-web-devicons' },
     config = function()
       require('nvim-tree').setup()
     end,
@@ -63,7 +63,7 @@ packer.startup(function(use)
   use 'tpope/vim-rhubarb'
   use {
     'lewis6991/gitsigns.nvim',
-    requires = {'nvim-lua/plenary.nvim'},
+    requires = { 'nvim-lua/plenary.nvim' },
     config = function()
       require('gitsigns').setup()
     end,
@@ -121,10 +121,10 @@ packer.startup(function(use)
   use {
     'nvim-telescope/telescope.nvim',
     requires = {
-      {'nvim-lua/plenary.nvim'},
-      {'nvim-treesitter/nvim-treesitter'},
-      {'kyazdani42/nvim-web-devicons'},
-      {'nvim-telescope/telescope-fzf-native.nvim', run = 'make'},
+      { 'nvim-lua/plenary.nvim' },
+      { 'nvim-treesitter/nvim-treesitter' },
+      { 'kyazdani42/nvim-web-devicons' },
+      { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' },
     },
     config = function()
       require('config.telescope')
