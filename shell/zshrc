@@ -70,6 +70,7 @@ plugins=(
 
 # Add fzf to path. We use locally-installed versions of fzf.
 fzf_paths=(
+  "${HOME}/.local/share/nvim/lazy/fzf"
   "${HOME}/.local/share/nvim/site/pack/packer/start/fzf"
   "${HOME}/.vim/plugged/fzf"
 )

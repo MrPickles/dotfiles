@@ -1,7 +1,4 @@
 -- Abbreviate common commands.
-vim.cmd('command! PI PackerInstall')
-vim.cmd('command! PS PackerSync')
-vim.cmd('command! PST PackerStatus')
 vim.cmd('command! LSP LspInstall')
 vim.cmd('command! LS Mason')
 

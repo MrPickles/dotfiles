@@ -51,12 +51,10 @@ RUN /home/${USER}/.oh-my-zsh/custom/themes/powerlevel10k/gitstatus/install
 
 # Install Neovim plugins
 #
-# 1) The first headless run bootstraps Packer.
-# 2) The second headless run installs the Packer plugins.
-# 3) Then, we install the Treesitter parsers.
-# 4) The fourth run installs the Lua LSP, since that may not have finished.
-RUN nvim --headless +qa \
-  && nvim --headless -c "autocmd User PackerComplete quitall" -c "PackerSync" \
+# 1) The first headless run bootstraps Neovim and lazy.nvim.
+# 2) The second headless run ensures that the Treesitter parsers are installed.
+# 4) The third run installs the Lua LSP, since that may not have finished.
+RUN nvim --headless "+Lazy! sync" +qa \
   && nvim --headless -c "TSInstallSync all" +qa \
   && nvim --headless -c "MasonInstall lua-language-server" +qa
 
