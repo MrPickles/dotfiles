@@ -1,3 +1,4 @@
+-- Bootstrap lazy.nvim plugin manager.
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -11,15 +12,15 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+-- Source basic settings.
+require("settings")
 
-require('settings')
-require('keybindings')
-
+-- Source plugins.
 require("lazy").setup("plugins")
 
 -- Source custom configs (not under version control).
 vim.cmd([[
-  if filereadable(glob('~/.vimrc.local'))
+  if filereadable(glob("~/.vimrc.local"))
     source ~/.vimrc.local
   endif
 ]])

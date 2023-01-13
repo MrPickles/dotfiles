@@ -25,4 +25,27 @@ vim.cmd([[
   \   exe "normal! g`\"" |
   \ endif
 ]])
-vim.cmd('syntax on')
+
+-- Alias most permutations of capitalized "wqa" commands to work.
+vim.cmd("command! Q q")
+vim.cmd("command! W w")
+vim.cmd("command! WQ wq")
+vim.cmd("command! Wq wq")
+vim.cmd("command! WA wa")
+vim.cmd("command! Wa wa")
+vim.cmd("command! QA qa")
+vim.cmd("command! Qa qa")
+vim.cmd("command! Wqa wqa")
+vim.cmd("command! WQa wqa")
+vim.cmd("command! WQA wqa")
+
+-- See `:help vim.diagnostic.*` for documentation on any of the below functions
+local opts = { noremap = true, silent = true }
+vim.keymap.set("n", "<space>e", vim.diagnostic.open_float, opts)
+vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
+vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
+vim.keymap.set("n", "<space>q", vim.diagnostic.setloclist, opts)
+
+-- Map <ctrl-l> and <ctrl-h> to go to the next and previous buffers.
+vim.keymap.set("n", "<C-l>", ":bnext<cr>", opts)
+vim.keymap.set("n", "<C-h>", ":bprev<cr>", opts)
