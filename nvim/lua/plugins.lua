@@ -93,6 +93,8 @@ packer.startup(function(use)
       'hrsh7th/cmp-path',
       'hrsh7th/cmp-calc',
       'onsails/lspkind-nvim',
+      'saadparwaiz1/cmp_luasnip',
+      'rafamadriz/friendly-snippets',
     },
     config = function()
       require('config.cmp')

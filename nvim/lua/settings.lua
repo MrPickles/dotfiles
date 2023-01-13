@@ -6,6 +6,7 @@ vim.opt.background = 'dark' -- Set to dark mode.
 vim.opt.wrap = false -- Disable line wrap.
 vim.opt.number = true -- Show line numbers
 vim.opt.termguicolors = true -- Match terminal colors with GUI program.
+vim.opt.signcolumn = 'yes' -- Reserve space for diagnostic icons
 
 -- Indentation settings
 vim.opt.tabstop = 2 -- Make tabs 2 characters wide.
