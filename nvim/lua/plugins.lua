@@ -44,7 +44,7 @@ packer.startup(function(use)
   }
   use {
     'akinsho/bufferline.nvim',
-    requires = 'kyazdani42/nvim-web-devicons',
+    requires = 'nvim-tree/nvim-web-devicons',
     config = function()
       require('config.bufferline')
     end,
@@ -56,7 +56,6 @@ packer.startup(function(use)
       require('nvim-tree').setup()
     end,
   }
-  use 'liuchengxu/vista.vim'
 
   -- Plugins for git and version control.
   use 'tpope/vim-fugitive'
@@ -77,7 +76,6 @@ packer.startup(function(use)
     requires = {
       'williamboman/mason-lspconfig.nvim',
       'neovim/nvim-lspconfig',
-      'ray-x/lsp_signature.nvim',
     },
     config = function()
       require('config.lsp')
@@ -114,8 +112,6 @@ packer.startup(function(use)
   }
   -- Show what function/class you're in.
   use 'nvim-treesitter/nvim-treesitter-context'
-  -- Vim Polyglot for the languages not supported by Treesitter.
-  use 'sheerun/vim-polyglot'
 
   -- Telescope for better searching and whatnot.
   use {
@@ -123,7 +119,7 @@ packer.startup(function(use)
     requires = {
       { 'nvim-lua/plenary.nvim' },
       { 'nvim-treesitter/nvim-treesitter' },
-      { 'kyazdani42/nvim-web-devicons' },
+      { 'nvim-tree/nvim-web-devicons' },
       { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' },
     },
     config = function()
@@ -145,12 +141,6 @@ packer.startup(function(use)
 
   -- Miscellaneous plugins.
   use 'psliwka/vim-smoothie'
-  use {
-    'nacro90/numb.nvim',
-    config = function()
-      require('numb').setup()
-    end,
-  }
 
   -- Automatically sync all packages if we're bootstrapping.
   if bootstrap then
