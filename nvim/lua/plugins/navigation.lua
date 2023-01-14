@@ -65,8 +65,8 @@ return {
       defaults = {
         mappings = {
           i = {
-            ["<C-j>"] = 'move_selection_next',
-            ["<C-k>"] = 'move_selection_previous',
+            ["<C-j>"] = "move_selection_next",
+            ["<C-k>"] = "move_selection_previous",
           }
         }
       },
@@ -74,7 +74,7 @@ return {
     config = function(_, opts)
       local telescope = require("telescope")
       telescope.setup(opts)
-      telescope.load_extension('fzf')
+      telescope.load_extension("fzf")
     end,
   },
 }

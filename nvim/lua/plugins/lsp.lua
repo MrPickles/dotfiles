@@ -9,11 +9,11 @@ return {
       require("mason").setup()
 
       local mason_lspconfig = require("mason-lspconfig")
-      mason_lspconfig.setup {
+      mason_lspconfig.setup({
         ensure_installed = {
           "sumneko_lua",
         },
-      }
+      })
 
       local function on_attach(_, bufnr)
         -- Enable completion triggered by <c-x><c-o>
