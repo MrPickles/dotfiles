@@ -50,11 +50,7 @@ RUN ./setup.sh -t build
 RUN /home/${USER}/.oh-my-zsh/custom/themes/powerlevel10k/gitstatus/install
 
 # Install Neovim plugins
-#
-# 1) The first headless run bootstraps Neovim and lazy.nvim.
-# 4) The second run installs the Lua LSP, since that may not have finished.
-RUN nvim --headless "+Lazy! sync" +qa \
-  && nvim --headless -c "MasonInstall lua-language-server" +qa
+RUN nvim --headless "+Lazy! sync" +qa
 
 # Install vim plugins
 RUN vim +PlugInstall +qa

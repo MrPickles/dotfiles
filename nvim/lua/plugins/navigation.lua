@@ -1,5 +1,5 @@
 return {
-  -- Neovim manage our fzf installation.
+  -- Neovim manages our fzf installation.
   -- It's the latest stable version of the binary.
   {
     "junegunn/fzf",
@@ -15,7 +15,7 @@ return {
     "nvim-treesitter/nvim-treesitter",
     opts = {
       ensure_installed = {
-        "c",
+        "bash",
         "lua",
         "vim",
         "help"
