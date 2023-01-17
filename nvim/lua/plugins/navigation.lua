@@ -1,15 +1,4 @@
 return {
-  -- Neovim manages our fzf installation.
-  -- It's the latest stable version of the binary.
-  {
-    "junegunn/fzf",
-    version = "*",
-    build = function()
-      vim.fn["fzf#install"]()
-    end,
-    priority = 100,
-  },
-
   -- Treesitter gives us better syntax highlighting than regex-based parsers.
   {
     "nvim-treesitter/nvim-treesitter",

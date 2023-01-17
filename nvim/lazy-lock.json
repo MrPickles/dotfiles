@@ -10,6 +10,7 @@
   "feline.nvim": { "branch": "master", "commit": "d48b6f92c6ccdd6654c956f437be49ea160b5b0c" },
   "friendly-snippets": { "branch": "main", "commit": "320865dfe76c03a5c60513d4f34ca22effae56f2" },
   "fzf": { "branch": "master", "commit": "20230117636c9dfa3ed6f6428c5bc4c51b02f60a" },
+  "fzf.vim": { "branch": "master", "commit": "bdf48c282ad2174c25c059b3cdb7956427b07a99" },
   "gitsigns.nvim": { "branch": "main", "commit": "addd6e174a85fc1c4007ab0b65d77e6555b417bf" },
   "gofmt.vim": { "branch": "master", "commit": "7ebf69493e04fcb5d5374dbc2a056cc82e801bfd" },
   "indent-blankline.nvim": { "branch": "master", "commit": "c4c203c3e8a595bc333abaf168fcb10c13ed5fb7" },
