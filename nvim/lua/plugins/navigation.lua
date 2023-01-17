@@ -37,12 +37,7 @@ return {
   },
 
   -- Show what function/class you're in.
-  {
-    "nvim-treesitter/nvim-treesitter-context",
-    dependencies = {
-      { "nvim-treesitter/nvim-treesitter" },
-    },
-  },
+  { "nvim-treesitter/nvim-treesitter-context" },
 
   -- Telescope for better searching and whatnot.
   {
@@ -59,7 +54,6 @@ return {
       vim.keymap.set("n", "<C-p>", ":Telescope find_files<cr>", opts)
       -- Set <ctrl-g> to open Telescope grep.
       vim.keymap.set("n", "<C-g>", ":Telescope live_grep<cr>", opts)
-
     end,
     opts = {
       defaults = {

@@ -1,16 +1,10 @@
 return {
+  { "williamboman/mason.nvim", config = true },
+  { "williamboman/mason-lspconfig.nvim", config = true },
   {
-    "williamboman/mason.nvim",
-    dependencies = {
-      "williamboman/mason-lspconfig.nvim",
-      "neovim/nvim-lspconfig",
-    },
+    "neovim/nvim-lspconfig",
+    dependencies = { "williamboman/mason-lspconfig.nvim" },
     config = function()
-      require("mason").setup()
-
-      local mason_lspconfig = require("mason-lspconfig")
-      mason_lspconfig.setup()
-
       local function on_attach(_, bufnr)
         -- Enable completion triggered by <c-x><c-o>
         vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
@@ -34,8 +28,8 @@ return {
       end
 
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
-      for _, server in ipairs(mason_lspconfig.get_installed_servers()) do
-        require("lspconfig")[server].setup {
+      for _, server in ipairs(require("mason-lspconfig").get_installed_servers()) do
+        require("lspconfig")[server].setup({
           on_attach = on_attach,
           capabilities = capabilities,
           settings = {
@@ -45,7 +39,7 @@ return {
               },
             },
           },
-        }
+        })
       end
     end,
   },
