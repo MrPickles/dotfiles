@@ -26,6 +26,10 @@ return {
   {
     "akinsho/bufferline.nvim",
     dependencies = { "nvim-tree/nvim-web-devicons" },
+    init = function()
+      -- Required setting for this plugin.
+      vim.opt.termguicolors = true
+    end,
     opts = {
       options = {
         offsets = {
