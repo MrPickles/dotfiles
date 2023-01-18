@@ -1,9 +1,10 @@
 return {
-  { "williamboman/mason.nvim", config = true },
-  { "williamboman/mason-lspconfig.nvim", config = true },
   {
     "neovim/nvim-lspconfig",
-    dependencies = { "williamboman/mason-lspconfig.nvim" },
+    dependencies = {
+      { "williamboman/mason.nvim", config = true },
+      { "williamboman/mason-lspconfig.nvim", config = true },
+    },
     config = function()
       local function on_attach(_, bufnr)
         -- Enable completion triggered by <c-x><c-o>

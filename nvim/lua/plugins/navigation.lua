@@ -2,6 +2,10 @@ return {
   -- Treesitter gives us better syntax highlighting than regex-based parsers.
   {
     "nvim-treesitter/nvim-treesitter",
+    dependencies = {
+      -- Show what function/class you're in.
+      "nvim-treesitter/nvim-treesitter-context",
+    },
     opts = {
       ensure_installed = {
         "bash",
@@ -24,9 +28,6 @@ return {
       ts_update()
     end,
   },
-
-  -- Show what function/class you're in.
-  { "nvim-treesitter/nvim-treesitter-context" },
 
   -- Telescope for better searching and whatnot.
   {

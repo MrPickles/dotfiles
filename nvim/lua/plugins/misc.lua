@@ -8,11 +8,11 @@ return {
   -- It's the latest stable version of the binary.
   {
     "junegunn/fzf",
+    dependencies = { "junegunn/fzf.vim" },
     version = "*",
     build = function()
       vim.fn["fzf#install"]()
     end,
     priority = 100,
   },
-  { "junegunn/fzf.vim" },
 }
