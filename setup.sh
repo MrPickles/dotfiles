@@ -26,7 +26,7 @@ while getopts :ht: option; do
       elif [[ "clean" =~ ^${OPTARG} ]]; then
         BUILD=
       elif [[ "shellcheck" =~ ^${OPTARG} ]]; then
-        shellcheck -x -- *.sh
+        shellcheck -x -- **/*.sh
         exit 0
       else
         echo "${usage}" >&2
@@ -202,7 +202,12 @@ main() {
   cd "$(dirname "$0")" || exit
 
   # Symlink (or unlink) the dotfiles.
-  mapfile -t FILES_TO_SYMLINK < <(find home -type f)
+  # Technically, this won't work for odd filenames, e.g. those with spaces or
+  # newlines. However, we don't care in this case and would rather have broader
+  # compatibility.
+  #
+  # shellcheck disable=SC2207
+  FILES_TO_SYMLINK=($(find home -type f))
   for dotfile in "${FILES_TO_SYMLINK[@]}"; do
     sourceFile="$(pwd)/${dotfile}"
     targetFile="${HOME}/.$(printf "%s" "${dotfile}" | sed "s/.*\/\(.*\)/\1/g")"
