@@ -42,16 +42,15 @@ while getopts :ht: option; do
 done
 
 FILES_TO_SYMLINK=(
-  'git/gitattributes'
-  'git/main.gitconfig'
-  'git/gitignore'
+  'home/main.gitconfig'
+  'home/gitignore'
 
-  'shell/ignore'
-  'shell/ripgreprc'
-  'shell/tmux.conf'
-  'shell/vimrc'
-  'shell/zshrc'
-  'shell/p10k.zsh'
+  'home/ignore'
+  'home/ripgreprc'
+  'home/tmux.conf'
+  'home/vimrc'
+  'home/zshrc'
+  'home/p10k.zsh'
 )
 
 FOLDERS_TO_SYMLINK=(

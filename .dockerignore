@@ -4,10 +4,10 @@ Dockerfile
 
 # Git artifacts
 .git
+.github
 .gitignore
 
 # Non-critical repo files
 dotfiles.sh
-images/
 LICENSE
 README.md
