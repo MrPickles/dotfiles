@@ -10,9 +10,9 @@ BUILD=true
 INTERACTIVE=
 
 while getopts :ht: option; do
-  case $option in
+  case ${option} in
     h)
-      echo "$usage"
+      echo "${usage}"
       echo
       echo "OPTIONS"
       echo "-h            Output verbose usage message"
@@ -29,33 +29,17 @@ while getopts :ht: option; do
         shellcheck -x -- *.sh
         exit 0
       else
-        echo "$usage" >&2
+        echo "${usage}" >&2
         exit 1
       fi;;
     \?)
-      echo "Unknown option: -$OPTARG" >&2
+      echo "Unknown option: -${OPTARG}" >&2
       exit 1;;
     :)
-      echo "Missing argument for -$OPTARG" >&2
+      echo "Missing argument for -${OPTARG}" >&2
       exit 1;;
   esac
 done
-
-FILES_TO_SYMLINK=(
-  'home/main.gitconfig'
-  'home/gitignore'
-
-  'home/ignore'
-  'home/ripgreprc'
-  'home/tmux.conf'
-  'home/vimrc'
-  'home/zshrc'
-  'home/p10k.zsh'
-)
-
-FOLDERS_TO_SYMLINK=(
-  'nvim'
-)
 
 print_success() {
   if [[ $BUILD ]]; then
@@ -179,74 +163,87 @@ install_optional_extras() {
 }
 
 link_file() {
-  local sourceFile=$1
-  local targetFile=$2
+  local source=$1
+  local target=$2
 
-  if [ ! -e "$targetFile" ]; then
-    execute "ln -fs $sourceFile $targetFile" "$targetFile → $sourceFile"
-  elif [ "$(readlink "$targetFile")" == "$sourceFile" ]; then
-    print_success "$targetFile → $sourceFile"
+  if [ ! -e "${target}" ]; then
+    # If the target location doesn't exist, we can safely symlink.
+    execute "ln -fs ${source} ${target}" "${target} → ${source}"
+  elif [ "$(readlink "${target}")" == "${source}" ]; then
+    # If the target location is already symlinked, we do nothing.
+    print_success "${target} → ${source}"
   elif [[ $INTERACTIVE ]]; then
-    ask_for_confirmation "'$targetFile' already exists, do you want to overwrite it?"
+    # If there's a potential conflict, we prompt before overwriting.
+    ask_for_confirmation "'${target}' already exists, do you want to overwrite it?"
     if answer_is_yes; then
-      rm -rf "$targetFile"
-      execute "ln -fs $sourceFile $targetFile" "$targetFile → $sourceFile"
+      rm -rf "${target}"
+      execute "ln -fs ${source} ${target}" "${target} → ${source}"
     else
-      print_error "$targetFile → $sourceFile"
+      print_error "${target} → ${source}"
     fi
   else
     # This this isn't interactive, create a backup of the original file.
-    execute "cp $targetFile $targetFile.bak" "$targetFile → $targetFile.bak"
-    execute "ln -fs $sourceFile $targetFile" "$targetFile → $sourceFile"
+    execute "cp ${target} ${target}.bak" "${target} → ${target}.bak"
+    execute "ln -fs ${source} ${target}" "${target} → ${source}"
   fi
 }
 
 unlink_file() {
-  local sourceFile=$1
-  local targetFile=$2
+  local source=$1
+  local target=$2
 
-  if [ "$(readlink "$targetFile")" == "$sourceFile" ]; then
-    execute "unlink $targetFile" "$targetFile"
+  if [ "$(readlink "${target}")" == "${source}" ]; then
+    execute "unlink ${target}" "${target}"
   fi
 }
 
-# Symlink (or unlink) the dotfiles.
-for i in "${FILES_TO_SYMLINK[@]}"; do
-  sourceFile="$(pwd)/$i"
-  targetFile="$HOME/.$(printf "%s" "$i" | sed "s/.*\/\(.*\)/\1/g")"
+main() {
+  # Run the symlinking from the repo root.
+  cd "$(dirname "$0")" || exit
+
+  # Symlink (or unlink) the dotfiles.
+  mapfile -t FILES_TO_SYMLINK < <(find home -type file)
+  for dotfile in "${FILES_TO_SYMLINK[@]}"; do
+    sourceFile="$(pwd)/${dotfile}"
+    targetFile="${HOME}/.$(printf "%s" "${dotfile}" | sed "s/.*\/\(.*\)/\1/g")"
+
+    if [[ $BUILD ]]; then
+      link_file "$sourceFile" "$targetFile"
+    else
+      unlink_file "$sourceFile" "$targetFile"
+    fi
+  done
+
+  # Symlink (or unlink) folders in the ~/.config directory.
+  mkdir -p "${HOME}/.config"
+  FOLDERS_TO_SYMLINK=(
+    'nvim'
+  )
+  for configFolder in "${FOLDERS_TO_SYMLINK[@]}"; do
+    sourceFolder="$(pwd)/$configFolder"
+    targetFolder="${HOME}/.config/$(printf "%s" "${configFolder}" | sed "s/.*\/\(.*\)/\1/g")"
+
+    if [[ $BUILD ]]; then
+      link_file "$sourceFolder" "$targetFolder"
+    else
+      unlink_file "$sourceFolder" "$targetFolder"
+    fi
+  done
 
   if [[ $BUILD ]]; then
-    link_file "$sourceFile" "$targetFile"
+    # Install zsh (if not available) and oh-my-zsh and p10k.
+    install_zsh
+    install_zsh_extras
+    if ! [[ $INTERACTIVE ]]; then
+      install_optional_extras
+    fi
+
+    # Link gitconfig.
+    git config --global include.path ~/.main.gitconfig
   else
-    unlink_file "$sourceFile" "$targetFile"
+    # Unlink gitconfig.
+    git config --global --unset include.path
   fi
-done
+}
 
-
-# Symlink (or unlink) folders in the ~/.config directory.
-mkdir -p "${HOME}/.config"
-for i in "${FOLDERS_TO_SYMLINK[@]}"; do
-  sourceFile="$(pwd)/$i"
-  targetFile="$HOME/.config/$(printf "%s" "$i" | sed "s/.*\/\(.*\)/\1/g")"
-
-  if [[ $BUILD ]]; then
-    link_file "$sourceFile" "$targetFile"
-  else
-    unlink_file "$sourceFile" "$targetFile"
-  fi
-done
-
-if [[ $BUILD ]]; then
-  # Install zsh (if not available) and oh-my-zsh and p10k.
-  install_zsh
-  install_zsh_extras
-  if ! [[ $INTERACTIVE ]]; then
-    install_optional_extras
-  fi
-
-  # Link gitconfig.
-  git config --global include.path ~/.main.gitconfig
-else
-  # Unlink gitconfig.
-  git config --global --unset include.path
-fi
+main
