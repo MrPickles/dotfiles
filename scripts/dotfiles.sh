@@ -6,6 +6,8 @@
 # curl -L andrew.cloud/dotfiles.sh | sh
 # or
 # wget -qO- andrew.cloud/dotfiles.sh | sh
+# or
+# curl https://raw.githubusercontent.com/MrPickles/dotfiles/master/scripts/dotfiles.sh | sh
 
 { # This ensures the entire script is downloaded.
 

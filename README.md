@@ -147,6 +147,8 @@ and symlinks the dotfiles to your home directory.
 curl -L andrew.cloud/dotfiles.sh | sh
 # or
 wget -qO- andrew.cloud/dotfiles.sh | sh
+# or
+# curl https://raw.githubusercontent.com/MrPickles/dotfiles/master/scripts/dotfiles.sh | sh
 ```
 
 Alternatively, you can manually clone the repository and run the `setup.sh`
