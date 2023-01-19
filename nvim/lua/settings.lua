@@ -11,7 +11,14 @@ vim.opt.signcolumn = 'yes' -- Reserve space for diagnostic icons
 -- Indentation settings
 vim.opt.tabstop = 2 -- Make tabs 2 characters wide.
 vim.opt.shiftwidth = 2 -- Indent by 2 spaces by default.
-vim.opt.expandtab = true -- Pressing tab converts to spaces.
+vim.opt.expandtab = true -- Pressing tab converts to spaces...
+-- ...except for Makefiles and Go, where we explicitly want tabs.
+vim.api.nvim_create_autocmd("Filetype", {
+  pattern = { "go", "make" },
+  callback = function()
+    vim.opt.expandtab = false
+  end,
+})
 
 -- Search settings.
 vim.opt.ignorecase = true -- Ignore case sensitivity.
