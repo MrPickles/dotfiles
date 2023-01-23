@@ -99,14 +99,14 @@ install_zsh() {
     # If zsh isn't installed, get the platform of the current machine and
     # install zsh with the appropriate package manager.
     platform=$(uname);
-    if [[ $platform == 'Linux' ]]; then
+    if [[ $platform == "Linux" ]]; then
       if [[ -f /etc/redhat-release ]]; then
         sudo yum install zsh
       fi
       if [[ -f /etc/debian_version ]]; then
         sudo apt-get -y install zsh
       fi
-    elif [[ $platform == 'Darwin' ]]; then
+    elif [[ $platform == "Darwin" ]]; then
       brew install zsh
     fi
   fi
@@ -132,7 +132,7 @@ install_zsh_extras() {
   THEME_PATH="${ZSH_CUSTOM}/themes/${THEME_REPO_URL##*/}"
   THEME_VERSION_TAG="v1.17.0"
   if [[ ! -d "${THEME_PATH}" ]]; then
-    git clone --filter=blob:none --branch v1.17.0 "${THEME_REPO_URL}" "${THEME_PATH}"
+    git clone --filter=blob:none --branch "${THEME_VERSION_TAG}" "${THEME_REPO_URL}" "${THEME_PATH}"
   else
     git -C "${THEME_PATH}" fetch
     git -C "${THEME_PATH}" checkout "${THEME_VERSION_TAG}"
@@ -156,9 +156,9 @@ install_zsh_extras() {
 
 install_optional_extras() {
   platform=$(uname);
-  if [[ $platform == 'Darwin' ]]; then
+  if [[ $platform == "Darwin" ]]; then
     brew install ripgrep fd exa bat git-delta neovim
-  elif [[ $platform == 'Linux' ]]; then
+  elif [[ $platform == "Linux" ]]; then
     if [[ -f /etc/debian_version ]]; then
       sudo apt-get -y install bat exa fd-find ripgrep
       echo "Please install neovim and git-delta yourself."
@@ -228,7 +228,7 @@ main() {
   # Symlink (or unlink) folders in the ~/.config directory.
   mkdir -p "${HOME}/.config"
   FOLDERS_TO_SYMLINK=(
-    'nvim'
+    "nvim"
   )
   for configFolder in "${FOLDERS_TO_SYMLINK[@]}"; do
     sourceFolder="$(pwd)/$configFolder"
