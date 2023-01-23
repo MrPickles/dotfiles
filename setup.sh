@@ -117,35 +117,41 @@ install_zsh() {
 }
 
 install_zsh_extras() {
-  # Clone Oh My Zsh if it isn't already present
-  if [[ ! -d $HOME/.oh-my-zsh/ ]]; then
-    git clone --filter=blob:none https://github.com/robbyrussell/oh-my-zsh.git "$HOME/.oh-my-zsh"
+  ZSH=${HOME}/.oh-my-zsh
+  ZSH_CUSTOM="${ZSH_CUSTOM:-${ZSH}/custom}"
+
+  # Clone or update Oh My Zsh.
+  if [[ ! -d "${ZSH}" ]]; then
+    git clone --filter=blob:none https://github.com/robbyrussell/oh-my-zsh "${ZSH}"
+  else
+    git -C "${ZSH}" pull
   fi
-  # Clone Powerlevel10k if it isn't already present.
-  if [[ ! -d $HOME/.oh-my-zsh/custom/themes/powerlevel10k ]]; then
-    git clone --filter=blob:none \
-      --branch v1.17.0 \
-      https://github.com/romkatv/powerlevel10k.git \
-      "$HOME/.oh-my-zsh/custom/themes/powerlevel10k"
+
+  # Clone or update Powerlevel10k.
+  THEME_REPO_URL="https://github.com/romkatv/powerlevel10k"
+  THEME_PATH="${ZSH_CUSTOM}/themes/${THEME_REPO_URL##*/}"
+  THEME_VERSION_TAG="v1.17.0"
+  if [[ ! -d "${THEME_PATH}" ]]; then
+    git clone --filter=blob:none --branch v1.17.0 "${THEME_REPO_URL}" "${THEME_PATH}"
+  else
+    git -C "${THEME_PATH}" fetch
+    git -C "${THEME_PATH}" checkout "${THEME_VERSION_TAG}"
   fi
-  ft_path=${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/fzf-tab
-  if [[ ! -d ${ft_path} ]]; then
-    git clone --filter=blob:none \
-      https://github.com/Aloxaf/fzf-tab \
-      "${ft_path}"
-  fi
-  fsh_path=${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting
-  if [[ ! -d ${fsh_path} ]]; then
-    git clone --filter=blob:none \
-      https://github.com/zdharma-continuum/fast-syntax-highlighting.git \
-      "${fsh_path}"
-  fi
-  za_path=${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-  if [[ ! -d ${za_path} ]]; then
-    git clone --filter=blob:none \
-      https://github.com/zsh-users/zsh-autosuggestions \
-      "${za_path}"
-  fi
+
+  # Install or update custom oh-my-zsh plugins.
+  CUSTOM_PLUGIN_REPOS=(
+    "https://github.com/Aloxaf/fzf-tab"
+    "https://github.com/zdharma-continuum/fast-syntax-highlighting"
+    "https://github.com/zsh-users/zsh-autosuggestions"
+  )
+  for REPO_URL in "${CUSTOM_PLUGIN_REPOS[@]}"; do
+    PLUGIN_PATH="${ZSH_CUSTOM}/plugins/${REPO_URL##*/}"
+    if [[ ! -d "${PLUGIN_PATH}" ]]; then
+      git clone --filter=blob:none "${REPO_URL}" "${PLUGIN_PATH}"
+    else
+      git -C "${PLUGIN_PATH}" pull
+    fi
+  done
 }
 
 install_optional_extras() {
