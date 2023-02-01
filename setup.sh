@@ -137,16 +137,14 @@ link_file() {
   local source=$1
   local target=$2
 
-  if [[ ! -e "${target}" || "$(readlink "${target}")" == "${source}" ]]; then
-    # If the target location doesn't exist, we can safely symlink.
-    # If the target location is already symlinked, symlinking will be a no-op.
-    execute "ln -fs ${source} ${target}" "${target} → ${source}"
-  else
-    # Otherwise, create a backup of the original file.
+  # If the target location exists and it's not our target symlink, we create a backup.
+  if [[ -e "${target}" && "$(readlink "${target}")" != "${source}" ]]; then
     epoch=$(date +%s)
-    execute "cp ${target} ${target}.${epoch}.bak" "${target} → ${target}.${epoch}.bak"
-    execute "ln -fs ${source} ${target}" "${target} → ${source}"
+    execute "cp ${target} ${target}.${epoch}.bak" "Backing up ${target} → ${target}.${epoch}.bak"
   fi
+
+  # Symlink the dotfile.
+  execute "ln -fs ${source} ${target}" "Linking ${target} → ${source}"
 }
 
 unlink_file() {
@@ -154,7 +152,7 @@ unlink_file() {
   local target=$2
 
   if [ "$(readlink "${target}")" == "${source}" ]; then
-    execute "unlink ${target}" "${target}"
+    execute "unlink ${target}" "Unlinking ${target} → ${source}"
   fi
 }
 
