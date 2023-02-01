@@ -146,7 +146,7 @@ link_file() {
   # If the target location exists and it's not our target symlink, we create a backup.
   if [[ -e "${target}" ]]; then
     epoch=$(date +%s)
-    execute "cp ${target} ${target}.${epoch}.bak" "Backing up ${target} → ${target}.${epoch}.bak"
+    execute "cp -r ${target} ${target}.${epoch}.bak" "Backing up ${target} → ${target}.${epoch}.bak"
   fi
 
   # Symlink the dotfile.
