@@ -9,15 +9,19 @@ usage="Usage: $0 [-h] [-t <build|clean|shellcheck>]"
 BUILD=true
 INTERACTIVE=
 
+# Run the symlinking from the repo root.
+cd "$(dirname "$0")" || exit
+
 while getopts :ht: option; do
   case ${option} in
     h)
       echo "${usage}"
       echo
       echo "OPTIONS"
-      echo "-h            Output verbose usage message"
-      echo "-t build      Set up dotfile symlinks and configure oh-my-zsh"
-      echo "-t clean      Remove all existing dotfiles symlinks"
+      echo "-h                 Output verbose usage message"
+      echo "-t build           Set up dotfile symlinks and configure oh-my-zsh"
+      echo "-t clean           Remove all existing dotfiles symlinks"
+      echo "-t shellcheck      Remove all existing dotfiles symlinks"
       exit;;
     t)
       INTERACTIVE=true
@@ -41,56 +45,17 @@ while getopts :ht: option; do
   esac
 done
 
-print_success() {
-  if [[ $BUILD ]]; then
-    # Print output in green
-    printf "\e[0;32m  [✔] %s\e[0m\n" "$1"
-  else
-    # Print output in cyan
-    printf "\e[0;36m  [✔] Unlinked %s\e[0m\n" "$1"
-  fi
-}
-
-print_error() {
-  if [[ $BUILD ]]; then
-    # Print output in red
-    printf "\e[0;31m  [✖] %s %s\e[0m\n" "$1" "$2"
-  else
-    # Print output in red
-    printf "\e[0;31m  [✖] Failed to unlink %s %s\e[0m\n" "$1" "$2"
-  fi
-}
-
-print_question() {
-  # Print output in yellow
-  printf "\e[0;33m  [?] %s\e[0m" "$1"
-}
-
 execute() {
-  $1 &> /dev/null
-  print_result $? "${2:-$1}"
-}
+  cmd=$1
+  msg=$2
 
-print_result() {
-  if [ "$1" -eq 0 ]; then
-    print_success "$2"
+  if [[ $cmd ]]; then
+    # Print output in green.
+    printf "\e[0;32m  [✔] %s\e[0m\n" "${msg}"
   else
-    print_error "$2"
+    # Print output in red.
+    printf "\e[0;31m  [✖] %s\e[0m\n" "${msg}"
   fi
-
-  [ "$3" == "true" ] && [ "$1" -ne 0 ] && exit
-}
-
-ask_for_confirmation() {
-  print_question "$1 [y/N] "
-  read -r -n 1
-  printf "\n"
-}
-
-answer_is_yes() {
-  [[ "$REPLY" =~ ^[Yy]$ ]] \
-    && return 0 \
-    || return 1
 }
 
 install_zsh() {
@@ -116,7 +81,7 @@ install_zsh() {
   fi
 }
 
-install_zsh_extras() {
+install_omz() {
   ZSH=${HOME}/.oh-my-zsh
   ZSH_CUSTOM="${ZSH_CUSTOM:-${ZSH}/custom}"
 
@@ -172,24 +137,14 @@ link_file() {
   local source=$1
   local target=$2
 
-  if [ ! -e "${target}" ]; then
+  if [[ ! -e "${target}" || "$(readlink "${target}")" == "${source}" ]]; then
     # If the target location doesn't exist, we can safely symlink.
+    # If the target location is already symlinked, symlinking will be a no-op.
     execute "ln -fs ${source} ${target}" "${target} → ${source}"
-  elif [ "$(readlink "${target}")" == "${source}" ]; then
-    # If the target location is already symlinked, we do nothing.
-    print_success "${target} → ${source}"
-  elif [[ $INTERACTIVE ]]; then
-    # If there's a potential conflict, we prompt before overwriting.
-    ask_for_confirmation "'${target}' already exists, do you want to overwrite it?"
-    if answer_is_yes; then
-      rm -rf "${target}"
-      execute "ln -fs ${source} ${target}" "${target} → ${source}"
-    else
-      print_error "${target} → ${source}"
-    fi
   else
-    # This this isn't interactive, create a backup of the original file.
-    execute "cp ${target} ${target}.bak" "${target} → ${target}.bak"
+    # Otherwise, create a backup of the original file.
+    epoch=$(date +%s)
+    execute "cp ${target} ${target}.${epoch}.bak" "${target} → ${target}.${epoch}.bak"
     execute "ln -fs ${source} ${target}" "${target} → ${source}"
   fi
 }
@@ -204,9 +159,6 @@ unlink_file() {
 }
 
 main() {
-  # Run the symlinking from the repo root.
-  cd "$(dirname "$0")" || exit
-
   # Symlink (or unlink) the dotfiles.
   # Technically, this won't work for odd filenames, e.g. those with spaces or
   # newlines. However, we don't care in this case and would rather have broader
@@ -216,7 +168,7 @@ main() {
   FILES_TO_SYMLINK=($(find home -type f))
   for dotfile in "${FILES_TO_SYMLINK[@]}"; do
     sourceFile="$(pwd)/${dotfile}"
-    targetFile="${HOME}/.$(printf "%s" "${dotfile}" | sed "s/.*\/\(.*\)/\1/g")"
+    targetFile="${HOME}/.$(basename "${dotfile}")"
 
     if [[ $BUILD ]]; then
       link_file "$sourceFile" "$targetFile"
@@ -232,7 +184,7 @@ main() {
   )
   for configFolder in "${FOLDERS_TO_SYMLINK[@]}"; do
     sourceFolder="$(pwd)/$configFolder"
-    targetFolder="${HOME}/.config/$(printf "%s" "${configFolder}" | sed "s/.*\/\(.*\)/\1/g")"
+    targetFolder="${HOME}/.config/$(basename "${configFolder}")"
 
     if [[ $BUILD ]]; then
       link_file "$sourceFolder" "$targetFolder"
@@ -244,7 +196,7 @@ main() {
   if [[ $BUILD ]]; then
     # Install zsh (if not available) and oh-my-zsh and p10k.
     install_zsh
-    install_zsh_extras
+    install_omz
     if ! [[ $INTERACTIVE ]]; then
       install_optional_extras
     fi
@@ -257,4 +209,4 @@ main() {
   fi
 }
 
-main
+main "$@"
