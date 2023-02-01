@@ -122,9 +122,9 @@ install_zsh_extras() {
 
   # Clone or update Oh My Zsh.
   if [[ ! -d "${ZSH}" ]]; then
-    git clone --filter=blob:none https://github.com/robbyrussell/oh-my-zsh "${ZSH}"
+    git clone --quiet --filter=blob:none https://github.com/robbyrussell/oh-my-zsh "${ZSH}"
   else
-    git -C "${ZSH}" pull
+    git -C "${ZSH}" pull --quiet
   fi
 
   # Clone or update Powerlevel10k.
@@ -132,10 +132,10 @@ install_zsh_extras() {
   THEME_PATH="${ZSH_CUSTOM}/themes/${THEME_REPO_URL##*/}"
   THEME_VERSION_TAG="v1.17.0"
   if [[ ! -d "${THEME_PATH}" ]]; then
-    git clone --filter=blob:none --branch "${THEME_VERSION_TAG}" "${THEME_REPO_URL}" "${THEME_PATH}"
+    git clone --quiet --filter=blob:none --branch "${THEME_VERSION_TAG}" "${THEME_REPO_URL}" "${THEME_PATH}"
   else
-    git -C "${THEME_PATH}" fetch
-    git -C "${THEME_PATH}" checkout "${THEME_VERSION_TAG}"
+    git -C "${THEME_PATH}" fetch --quiet
+    git -C "${THEME_PATH}" checkout "${THEME_VERSION_TAG}" --quiet
   fi
 
   # Install or update custom oh-my-zsh plugins.
@@ -147,9 +147,9 @@ install_zsh_extras() {
   for REPO_URL in "${CUSTOM_PLUGIN_REPOS[@]}"; do
     PLUGIN_PATH="${ZSH_CUSTOM}/plugins/${REPO_URL##*/}"
     if [[ ! -d "${PLUGIN_PATH}" ]]; then
-      git clone --filter=blob:none "${REPO_URL}" "${PLUGIN_PATH}"
+      git clone --quiet --filter=blob:none "${REPO_URL}" "${PLUGIN_PATH}"
     else
-      git -C "${PLUGIN_PATH}" pull
+      git -C "${PLUGIN_PATH}" pull --quiet
     fi
   done
 }
