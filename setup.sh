@@ -49,7 +49,8 @@ execute() {
   cmd=$1
   msg=$2
 
-  if [[ $cmd ]]; then
+  eval "${cmd}"
+  if [[ $? ]]; then
     # Print output in green.
     printf "\e[0;32m  [✔] %s\e[0m\n" "${msg}"
   else
