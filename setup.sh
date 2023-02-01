@@ -21,7 +21,7 @@ while getopts :ht: option; do
       echo "-h                 Output verbose usage message"
       echo "-t build           Set up dotfile symlinks and configure oh-my-zsh"
       echo "-t clean           Remove all existing dotfiles symlinks"
-      echo "-t shellcheck      Remove all existing dotfiles symlinks"
+      echo "-t shellcheck      Lint all shell scripts"
       exit;;
     t)
       INTERACTIVE=true
