@@ -7,13 +7,13 @@
 
 usage="Usage: $0 [-h] [-t <build|clean|shellcheck>]"
 BUILD=true
-INTERACTIVE=
+BOOTSTRAP=true
 
 # Run the symlinking from the repo root.
 cd "$(dirname "$0")" || exit
 
 while getopts :ht: option; do
-  case ${option} in
+  case "${option}" in
     h)
       echo "${usage}"
       echo
@@ -24,9 +24,9 @@ while getopts :ht: option; do
       echo "-t shellcheck      Lint all shell scripts"
       exit;;
     t)
-      INTERACTIVE=true
       if [[ "build" =~ ^${OPTARG} ]]; then
         BUILD=true
+        BOOTSTRAP=
       elif [[ "clean" =~ ^${OPTARG} ]]; then
         BUILD=
       elif [[ "shellcheck" =~ ^${OPTARG} ]]; then
@@ -61,23 +61,21 @@ execute() {
 
 install_zsh() {
   # Test to see if zsh is installed.
-  if [ -z "$(command -v zsh)" ]; then
-    # If zsh isn't installed, get the platform of the current machine and
-    # install zsh with the appropriate package manager.
-    platform=$(uname);
-    if [[ $platform == "Linux" ]]; then
-      if [[ -f /etc/redhat-release ]]; then
-        sudo yum install zsh
-      fi
-      if [[ -f /etc/debian_version ]]; then
-        sudo apt-get -y install zsh
-      fi
-    elif [[ $platform == "Darwin" ]]; then
-      brew install zsh
-    fi
+  if [[ "$(command -v zsh)" ]]; then
+    return
   fi
-  # Set the default shell to zsh if it isn't currently set to zsh
-  if [[ ! "$SHELL" == "$(command -v zsh)" ]]; then
+
+  # If zsh isn't installed, get the platform of the current machine and
+  # install zsh with the appropriate package manager.
+  platform=$(uname);
+  if [[ $platform == "Linux" && -f /etc/debian_version ]]; then
+    sudo apt install -y zsh
+  elif [[ $platform == "Darwin" ]]; then
+    brew install zsh
+  fi
+
+  # Set the default shell to zsh if it isn't currently set to zsh.
+  if [[ "${SHELL}" != "$(command -v zsh)" ]]; then
     sudo chsh -s "$(command -v zsh)"
   fi
 }
@@ -120,17 +118,17 @@ install_omz() {
   done
 }
 
-install_optional_extras() {
+install_binary_packages() {
   platform=$(uname);
   if [[ $platform == "Darwin" ]]; then
+    # Install Homebrew.
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    brew update
     brew install ripgrep fd exa bat git-delta neovim
-  elif [[ $platform == "Linux" ]]; then
-    if [[ -f /etc/debian_version ]]; then
-      sudo apt-get -y install bat exa fd-find ripgrep
-      echo "Please install neovim and git-delta yourself."
-    else
-      echo "Unsupported OS. Install extras yourself... ¯\_(ツ)_/¯"
-    fi
+  elif [[ $platform == "Linux" && -f /etc/debian_version ]]; then
+    sudo apt update
+    sudo apt install -y bat exa fd-find ripgrep
+    echo "Please install neovim and git-delta yourself."
   fi
 }
 
@@ -138,8 +136,13 @@ link_file() {
   local source=$1
   local target=$2
 
+  # We've already symlinked, do nothing.
+  if [[ "$(readlink "${target}")" == "${source}" ]]; then
+    return
+  fi
+
   # If the target location exists and it's not our target symlink, we create a backup.
-  if [[ -e "${target}" && "$(readlink "${target}")" != "${source}" ]]; then
+  if [[ -e "${target}" ]]; then
     epoch=$(date +%s)
     execute "cp ${target} ${target}.${epoch}.bak" "Backing up ${target} → ${target}.${epoch}.bak"
   fi
@@ -193,15 +196,18 @@ main() {
   done
 
   if [[ $BUILD ]]; then
-    # Install zsh (if not available) and oh-my-zsh and p10k.
-    install_zsh
-    install_omz
-    if ! [[ $INTERACTIVE ]]; then
-      install_optional_extras
-    fi
-
     # Link gitconfig.
     git config --global include.path ~/.main.gitconfig
+
+    # Install oh-my-zsh and its custom plugins/themes.
+    install_omz
+
+    # Install zsh and other packages.
+    # Note that these require sudo and may take a while, so we only do this when bootstrapping.
+    if [[ $BOOTSTRAP ]]; then
+      install_binary_packages
+      install_zsh
+    fi
   else
     # Unlink gitconfig.
     git config --global --unset include.path
