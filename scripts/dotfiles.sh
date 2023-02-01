@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This is the one-liner installation script for these dotfiles. To install,
-# run one of these two commands...
+# run one of these commands...
 #
 # curl -L andrew.cloud/dotfiles.sh | sh
 # or
@@ -9,26 +9,24 @@
 # or
 # curl https://raw.githubusercontent.com/MrPickles/dotfiles/master/scripts/dotfiles.sh | sh
 
-{ # This ensures the entire script is downloaded.
+main() {
+  readonly dotfilesDir="${HOME}/.dotfiles"
+  readonly repo="https://github.com/MrPickles/dotfiles"
 
-  basedir=$HOME/.dotfiles
-  repourl=https://github.com/MrPickles/dotfiles.git
-
-  if ! command -v git >/dev/null ; then
-    echo "Error: Git is not installed!"
+  if [[ ! "$(command -v git)" ]]; then
+    echo "This bootstrap script requires git. Aborting."
     exit 1
   fi
 
-  if [ -d "$basedir/.git" ]; then
-    cd "$basedir" || exit
-    git pull --quiet --rebase origin master
+  if [[ -d "$dotfilesDir" ]]; then
+    echo "The dotfiles directory (${dotfilesDir}) already exists. We will assume you already cloned the correct repository."
   else
-    rm -rf "$basedir"
-    git clone --quiet --filter=blob:none "$repourl" "$basedir"
+    git clone --quiet --filter=blob:none "${repo}" "${dotfilesDir}"
   fi
 
-  cd "$basedir" || exit
+  cd "${dotfilesDir}" || exit
   # shellcheck source=setup.sh
-  . setup.sh -t build
+  . setup.sh
+}
 
-} # This ensures the entire script is downloaded.
+main "$@"

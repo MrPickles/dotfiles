@@ -121,8 +121,10 @@ install_omz() {
 install_binary_packages() {
   platform=$(uname);
   if [[ $platform == "Darwin" ]]; then
-    # Install Homebrew.
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    if [[ -z "$(command -v brew)" ]]; then
+      # Install Homebrew.
+      /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    fi
     brew update
     brew install ripgrep fd exa bat git-delta neovim
   elif [[ $platform == "Linux" && -f /etc/debian_version ]]; then
