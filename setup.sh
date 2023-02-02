@@ -127,7 +127,7 @@ install_binary_packages() {
       /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     fi
     brew update
-    brew install ripgrep fd exa bat git-delta neovim
+    brew install ripgrep fd exa bat git-delta neovim reattach-to-user-namespace
   elif [[ $platform == "Linux" && -f /etc/debian_version ]]; then
     sudo apt update
     sudo apt install -y bat fd-find ripgrep
