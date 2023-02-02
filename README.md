@@ -48,6 +48,8 @@ script:
 * Installing (and using) Powerline/FontAwesome-compatible fonts.
 * Using the Solarized colorscheme.
 
+Currently, I use `MesloLGS NF` as my regular font.
+
 ### MacOS
 
 #### Installing Fonts with Custom Glyph Support
@@ -157,7 +159,7 @@ script.
 ```shell
 git clone --filter=blob:none git@github.com:MrPickles/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
-./setup.sh -t build
+./setup.sh
 ```
 
 You will also likely need to manually change your shell to `zsh` if you are
@@ -165,6 +167,13 @@ currently using a different shell.
 
 ```shell
 chsh -s $(which zsh)
+```
+
+For future runs, if you ever want to update custom plugins or redo the symlinks,
+you can run the setup script with the following flags:
+
+```shell
+./setup.sh -t build
 ```
 
 ## Customizing

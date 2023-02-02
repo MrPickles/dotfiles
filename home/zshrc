@@ -39,17 +39,6 @@ DISABLE_UPDATE_PROMPT=true
 POWERLEVEL9K_MODE='nerdfont-complete'
 ZSH_THEME='powerlevel10k/powerlevel10k'
 
-# Use a more universal theme for terminals without special font support.
-# https://apple.stackexchange.com/a/118500
-# https://stackoverflow.com/a/5203740/3344451
-_p10k_incompatible_emulators=(
-  Apple_Terminal
-  vscode
-)
-if [[ -n "${_p10k_incompatible_emulators[(r)$TERM_PROGRAM]}" ]]; then
-  ZSH_THEME='robbyrussell'
-fi
-
 # These are the default OMZ plugins that we'll install.
 plugins=(
   git
