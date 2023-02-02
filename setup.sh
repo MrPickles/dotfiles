@@ -130,7 +130,13 @@ install_binary_packages() {
     brew install ripgrep fd exa bat git-delta neovim
   elif [[ $platform == "Linux" && -f /etc/debian_version ]]; then
     sudo apt update
-    sudo apt install -y bat exa fd-find ripgrep
+    sudo apt install -y bat fd-find ripgrep
+    # The apt package for exa is only available on Ubuntu 20.10 or later.
+    # Earlier versions are still under LTS (and prevalent), so those will fail.
+    sudo apt install exa
+    if [[ $? ]]; then
+      echo "Please install exa yourself."
+    fi
     echo "Please install neovim and git-delta yourself."
   fi
 }
