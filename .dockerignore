@@ -8,6 +8,5 @@ Dockerfile
 .gitignore
 
 # Non-critical repo files
-dotfiles.sh
 LICENSE
 README.md
