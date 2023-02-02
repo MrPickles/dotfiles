@@ -14,7 +14,7 @@ call plug#begin()
 Plug 'tpope/vim-sensible'
 
 " Optionally manage fzf here. Neovim does the same.
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf', { 'tag': '*',  'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
 " Git-release plugins.
