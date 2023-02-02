@@ -30,8 +30,9 @@ while getopts :ht: option; do
       elif [[ "clean" =~ ^${OPTARG} ]]; then
         BUILD=
       elif [[ "shellcheck" =~ ^${OPTARG} ]]; then
+        shopt -s globstar
         shellcheck -x -- **/*.sh
-        exit 0
+        exit $?
       else
         echo "${usage}" >&2
         exit 1

@@ -25,7 +25,6 @@ main() {
   fi
 
   cd "${dotfilesDir}" || exit
-  # shellcheck source=setup.sh
   . setup.sh
 }
 

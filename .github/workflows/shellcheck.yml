@@ -7,4 +7,6 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v2
       - name: Run shellcheck of .sh files
-        run: shellcheck -x -- **/*.sh
+        run: |
+          shopt -s globstar
+          shellcheck -x -- **/*.sh
