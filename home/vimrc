@@ -27,7 +27,6 @@ Plug 'vim-airline/vim-airline', { 'tag': 'v0.11' }
 Plug 'sheerun/vim-polyglot', { 'tag': 'v4.17.0' }
 Plug 'altercation/vim-colors-solarized'
 Plug 'ryanoasis/vim-devicons'
-Plug 'psliwka/vim-smoothie'
 call plug#end()
 
 " Load some standard configs.
