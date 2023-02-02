@@ -153,7 +153,7 @@ link_file() {
   # If the target location exists and it's not our target symlink, we create a backup.
   if [[ -e "${target}" ]]; then
     epoch=$(date +%s)
-    execute "cp -r ${target} ${target}.${epoch}.bak" "Backing up ${target} → ${target}.${epoch}.bak"
+    execute "mv ${target} ${target}.${epoch}.bak" "Backing up ${target} → ${target}.${epoch}.bak"
   fi
 
   # Symlink the dotfile.
@@ -176,7 +176,7 @@ main() {
   # compatibility.
   #
   # shellcheck disable=SC2207
-  FILES_TO_SYMLINK=($(find home -type f))
+  FILES_TO_SYMLINK=($(find home -type f -depth 1))
   for dotfile in "${FILES_TO_SYMLINK[@]}"; do
     sourceFile="$(pwd)/${dotfile}"
     targetFile="${HOME}/.$(basename "${dotfile}")"
@@ -190,9 +190,8 @@ main() {
 
   # Symlink (or unlink) folders in the ~/.config directory.
   mkdir -p "${HOME}/.config"
-  FOLDERS_TO_SYMLINK=(
-    "nvim"
-  )
+  # shellcheck disable=SC2207
+  FOLDERS_TO_SYMLINK=($(find config -type d -depth 1))
   for configFolder in "${FOLDERS_TO_SYMLINK[@]}"; do
     sourceFolder="$(pwd)/$configFolder"
     targetFolder="${HOME}/.config/$(basename "${configFolder}")"
