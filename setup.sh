@@ -176,7 +176,7 @@ main() {
   # compatibility.
   #
   # shellcheck disable=SC2207
-  FILES_TO_SYMLINK=($(find home -type f -depth 1))
+  FILES_TO_SYMLINK=($(find home -mindepth 1 -maxdepth 1 -type f))
   for dotfile in "${FILES_TO_SYMLINK[@]}"; do
     sourceFile="$(pwd)/${dotfile}"
     targetFile="${HOME}/.$(basename "${dotfile}")"
@@ -191,7 +191,7 @@ main() {
   # Symlink (or unlink) folders in the ~/.config directory.
   mkdir -p "${HOME}/.config"
   # shellcheck disable=SC2207
-  FOLDERS_TO_SYMLINK=($(find config -type d -depth 1))
+  FOLDERS_TO_SYMLINK=($(find config -mindepth 1 -maxdepth 1 -type d))
   for configFolder in "${FOLDERS_TO_SYMLINK[@]}"; do
     sourceFolder="$(pwd)/$configFolder"
     targetFolder="${HOME}/.config/$(basename "${configFolder}")"
