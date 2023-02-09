@@ -39,10 +39,7 @@ set background=dark
 syntax on
 syntax enable
 
-" Color scheme configs.
-set termguicolors
-let g:tokyonight_style = 'storm'
-silent! colorscheme tokyonight
+let g:airline_theme = "tokyonight"
 
 if executable('fzf')
   " Remap ctrl-P to execute fzf.
