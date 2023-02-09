@@ -4,3 +4,6 @@ plugged
 
 # Artifacts for packer.
 packer_compiled.lua
+
+# Kitty artifacts.
+kitty.conf.bak
