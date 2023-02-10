@@ -25,7 +25,6 @@ Plug 'airblade/vim-gitgutter'
 " Cosmetic plugins.
 Plug 'vim-airline/vim-airline', { 'tag': 'v0.11' }
 Plug 'sheerun/vim-polyglot', { 'tag': 'v4.17.0' }
-Plug 'ghifarit53/tokyonight-vim'
 Plug 'ryanoasis/vim-devicons'
 call plug#end()
 
@@ -38,8 +37,6 @@ set hlsearch
 set background=dark
 syntax on
 syntax enable
-
-let g:airline_theme = "tokyonight"
 
 if executable('fzf')
   " Remap ctrl-P to execute fzf.
