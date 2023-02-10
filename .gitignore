@@ -7,6 +7,3 @@ packer_compiled.lua
 
 # Kitty artifacts.
 kitty.conf.bak
-
-# Tmux plugins.
-config/tmux/plugins/

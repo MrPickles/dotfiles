@@ -3,11 +3,11 @@ return {
   { "folke/lazy.nvim", version = "*" },
 
   {
-    "folke/tokyonight.nvim",
+    "ishan9299/nvim-solarized-lua",
     lazy = false,
     priority = 1000,
     config = function()
-      vim.cmd("colorscheme tokyonight-storm")
+      vim.cmd("colorscheme solarized")
     end,
   },
 
@@ -228,18 +228,7 @@ return {
   { "psliwka/vim-smoothie" },
   -- Highlight hex colors.
   { "norcalli/nvim-colorizer.lua", config = true },
-  {
-    "nvim-lualine/lualine.nvim",
-    dependencies = {
-      { "nvim-tree/nvim-web-devicons" },
-      { "folke/tokyonight.nvim" },
-    },
-    opts = {
-      options = {
-        theme = "tokyonight",
-      },
-    },
-  },
+  { "feline-nvim/feline.nvim", config = true },
   {
     "akinsho/bufferline.nvim",
     dependencies = {
