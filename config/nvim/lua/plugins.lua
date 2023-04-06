@@ -25,11 +25,20 @@ return {
 
   -- Set up language server protocol.
   {
+    "SmiteshP/nvim-navbuddy",
+    dependencies = {
+      "neovim/nvim-lspconfig",
+      "SmiteshP/nvim-navic",
+      "MunifTanjim/nui.nvim",
+    },
+  },
+  {
     "neovim/nvim-lspconfig",
     dependencies = {
       { "williamboman/mason.nvim", config = true },
       { "williamboman/mason-lspconfig.nvim", config = true },
-      { "SmiteshP/nvim-navic" },
+      --{ "SmiteshP/nvim-navic" },
+      { "SmiteshP/nvim-navbuddy" },
     },
     config = function()
       -- See `:help vim.diagnostic.*` for documentation on any of the below functions
@@ -40,6 +49,7 @@ return {
       vim.keymap.set("n", "<space>q", vim.diagnostic.setloclist, opts)
 
       local navic = require("nvim-navic")
+      local navbuddy = require("nvim-navbuddy")
       local function on_attach(client, bufnr)
         -- Enable completion triggered by <c-x><c-o>
         vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
@@ -65,6 +75,7 @@ return {
         end, bufopts)
         if client.server_capabilities.documentSymbolProvider then
           navic.attach(client, bufnr)
+          navbuddy.attach(client, bufnr)
         end
       end
 
