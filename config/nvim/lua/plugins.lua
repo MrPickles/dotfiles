@@ -37,7 +37,7 @@ return {
     dependencies = {
       { "williamboman/mason.nvim", config = true },
       { "williamboman/mason-lspconfig.nvim", config = true },
-      --{ "SmiteshP/nvim-navic" },
+      { "SmiteshP/nvim-navic" },
       { "SmiteshP/nvim-navbuddy" },
     },
     config = function()
