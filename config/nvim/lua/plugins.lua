@@ -228,7 +228,15 @@ return {
   { "psliwka/vim-smoothie" },
   -- Highlight hex colors.
   { "norcalli/nvim-colorizer.lua", config = true },
-  { "feline-nvim/feline.nvim", config = true },
+  {
+    "nvim-lualine/lualine.nvim",
+    dependencies = {
+      { "nvim-tree/nvim-web-devicons" },
+    },
+    config = function()
+      require("evil_lualine")
+    end,
+  },
   {
     "akinsho/bufferline.nvim",
     dependencies = {
