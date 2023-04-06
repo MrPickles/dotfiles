@@ -29,6 +29,7 @@ return {
     dependencies = {
       { "williamboman/mason.nvim", config = true },
       { "williamboman/mason-lspconfig.nvim", config = true },
+      { "SmiteshP/nvim-navic" },
     },
     config = function()
       -- See `:help vim.diagnostic.*` for documentation on any of the below functions
@@ -38,7 +39,8 @@ return {
       vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
       vim.keymap.set("n", "<space>q", vim.diagnostic.setloclist, opts)
 
-      local function on_attach(_, bufnr)
+      local navic = require("nvim-navic")
+      local function on_attach(client, bufnr)
         -- Enable completion triggered by <c-x><c-o>
         vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
 
@@ -61,6 +63,9 @@ return {
         vim.keymap.set("n", "<space>f", function()
           vim.lsp.buf.format({ async = true })
         end, bufopts)
+        if client.server_capabilities.documentSymbolProvider then
+          navic.attach(client, bufnr)
+        end
       end
 
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
@@ -232,6 +237,7 @@ return {
     "nvim-lualine/lualine.nvim",
     dependencies = {
       { "nvim-tree/nvim-web-devicons" },
+      { "SmiteshP/nvim-navic" },
     },
     config = function()
       require("evil_lualine")
