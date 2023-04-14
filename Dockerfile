@@ -1,6 +1,7 @@
 # syntax=docker/dockerfile:1
 FROM ubuntu:latest
 
+RUN add-apt-repository ppa:neovim-ppa/stable
 RUN apt update && apt install -y \
   bat \
   build-essential \
@@ -8,6 +9,7 @@ RUN apt update && apt install -y \
   exa \
   fd-find \
   git \
+  neovim \
   ripgrep \
   sudo \
   tmux \
@@ -19,13 +21,8 @@ RUN apt update && apt install -y \
 
 WORKDIR /tmp
 
-# Install Neovim via dpkg
-RUN wget https://github.com/neovim/neovim/releases/download/stable/nvim-linux64.deb \
-  && dpkg -i nvim-linux64.deb \
-  && rm nvim-linux64.deb
-
 # Install git-delta via dpkg
-ENV GIT_DELTA_VERSION="0.14.0"
+ENV GIT_DELTA_VERSION="0.15.1"
 ENV GIT_DELTA_DEB="git-delta-musl_${GIT_DELTA_VERSION}_amd64.deb"
 RUN wget https://github.com/dandavison/delta/releases/download/${GIT_DELTA_VERSION}/${GIT_DELTA_DEB} \
   && dpkg -i ${GIT_DELTA_DEB} \
