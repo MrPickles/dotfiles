@@ -1,7 +1,6 @@
 # syntax=docker/dockerfile:1
 FROM ubuntu:latest
 
-RUN add-apt-repository ppa:neovim-ppa/stable
 RUN apt update && apt install -y \
   bat \
   build-essential \
@@ -9,8 +8,8 @@ RUN apt update && apt install -y \
   exa \
   fd-find \
   git \
-  neovim \
   ripgrep \
+  software-properties-common \
   sudo \
   tmux \
   tree \
@@ -20,6 +19,10 @@ RUN apt update && apt install -y \
   zsh
 
 WORKDIR /tmp
+
+# Install neovim via PPA
+RUN add-apt-repository ppa:neovim-ppa/stable
+RUN apt update && apt install -y neovim
 
 # Install git-delta via dpkg
 ENV GIT_DELTA_VERSION="0.15.1"
