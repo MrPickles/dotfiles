@@ -187,7 +187,7 @@ return {
         "bash",
         "lua",
         "vim",
-        "help"
+        "vimdoc"
       },
       sync_install = false,
       auto_install = true,
