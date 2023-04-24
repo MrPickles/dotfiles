@@ -14,9 +14,9 @@ _has() {
   return $(whence $1 >/dev/null)
 }
 
-# Prepend a directory to path, if it exists and isn't already in the path.
+# Prepend a directory to path, if it exists.
 _prepend_to_path() {
-  if [ -d $1 -a -z ${path[(r)$1]} ]; then
+  if [ -d $1 ]; then
     path=($1 $path);
   fi
 }
