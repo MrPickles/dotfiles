@@ -29,6 +29,15 @@ _append_to_path() {
 }
 
 ################################################################################
+# Modify the path
+################################################################################
+
+# Add common bin directories to path.
+_prepend_to_path /usr/local/bin
+_prepend_to_path /usr/local/sbin
+_prepend_to_path $HOME/.local/bin
+
+################################################################################
 # Oh-My-ZSH prerequisite setup
 ################################################################################
 
@@ -151,11 +160,6 @@ fi
 # Set shell options.
 setopt correct # enable spelling suggestions
 setopt rmstarsilent # silence rm * confirmation
-
-# Add common bin directories to path.
-_prepend_to_path /usr/local/bin
-_prepend_to_path /usr/local/sbin
-_prepend_to_path $HOME/.local/bin
 
 # Decrease delay in entering normal mode in shell.
 # https://www.johnhawthorn.com/2012/09/vi-escape-delays/
