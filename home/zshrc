@@ -38,6 +38,9 @@ DISABLE_UPDATE_PROMPT=true
 # Set zsh theme to be powerlevel10k with patched fontawesome symbols.
 POWERLEVEL9K_MODE='nerdfont-complete'
 ZSH_THEME='powerlevel10k/powerlevel10k'
+# OMZ messes with the ls colors by default. Let's not have it do that.
+DISABLE_LS_COLORS=true
+export LS_COLORS=
 
 # These are the default OMZ plugins that we'll install.
 plugins=(
