@@ -7,9 +7,10 @@ RUN apt update && apt install -y \
   curl \
   exa \
   fd-find \
+  fuse \
   git \
+  libfuse2 \
   ripgrep \
-  software-properties-common \
   sudo \
   tmux \
   tree \
@@ -20,9 +21,10 @@ RUN apt update && apt install -y \
 
 WORKDIR /tmp
 
-# Install neovim via PPA
-RUN add-apt-repository ppa:neovim-ppa/stable
-RUN apt update && apt install -y neovim
+# Install Neovim AppImage
+RUN wget https://github.com/neovim/neovim/releases/download/stable/nvim.appimage \
+  && chmod +x nvim.appimage \
+  && mv nvim.appimage /usr/bin/nvim
 
 # Install git-delta via dpkg
 ENV GIT_DELTA_VERSION="0.15.1"
