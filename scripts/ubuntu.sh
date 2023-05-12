@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 
-# This script installs most relevant pages for Ubuntu 22.04.
+# This script installs most relevant packages for Ubuntu 22.04.
+#
+# TODO: Eventually, it might be good to add a few extras:
+# - Installing git-delta
+# - Installing neovim
+# - Properly linking fd-find
+# Most of these can be copied from the Dockerfile.
 
 sudo apt install \
   bat \
@@ -8,9 +14,7 @@ sudo apt install \
   curl \
   exa \
   fd-find \
-  fuse \
   git \
-  libfuse2 \
   ripgrep \
   sudo \
   tmux \

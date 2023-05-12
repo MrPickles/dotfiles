@@ -49,6 +49,10 @@ USER ${USER}
 WORKDIR /home/${USER}/.dotfiles
 RUN ./setup.sh -t build
 
+# Symlink fd, since the actual binary name is fdfind.
+RUN mkdir -p ~/.local/bin
+RUN ln -s $(which fdfind) ~/.local/bin/fd
+
 # Install gitstatusd
 RUN /home/${USER}/.oh-my-zsh/custom/themes/powerlevel10k/gitstatus/install
 
