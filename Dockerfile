@@ -7,9 +7,7 @@ RUN apt update && apt install -y \
   curl \
   exa \
   fd-find \
-  fuse \
   git \
-  libfuse2 \
   ripgrep \
   sudo \
   tmux \
@@ -24,7 +22,9 @@ WORKDIR /tmp
 # Install Neovim AppImage
 RUN wget https://github.com/neovim/neovim/releases/download/stable/nvim.appimage \
   && chmod +x nvim.appimage \
-  && mv nvim.appimage /usr/bin/nvim
+  && nvim.appimage --appimage-extract \
+  && mv squashfs-root/usr/share/nvim /usr/share/nvim \
+  && rm -rf nvim.appimage squashfs-root
 
 # Install git-delta via dpkg
 ENV GIT_DELTA_VERSION="0.15.1"
