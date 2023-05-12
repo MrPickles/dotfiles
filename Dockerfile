@@ -23,8 +23,9 @@ WORKDIR /tmp
 RUN wget https://github.com/neovim/neovim/releases/download/stable/nvim.appimage \
   && chmod +x nvim.appimage \
   && ./nvim.appimage --appimage-extract \
-  && mv squashfs-root/usr/share/nvim /usr/share/nvim \
-  && rm -rf nvim.appimage squashfs-root
+  && mv squashfs-root / \
+  && ln -s /squashfs-root/AppRun /usr/bin/nvim \
+  && rm nvim.appimage
 
 # Install git-delta via dpkg
 ENV GIT_DELTA_VERSION="0.15.1"
