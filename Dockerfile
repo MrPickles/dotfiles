@@ -22,7 +22,7 @@ WORKDIR /tmp
 # Install Neovim AppImage
 RUN wget https://github.com/neovim/neovim/releases/download/stable/nvim.appimage \
   && chmod +x nvim.appimage \
-  && nvim.appimage --appimage-extract \
+  && ./nvim.appimage --appimage-extract \
   && mv squashfs-root/usr/share/nvim /usr/share/nvim \
   && rm -rf nvim.appimage squashfs-root
 
