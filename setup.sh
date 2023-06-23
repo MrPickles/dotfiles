@@ -95,7 +95,7 @@ install_omz() {
   # Clone or update Powerlevel10k.
   THEME_REPO_URL="https://github.com/romkatv/powerlevel10k"
   THEME_PATH="${ZSH_CUSTOM}/themes/${THEME_REPO_URL##*/}"
-  THEME_VERSION_TAG="v1.18.0"
+  THEME_VERSION_TAG="v1.19.0"
   if [[ ! -d "${THEME_PATH}" ]]; then
     git clone --quiet --filter=blob:none --branch "${THEME_VERSION_TAG}" "${THEME_REPO_URL}" "${THEME_PATH}"
   else
