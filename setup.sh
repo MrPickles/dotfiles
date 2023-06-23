@@ -95,7 +95,10 @@ install_omz() {
   # Clone or update Powerlevel10k.
   THEME_REPO_URL="https://github.com/romkatv/powerlevel10k"
   THEME_PATH="${ZSH_CUSTOM}/themes/${THEME_REPO_URL##*/}"
-  THEME_VERSION_TAG=$(curl -s https://api.github.com/repos/romkatv/powerlevel10k/releases/latest | jq -r .tag_name)
+  THEME_VERSION_TAG="master"
+  if [[ -x "$(command -v jqa)" ]]; then
+    THEME_VERSION_TAG=$(curl -s https://api.github.com/repos/romkatv/powerlevel10k/releases/latest | jq -r .tag_name)
+  fi
   if [[ ! -d "${THEME_PATH}" ]]; then
     git clone --quiet --filter=blob:none --branch "${THEME_VERSION_TAG}" "${THEME_REPO_URL}" "${THEME_PATH}"
   else
@@ -127,7 +130,7 @@ install_binary_packages() {
       /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     fi
     brew update
-    brew install ripgrep fd exa bat git-delta neovim reattach-to-user-namespace
+    brew install ripgrep fd exa bat git-delta neovim reattach-to-user-namespace jq
   elif [[ $platform == "Linux" && -f /etc/debian_version ]]; then
     sudo apt update
     sudo apt install -y bat fd-find ripgrep
