@@ -60,27 +60,6 @@ execute() {
   fi
 }
 
-install_zsh() {
-  # Test to see if zsh is installed.
-  if [[ "$(command -v zsh)" ]]; then
-    return
-  fi
-
-  # If zsh isn't installed, get the platform of the current machine and
-  # install zsh with the appropriate package manager.
-  platform=$(uname);
-  if [[ $platform == "Linux" && -f /etc/debian_version ]]; then
-    sudo apt install -y zsh
-  elif [[ $platform == "Darwin" ]]; then
-    brew install zsh
-  fi
-
-  # Set the default shell to zsh if it isn't currently set to zsh.
-  if [[ "${SHELL}" != "$(command -v zsh)" ]]; then
-    sudo chsh -s "$(command -v zsh)"
-  fi
-}
-
 install_omz() {
   ZSH=${HOME}/.oh-my-zsh
   ZSH_CUSTOM="${ZSH_CUSTOM:-${ZSH}/custom}"
@@ -123,24 +102,19 @@ install_omz() {
 }
 
 install_binary_packages() {
-  platform=$(uname);
-  if [[ $platform == "Darwin" ]]; then
-    if [[ -z "$(command -v brew)" ]]; then
-      # Install Homebrew.
-      /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    fi
-    brew update
-    brew install ripgrep fd exa bat git-delta neovim reattach-to-user-namespace jq
-  elif [[ $platform == "Linux" && -f /etc/debian_version ]]; then
-    sudo apt update
-    sudo apt install -y bat fd-find ripgrep
-    # The apt package for exa is only available on Ubuntu 20.10 or later.
-    # Earlier versions are still under LTS (and prevalent), so those will fail.
-    sudo apt install exa
-    if [[ $? ]]; then
-      echo "Please install exa yourself."
-    fi
-    echo "Please install neovim and git-delta yourself."
+  sudo apt update
+  sudo apt install -y bat fd-find ripgrep zsh
+  # The apt package for exa is only available on Ubuntu 20.10 or later.
+  # Earlier versions are still under LTS (and prevalent), so those will fail.
+  sudo apt install exa
+  if [[ $? ]]; then
+    echo "Please install exa yourself."
+  fi
+  echo "Please install neovim and git-delta yourself."
+
+  # Set the default shell to zsh if it isn't currently set to zsh.
+  if [[ "${SHELL}" != "$(command -v zsh)" ]]; then
+    sudo chsh -s "$(command -v zsh)"
   fi
 }
 
@@ -215,9 +189,10 @@ main() {
 
     # Install zsh and other packages.
     # Note that these require sudo and may take a while, so we only do this when bootstrapping.
-    if [[ $BOOTSTRAP ]]; then
+    # It only works for Debian-based Linux distos.
+    platform=$(uname);
+    if [[ $BOOTSTRAP && $platform == "Linux" && -f /etc/debian_version ]]; then
       install_binary_packages
-      install_zsh
     fi
   else
     # Unlink gitconfig.
