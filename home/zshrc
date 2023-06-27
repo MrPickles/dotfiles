@@ -36,6 +36,9 @@ _append_to_path() {
 _prepend_to_path /usr/local/bin
 _prepend_to_path /usr/local/sbin
 _prepend_to_path $HOME/.local/bin
+if [[ $(uname) == "Darwin" ]]; then
+  _prepend_to_path /opt/homebrew/bin
+fi
 
 ################################################################################
 # Oh-My-ZSH prerequisite setup
