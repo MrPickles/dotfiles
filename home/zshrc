@@ -97,7 +97,7 @@ if _has fzf; then
   # Display source tree and file preview for CTRL-T and ALT-C.
   if _has tree; then
     # Show subdir tree for directories.
-    FZF_ALT_C_OPTS="--preview '(exa --tree --color=always {} || tree -C {}) | head -200'"
+    FZF_ALT_C_OPTS="--preview '(eza --tree --color=always {} || tree -C {}) | head -200'"
   fi
 
   # Bind alt-j/k/d/u to moving the preview window for fzf.
@@ -110,7 +110,7 @@ if _has fzf; then
 
   # Some basic fzf-tab configs.
   plugins+=(fzf-tab)
-  zstyle ':fzf-tab:complete:cd:*' fzf-preview '(exa --tree --color=always $realpath || tree -C $realpath) 2> /dev/null'
+  zstyle ':fzf-tab:complete:cd:*' fzf-preview '(eza --tree --color=always $realpath || tree -C $realpath) 2> /dev/null'
   zstyle ':completion:*:descriptions' format '[%d]'
   zstyle ':fzf-tab:*' switch-group ',' '.'
 fi
@@ -192,10 +192,10 @@ bindkey '^R' history-incremental-search-backward
 bindkey "${terminfo[khome]}" beginning-of-line
 bindkey "${terminfo[kend]}" end-of-line
 
-# Alias `exa` as default `ls` command (if available).
+# Alias `eza` as default `ls` command (if available).
 # This must come after OMZ. (The library overwrites this alias.)
-if _has exa; then
-  alias ls="exa"
+if _has eza; then
+  alias ls="eza"
 fi
 
 # Source fzf scripts via local installation.

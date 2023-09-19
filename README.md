@@ -92,7 +92,7 @@ shell experience in general.
 * [bat](https://github.com/sharkdp/bat)
 * [ripgrep](https://github.com/BurntSushi/ripgrep)
 * [fd](https://github.com/sharkdp/fd)
-* [exa](https://github.com/ogham/exa)
+* [eza](https://github.com/eza-community/eza)
 * [fzf](https://github.com/junegunn/fzf)
 * [delta](https://github.com/dandavison/delta)
 

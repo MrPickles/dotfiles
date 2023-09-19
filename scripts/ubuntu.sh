@@ -6,13 +6,13 @@
 # - Installing git-delta
 # - Installing neovim
 # - Properly linking fd-find
+# - Installing eza
 # Most of these can be copied from the Dockerfile.
 
 sudo apt install \
   bat \
   build-essential \
   curl \
-  exa \
   fd-find \
   git \
   ripgrep \

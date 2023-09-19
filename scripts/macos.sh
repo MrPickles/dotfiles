@@ -10,5 +10,5 @@ if [[ -z "$(command -v brew)" ]]; then
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 else
   brew update
-  brew install ripgrep fd exa bat git-delta neovim reattach-to-user-namespace jq tmux
+  brew install ripgrep fd eza bat git-delta neovim reattach-to-user-namespace jq tmux
 fi
