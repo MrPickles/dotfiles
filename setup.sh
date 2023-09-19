@@ -7,7 +7,6 @@
 
 usage="Usage: $0 [-h] [-t <build|clean|shellcheck>]"
 BUILD=true
-BOOTSTRAP=true
 
 # Run the symlinking from the repo root.
 cd "$(dirname "$0")" || exit
@@ -26,7 +25,6 @@ while getopts :ht: option; do
     t)
       if [[ "build" =~ ^${OPTARG} ]]; then
         BUILD=true
-        BOOTSTRAP=
       elif [[ "clean" =~ ^${OPTARG} ]]; then
         BUILD=
       elif [[ "shellcheck" =~ ^${OPTARG} ]]; then
@@ -101,23 +99,6 @@ install_omz() {
   done
 }
 
-install_binary_packages() {
-  sudo apt update
-  sudo apt install -y bat fd-find ripgrep zsh
-  # The apt package for exa is only available on Ubuntu 20.10 or later.
-  # Earlier versions are still under LTS (and prevalent), so those will fail.
-  sudo apt install exa
-  if [[ $? ]]; then
-    echo "Please install exa yourself."
-  fi
-  echo "Please install neovim and git-delta yourself."
-
-  # Set the default shell to zsh if it isn't currently set to zsh.
-  if [[ "${SHELL}" != "$(command -v zsh)" ]]; then
-    sudo chsh -s "$(command -v zsh)"
-  fi
-}
-
 link_file() {
   local source=$1
   local target=$2
@@ -186,14 +167,6 @@ main() {
 
     # Install oh-my-zsh and its custom plugins/themes.
     install_omz
-
-    # Install zsh and other packages.
-    # Note that these require sudo and may take a while, so we only do this when bootstrapping.
-    # It only works for Debian-based Linux distos.
-    platform=$(uname);
-    if [[ $BOOTSTRAP && $platform == "Linux" && -f /etc/debian_version ]]; then
-      install_binary_packages
-    fi
   else
     # Unlink gitconfig.
     git config --global --unset include.path
