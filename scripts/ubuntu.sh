@@ -2,7 +2,7 @@
 
 # This script installs most relevant packages for Ubuntu 22.04.
 _has() {
-  return $(whence $1 >/dev/null)
+  return $(where $1 >/dev/null)
 }
 
 sudo apt install \
@@ -12,6 +12,7 @@ sudo apt install \
   fd-find \
   git \
   gpg \
+  mosh \
   ripgrep \
   sudo \
   tmux \
