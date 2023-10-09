@@ -2,10 +2,10 @@
 
 # This script installs most relevant packages for Ubuntu 22.04.
 _has() {
-  return $(where $1 >/dev/null)
+  return $(which $1 >/dev/null)
 }
 
-sudo apt install \
+sudo apt install -y \
   bat \
   build-essential \
   curl \
