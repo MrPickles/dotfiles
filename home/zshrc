@@ -159,6 +159,9 @@ export BAT_THEME="Solarized (dark)"
 if _has batcat; then
   alias bat="batcat"
 fi
+if _has bat; then
+  alias cat="bat"
+fi
 
 # Set shell options.
 setopt correct # enable spelling suggestions
