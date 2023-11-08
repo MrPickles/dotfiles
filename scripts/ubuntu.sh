@@ -2,7 +2,7 @@
 
 # This script installs most relevant packages for Ubuntu 22.04.
 _has() {
-  return $(which $1 >/dev/null)
+  return "$(which "$1" >/dev/null)"
 }
 
 sudo apt install -y \
@@ -48,5 +48,5 @@ fi
 
 if ! _has fd; then
   mkdir -p ~/.local/bin
-  ln -s $(which fdfind) ~/.local/bin/fd
+  ln -s "$(which fdfind)" ~/.local/bin/fd
 fi
