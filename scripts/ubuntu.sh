@@ -2,7 +2,8 @@
 
 # This script installs most relevant packages for Ubuntu 22.04.
 _has() {
-  return "$(which "$1" >/dev/null)"
+  # shellcheck disable=SC2046 # Quoting everything gives the wrong semantics.
+  return $(which "$1" >/dev/null)
 }
 
 sudo apt install -y \
