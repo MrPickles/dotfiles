@@ -195,6 +195,9 @@ return {
         enable = true,
         additional_vim_regex_highlighting = false,
       },
+      indent = {
+        enable = true,
+      },
     },
     config = function(_, opts)
       require("nvim-treesitter.configs").setup(opts)
@@ -239,7 +242,7 @@ return {
   },
 
   -- Show blank line indentation levels.
-  { "lukas-reineke/indent-blankline.nvim" },
+  { "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {} },
   -- Allow smooth scrolling
   { "psliwka/vim-smoothie" },
   -- Highlight hex colors.

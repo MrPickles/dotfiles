@@ -9,6 +9,7 @@ vim.opt.termguicolors = true -- Match terminal colors with GUI program.
 vim.opt.signcolumn = 'yes' -- Reserve space for diagnostic icons
 
 -- Indentation settings
+vim.opt.cindent = true -- Enable modern C-style indentation.
 vim.opt.tabstop = 2 -- Make tabs 2 characters wide.
 vim.opt.shiftwidth = 2 -- Indent by 2 spaces by default.
 vim.opt.expandtab = true -- Pressing tab converts to spaces...
@@ -19,6 +20,7 @@ vim.api.nvim_create_autocmd("Filetype", {
     vim.opt.expandtab = false
   end,
 })
+vim.cmd([[filetype plugin indent on]]) -- Enable filetype-specific indentation.
 
 -- Search settings.
 vim.opt.ignorecase = true -- Ignore case sensitivity.
