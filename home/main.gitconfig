@@ -18,7 +18,7 @@
 [format]
 	pretty = %C(auto)%h%Creset -%C(auto)%d%Creset %s %C(blue)<%an> %Cgreen(%cr)%Creset
 [push]
-	default = simple
+	default = current
 [pager]
 	# Disable paging for `git branch`.
 	branch = false
@@ -28,3 +28,9 @@
 	side-by-side = true
 [interactive]
 	diffFilter = delta --color-only
+[merge]
+  conflictstyle = zdiff3
+[commit]
+  verbose = true
+[diff]
+  algoritm = histogram

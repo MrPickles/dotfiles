@@ -20,6 +20,12 @@ vim.api.nvim_create_autocmd("Filetype", {
     vim.opt.expandtab = false
   end,
 })
+vim.filetype.add({
+  extension = {
+    -- Set files like "main.gitconfig" to be gitconfig files.
+    gitconfig = "gitconfig"
+  },
+})
 vim.cmd([[filetype plugin indent on]]) -- Enable filetype-specific indentation.
 
 -- Search settings.
