@@ -19,5 +19,6 @@ else
     neovim \
     reattach-to-user-namespace \
     ripgrep \
-    tmux
+    tmux \
+    zoxide
 fi

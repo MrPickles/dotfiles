@@ -210,6 +210,10 @@ if _has fzf; then
   source "${fzf_path}/shell/completion.zsh"
 fi
 
+if _has zoxide; then
+  eval "$(zoxide init --cmd cd zsh)"
+fi
+
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
