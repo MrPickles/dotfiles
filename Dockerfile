@@ -61,6 +61,9 @@ RUN ./setup.sh -t build
 RUN mkdir -p ~/.local/bin
 RUN ln -s $(which fdfind) ~/.local/bin/fd
 
+# Install zoxide. (This needs to be done for the local, non-root user.)
+RUN curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
+
 # Install gitstatusd.
 RUN /home/${USER}/.oh-my-zsh/custom/themes/powerlevel10k/gitstatus/install
 

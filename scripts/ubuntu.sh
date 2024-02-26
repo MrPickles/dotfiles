@@ -51,3 +51,7 @@ if ! _has fd; then
   mkdir -p ~/.local/bin
   ln -s "$(which fdfind)" ~/.local/bin/fd
 fi
+
+if ! _has zoxide; then
+  curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
+fi
