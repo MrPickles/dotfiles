@@ -94,11 +94,8 @@ if _has fzf; then
     FZF_ALT_C_COMMAND='fd --type d --color never'
   fi
 
-  # Display source tree and file preview for CTRL-T and ALT-C.
-  if _has tree || _has eza; then
-    # Show subdir tree for directories.
-    FZF_ALT_C_OPTS="--preview '(eza --tree --icons --level 3 --color=always --group-directories-first {} || tree -C {}) | head -200'"
-  fi
+  # Display source tree and file preview for ALT-C.
+  FZF_ALT_C_OPTS="--preview '(eza --tree --icons --level 3 --color=always --group-directories-first {} || tree -C {}) | head -200'"
 
   # Bind alt-j/k/d/u to moving the preview window for fzf.
   FZF_DEFAULT_OPTS="--bind alt-k:preview-up,alt-j:preview-down,alt-u:preview-page-up,alt-d:preview-page-down"
@@ -110,7 +107,7 @@ if _has fzf; then
 
   # Some basic fzf-tab configs.
   plugins+=(fzf-tab)
-  zstyle ':fzf-tab:complete:cd:*' fzf-preview '(eza --tree --color=always $realpath || tree -C $realpath) 2> /dev/null'
+  zstyle ':fzf-tab:complete:cd:*' fzf-preview '(eza --tree --icons --color=always $realpath || tree -C $realpath) 2> /dev/null'
   zstyle ':completion:*:descriptions' format '[%d]'
   zstyle ':fzf-tab:*' switch-group ',' '.'
 fi
