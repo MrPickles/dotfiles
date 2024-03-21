@@ -29,7 +29,7 @@
 [interactive]
 	diffFilter = delta --color-only
 [merge]
-  conflictstyle = zdiff3
+  conflictstyle = diff3
 [commit]
   verbose = true
 [diff]
