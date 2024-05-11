@@ -33,4 +33,4 @@
 [commit]
   verbose = true
 [diff]
-  algoritm = histogram
+  algorithm = histogram
