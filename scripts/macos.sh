@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+if [[ $(uname) != "Darwin" ]]; then
+  echo "This script should be run on MacOS only."
+  exit 1
+fi
+
 # Remove hide delay for the dock
 # https://apple.stackexchange.com/a/46222
 defaults write com.apple.Dock autohide-delay -float 0; killall Dock
