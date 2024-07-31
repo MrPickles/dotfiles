@@ -130,8 +130,9 @@ fi
 # Use 256 color for tmux.
 alias tmux="TERM=screen-256color-bce tmux"
 # Attempt to take over existing sessions before creating a new tmux session.
-TMUX_DEFAULT_SESSION="tmux"
-alias t="tmux -u a -d -t ${TMUX_DEFAULT_SESSION} 2> /dev/null || tmux -u new -s ${TMUX_DEFAULT_SESSION}"
+t() {
+  tmux -u new -ADs ${1:-tmux}
+}
 if [[ -z "$TMUX" ]]; then
   # Switch to xterm if we're in a tmux session.
   TERM="xterm-256color"
