@@ -62,8 +62,6 @@ plugins=(
   colored-man-pages
   vi-mode
   git-auto-fetch
-  fd
-  ripgrep
   fast-syntax-highlighting
   zsh-autosuggestions
 )
