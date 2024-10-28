@@ -17,9 +17,7 @@ return {
     "junegunn/fzf",
     dependencies = { "junegunn/fzf.vim" },
     version = "*",
-    build = function()
-      vim.fn["fzf#install"]()
-    end,
+    build = "./install --bin",
     priority = 100,
   },
 
