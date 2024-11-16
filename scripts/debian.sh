@@ -31,9 +31,9 @@ cargo install \
 
 # Install Neovim.
 tmpdir=$(mktemp -d)
-mkdir -p $tmpdir
-curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz --output-dir $tmpdir
+mkdir -p "$tmpdir"
+curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz --output-dir "$tmpdir"
 sudo rm -rf /opt/nvim
-sudo tar -C /opt -xzf ${tmpdir}/nvim-linux64.tar.gz
+sudo tar -C /opt -xzf "${tmpdir}/nvim-linux64.tar.gz"
 sudo ln -sf /opt/nvim-linux64/bin/nvim /usr/bin/nvim
-rm -rf $tmpdir
+rm -rf "$tmpdir"
