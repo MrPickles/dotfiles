@@ -72,15 +72,10 @@ install_omz() {
   # Clone or update Powerlevel10k.
   THEME_REPO_URL="https://github.com/romkatv/powerlevel10k"
   THEME_PATH="${ZSH_CUSTOM}/themes/${THEME_REPO_URL##*/}"
-  THEME_VERSION_TAG="master"
-  if [[ -x "$(command -v jq)" ]]; then
-    THEME_VERSION_TAG=$(curl -s https://api.github.com/repos/romkatv/powerlevel10k/releases/latest | jq -r .tag_name)
-  fi
   if [[ ! -d "${THEME_PATH}" ]]; then
-    git clone --quiet --filter=blob:none --branch "${THEME_VERSION_TAG}" "${THEME_REPO_URL}" "${THEME_PATH}"
+    git clone --quiet --filter=blob:none "${THEME_REPO_URL}" "${THEME_PATH}"
   else
-    git -C "${THEME_PATH}" fetch --quiet
-    git -C "${THEME_PATH}" checkout "${THEME_VERSION_TAG}" --quiet
+    git -C "${THEME_PATH}" pull --quiet
   fi
 
   # Install or update custom oh-my-zsh plugins.
