@@ -4,33 +4,33 @@
 	di = diff
 	st = status
 	br = branch
-[color]
-	diff = auto
-	status = auto
-	branch = auto
-[core]
-	autocrlf = input
-	attributesfile = ~/.gitattributes
-	excludesfile = ~/.gitignore
-	pager = delta 2> /dev/null || less
 [apply]
 	whitespace = nowarn
-[format]
-	pretty = %C(auto)%h%Creset -%C(auto)%d%Creset %s %C(blue)<%an> %Cgreen(%cr)%Creset
-[push]
-	default = current
-[pager]
-	# Disable paging for `git branch`.
-	branch = false
+[color]
+	branch = auto
+	diff = auto
+	status = auto
+[commit]
+  verbose = true
+[core]
+	attributesfile = ~/.gitattributes
+	autocrlf = input
+	excludesfile = ~/.gitignore
+	pager = delta 2> /dev/null || less
 [delta]
-	syntax-theme = Solarized (dark)
 	line-numbers = true
 	side-by-side = true
+	syntax-theme = Solarized (dark)
+[diff]
+  algorithm = histogram
+[format]
+	pretty = %C(auto)%h%Creset -%C(auto)%d%Creset %s %C(blue)<%an> %Cgreen(%cr)%Creset
 [interactive]
 	diffFilter = delta --color-only
 [merge]
   conflictstyle = diff3
-[commit]
-  verbose = true
-[diff]
-  algorithm = histogram
+[pager]
+	# Disable paging for `git branch`.
+	branch = false
+[push]
+	default = current
