@@ -140,8 +140,8 @@ ins_left {
   -- Lsp server name .
   function()
     local msg = 'No Active Lsp'
-    local buf_ft = vim.api.nvim_buf_get_option(0, 'filetype')
-    local clients = vim.lsp.get_active_clients()
+    local buf_ft = vim.api.nvim_get_option_value('filetype', { buf = 0 })
+    local clients = vim.lsp.get_clients()
     if next(clients) == nil then
       return msg
     end
@@ -162,13 +162,12 @@ ins_left {
   sources = { 'nvim_diagnostic' },
   symbols = { error = ' ', warn = ' ', info = ' ' },
   diagnostics_color = {
-    color_error = { fg = colors.red },
-    color_warn = { fg = colors.yellow },
-    color_info = { fg = colors.cyan },
+    error = { fg = colors.red },
+    warn = { fg = colors.yellow },
+    info = { fg = colors.cyan },
   },
 }
 
--- Add components to right sections
 local navic = require("nvim-navic")
 ins_right {
   function()
@@ -179,6 +178,7 @@ ins_right {
   end
 }
 
+-- Add components to right sections
 ins_right {
   'o:encoding', -- option component same as &encoding in viml
   fmt = string.upper, -- I'm not sure why it's upper case either ;)
@@ -202,7 +202,7 @@ ins_right {
 ins_right {
   'diff',
   -- Is it me or the symbol for modified us really weird
-  symbols = { added = ' ', modified = '柳 ', removed = ' ' },
+  symbols = { added = ' ', modified = '󰝤 ', removed = ' ' },
   diff_color = {
     added = { fg = colors.green },
     modified = { fg = colors.orange },
