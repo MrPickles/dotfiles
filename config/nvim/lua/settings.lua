@@ -58,3 +58,7 @@ vim.cmd("command! WQA wqa")
 local opts = { noremap = true, silent = true }
 vim.keymap.set("n", "<C-l>", ":bnext<cr>", opts)
 vim.keymap.set("n", "<C-h>", ":bprev<cr>", opts)
+
+vim.diagnostic.config({
+  virtual_lines = true
+})
