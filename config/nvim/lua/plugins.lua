@@ -3,11 +3,15 @@ return {
   { "folke/lazy.nvim", version = "*" },
 
   {
-    "ishan9299/nvim-solarized-lua",
+    'maxmx03/solarized.nvim',
     lazy = false,
     priority = 1000,
-    config = function()
-      vim.cmd("colorscheme solarized")
+    opts = {
+      variant = 'autumn',
+    },
+    config = function(_, opts)
+      require('solarized').setup(opts)
+      vim.cmd.colorscheme 'solarized'
     end,
   },
 
@@ -176,10 +180,6 @@ return {
   -- Treesitter gives us better syntax highlighting than regex-based parsers.
   {
     "nvim-treesitter/nvim-treesitter",
-    dependencies = {
-      -- Show what function/class you're in.
-      "nvim-treesitter/nvim-treesitter-context",
-    },
     opts = {
       ensure_installed = {
         "bash",
@@ -205,6 +205,8 @@ return {
       ts_update()
     end,
   },
+  -- Show what function/class you're in.
+  { "nvim-treesitter/nvim-treesitter-context" },
 
   -- Telescope for better searching and whatnot.
   {
