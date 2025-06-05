@@ -3,7 +3,7 @@
 These are my personal dotfiles.
 
 ```
-curl -L andrew.cloud/dotfiles.sh | bash
+curl https://raw.githubusercontent.com/MrPickles/dotfiles/master/scripts/dotfiles.sh | bash
 ```
 
 ![Screenshot of my dotfiles](.github/screenshot.png)
@@ -40,10 +40,6 @@ The install script will run the configuration script, which fetches oh-my-zsh
 and symlinks the dotfiles to your home directory.
 
 ```shell
-curl -L andrew.cloud/dotfiles.sh | bash
-# or
-wget -qO- andrew.cloud/dotfiles.sh | bash
-# or
 curl https://raw.githubusercontent.com/MrPickles/dotfiles/master/scripts/dotfiles.sh | bash
 ```
 
