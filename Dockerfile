@@ -20,7 +20,7 @@ RUN apt update && apt install -y \
 WORKDIR /tmp
 
 # Install Neovim AppImage.
-RUN wget https://github.com/neovim/neovim/releases/download/stable/nvim.appimage \
+RUN wget https://github.com/neovim/neovim/releases/download/stable/nvim-linux-x86_64.appimage \
   && chmod +x nvim.appimage \
   && ./nvim.appimage --appimage-extract \
   && mv squashfs-root / \
