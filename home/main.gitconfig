@@ -1,9 +1,9 @@
 [alias]
-	co = checkout
+	br = branch
 	ci = commit
+	co = checkout
 	di = diff
 	st = status
-	br = branch
 [apply]
 	whitespace = nowarn
 [branch]
@@ -17,13 +17,11 @@
 [commit]
   verbose = true
 [core]
-	attributesfile = ~/.gitattributes
-	autocrlf = input
 	excludesfile = ~/.gitignore
 	pager = delta 2> /dev/null || less
 [delta]
 	line-numbers = true
-	side-by-side = true
+	navigate = true
 	syntax-theme = Solarized (dark)
 [diff]
   algorithm = histogram
@@ -43,10 +41,9 @@
 [interactive]
 	diffFilter = delta --color-only
 [merge]
-  conflictstyle = diff3
-[pager]
-	# Disable paging for `git branch`.
-	branch = false
+  conflictstyle = zdiff3
+[pull]
+	ff = only
 [push]
 	autoSetupRemote = true
 	default = simple
@@ -60,3 +57,5 @@
 	enabled = true
 [tag]
 	sort = version:refname
+[url "git@github.com:"]
+	insteadOf = "https://github.com/"
