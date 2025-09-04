@@ -35,6 +35,7 @@
     os_icon                 # os identifier
     context                 # user@hostname
     vcs                     # git status
+    jj                      # jj status
     dir                     # current directory
     # =========================[ Line #2 ]=========================
     newline                 # \n
@@ -465,6 +466,189 @@
   }
   functions -M my_git_formatter 2>/dev/null
 
+  # Based on these two blog posts:
+  # - https://andre.arko.net/2025/06/20/a-jj-prompt-for-powerlevel10k/
+  # - https://zerowidth.com/2025/async-zsh-jujutsu-prompt-with-p10k/
+  #
+  # jj prompt table of contents:
+  # ----------------------------
+  # jj_add     | add changes to jj for this prompt   | (no output)
+  # jj_at      | bookmark name and distance from @   | main›1
+  # jj_remote  | count changes ahead/behind remote   | 2⇡1⇣
+  # jj_change  | the current jj change ID            | kkor
+  # jj_desc    | current change description          | first line of description (or  )
+  # jj_status  | counts of added, removed, modified  | +1 -4 ^2
+  # jj_op      | the current jj operation ID         | b44825e56a5a
+
+  function jj_status_query() {
+    emulate -L zsh
+    cd "$1"
+
+    ## jj_add
+    jj --at-operation=@ debug snapshot
+
+    ## jj_at
+    local branch=$(jj --ignore-working-copy --at-op=@ --no-pager log --no-graph --limit 1 -r "
+      coalesce(
+        heads(::@ & (bookmarks() | remote_bookmarks() | tags())),
+        heads(@:: & (bookmarks() | remote_bookmarks() | tags())),
+        trunk()
+      )" -T "separate(' ', bookmarks, tags)" 2> /dev/null | cut -d ' ' -f 1)
+    if [[ -n $branch ]]; then
+      [[ $branch =~ "\*$" ]] && branch=${branch::-1}
+
+      local JJ_STATUS_COMMITS_AFTER=$(jj --ignore-working-copy --at-op=@ --no-pager log --no-graph -r "$branch..@ & (~empty() | merges())" -T '"n"' 2> /dev/null | wc -c | tr -d ' ')
+      local JJ_STATUS_COMMITS_BEFORE=$(jj --ignore-working-copy --at-op=@ --no-pager log --no-graph -r "@..$branch & (~empty() | merges())" -T '"n"' 2> /dev/null | wc -c | tr -d ' ')
+
+      ## jj_remote
+      local counts=($(jj --ignore-working-copy --at-op=@ --no-pager bookmark list -r $branch -T '
+        if(remote,
+          separate(" ",
+            name ++ "@" ++ remote,
+            coalesce(tracking_ahead_count.exact(), tracking_ahead_count.lower()),
+            coalesce(tracking_behind_count.exact(), tracking_behind_count.lower()),
+            if(tracking_ahead_count.exact(), "0", "+"),
+            if(tracking_behind_count.exact(), "0", "+"),
+          ) ++ "\n"
+        )
+      '))
+      local JJ_STATUS_LOCAL_BRANCH=$branch
+      local JJ_STATUS_COMMITS_AHEAD=$counts[2]
+      local JJ_STATUS_COMMITS_BEHIND=$counts[3]
+      local JJ_STATUS_COMMITS_AHEAD_PLUS=$counts[4]
+      local JJ_STATUS_COMMITS_BEHIND_PLUS=$counts[5]
+    fi
+
+    ## jj_change
+    IFS="#" local change=($(jj --ignore-working-copy --at-op=@ --no-pager log --no-graph --limit 1 -r "@" -T '
+      separate("#", change_id.shortest(4).prefix(), coalesce(change_id.shortest(4).rest(), "\0"),
+        commit_id.shortest(4).prefix(),
+        coalesce(commit_id.shortest(4).rest(), "\0"),
+        concat(
+          if(conflict, "💥"),
+          if(divergent, "🚧"),
+          if(hidden, "👻"),
+          if(immutable, "🔒"),
+        ),
+      )'))
+    local JJ_STATUS_CHANGE=($change[1] $change[2])
+    local JJ_STATUS_COMMIT=($change[3] $change[4])
+    local JJ_STATUS_ACTION=$change[5]
+
+    ## jj_desc
+    local JJ_STATUS_MESSAGE=$(jj --ignore-working-copy --at-op=@ --no-pager log --no-graph --limit 1 -r "@" -T "coalesce(description.first_line(), if(!empty, '\Uf040'))")
+
+    ## jj_status
+    local JJ_STATUS_CHANGES=($(jj log --ignore-working-copy --at-op=@ --no-graph --no-pager -r @ -T "diff.summary()" 2> /dev/null | awk 'BEGIN {a=0;d=0;m=0} /^A / {a++} /^D / {d++} /^M / {m++} /^R / {m++} /^C / {a++} END {print(a,d,m)}'))
+
+    # Run the JJ status formatter twice. Once normally and the second time to get the greyed-out version.
+    jj_status_formatter 1
+    jj_status_formatter
+  }
+
+  function jj_status_formatter() {
+    if (( $1 )); then
+      local grey='%244F'
+      local green='%76F'
+      local blue='%39F'
+      local red='%196F'
+      local yellow='%3F'
+      local cyan='%6F'
+      local magenta='%5F'
+    else
+      # Make all the colors grey to represent the stale segment.
+      local grey='%244F'
+      local green='%244F'
+      local blue='%244F'
+      local red='%244F'
+      local yellow='%244F'
+      local cyan='%244F'
+      local magenta='%244F'
+    fi
+
+    local res
+
+    ## jj_at
+    local status_color=${green}
+    (( JJ_STATUS_COMMITS_AHEAD )) && status_color=${cyan}
+    (( JJ_STATUS_COMMITS_BEHIND )) && status_color=${magenta}
+    (( JJ_STATUS_COMMITS_AHEAD && VCS_STATUS_COMMITS_BEHIND )) && status_color=${red}
+
+    local where=${(V)JJ_STATUS_LOCAL_BRANCH}
+    # If local branch name or tag is at most 32 characters long, show it in full.
+    # Otherwise show the first 12 … the last 12.
+    (( $#where > 32 )) && where[13,-13]="…"
+    res+="${status_color}${where//\%/%%}"  # escape %
+
+    # ‹42 if before the local bookmark
+    (( JJ_STATUS_COMMITS_BEFORE )) && res+="‹${JJ_STATUS_COMMITS_BEFORE}"
+    # ›42 if beyond the local bookmark
+    (( JJ_STATUS_COMMITS_AFTER )) && res+="›${JJ_STATUS_COMMITS_AFTER}"
+
+
+    ## jj_remote
+    # ⇣42 if behind the remote.
+    (( JJ_STATUS_COMMITS_BEHIND )) && res+=" ${green}⇣${JJ_STATUS_COMMITS_BEHIND}"
+    (( JJ_STATUS_COMMITS_BEHIND_PLUS )) && res+="${JJ_STATUS_COMMITS_BEHIND_PLUS}"
+    # ⇡42 if ahead of the remote; no leading space if also behind the remote: ⇣42⇡42.
+    (( JJ_STATUS_COMMITS_AHEAD && !JJ_STATUS_COMMITS_BEHIND )) && res+=" "
+    (( JJ_STATUS_COMMITS_AHEAD  )) && res+="${green}⇡${JJ_STATUS_COMMITS_AHEAD}"
+    (( JJ_STATUS_COMMITS_AHEAD_PLUS )) && res+="${JJ_STATUS_COMMITS_AHEAD_PLUS}"
+
+    ## jj_change
+    # 'zyxw' with the standard jj color coding for shortest name
+    res+=" ${magenta}${JJ_STATUS_CHANGE[1]}${grey}${JJ_STATUS_CHANGE[2]}"
+    # '💥🚧👻🔒' if the repo is in an unusual state.
+    [[ -n $JJ_STATUS_ACTION ]] && res+=" ${red}${JJ_STATUS_ACTION}"
+
+    ## jj_desc
+    [[ -n $JJ_STATUS_MESSAGE ]] && res+=" ${green}${JJ_STATUS_MESSAGE}"
+ 
+    ## jj_status
+    (( JJ_STATUS_CHANGES[1] )) && res+=" ${green}+${JJ_STATUS_CHANGES[1]}"
+    (( JJ_STATUS_CHANGES[2] )) && res+=" ${red}-${JJ_STATUS_CHANGES[2]}"
+    (( JJ_STATUS_CHANGES[3] )) && res+=" ${yellow}^${JJ_STATUS_CHANGES[3]}"
+
+    echo $res
+  }
+
+  function jj_status_callback() {
+    emulate -L zsh
+    local p10k_jj_statuses=( ${(f)3} )
+
+    if [[ $2 -ne 0 ]]; then
+      typeset -g p10k_jj_status=
+    else
+      typeset -g p10k_jj_status="$p10k_jj_statuses[1]"
+      typeset -g p10k_jj_status_greyed_out="$p10k_jj_statuses[2]"
+    fi
+    typeset -g p10k_jj_status_stale= p10k_jj_status_updated=1
+    p10k display -r
+  }
+
+  async_start_worker        jj_status_worker -u
+  async_unregister_callback jj_status_worker
+  async_register_callback   jj_status_worker jj_status_callback
+
+  function prompt_jj() {
+    emulate -L zsh -o extended_glob
+
+    command -v jj >/dev/null 2>&1 || return
+    if [[ -n $(jj workspace root 2>/dev/null) ]]; then
+      p10k display "*/jj=show"
+      p10k display "*/vcs=hide"
+    else
+      p10k display "*/jj=hide"
+      p10k display "*/vcs=show"
+      return
+    fi
+
+    typeset -g p10k_jj_status_stale=1 p10k_jj_status_updated=
+    p10k segment -f grey -c '$p10k_jj_status_stale' -e -t '$p10k_jj_status_greyed_out'
+    p10k segment -c '$p10k_jj_status_updated' -e -t '$p10k_jj_status'
+    async_job jj_status_worker jj_status_query $PWD
+  }
+
   # Don't count the number of unstaged, untracked and conflicted files in Git repositories with
   # more than this many files in the index. Negative value means infinity.
   #
@@ -497,7 +681,7 @@
 
   # Show status of repositories of these types. You can add svn and/or hg if you are
   # using them. If you do, your prompt may become slow even when your current directory
-  # isn't in an svn or hg reposotiry.
+  # isn't in an svn or hg repository.
   typeset -g POWERLEVEL9K_VCS_BACKENDS=(git)
 
   # These settings are used for repositories other than Git or when gitstatusd fails and

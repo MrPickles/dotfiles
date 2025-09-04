@@ -83,9 +83,16 @@ install_omz() {
     "https://github.com/Aloxaf/fzf-tab"
     "https://github.com/zdharma-continuum/fast-syntax-highlighting"
     "https://github.com/zsh-users/zsh-autosuggestions"
+    "https://github.com/mafredri/zsh-async"
   )
   for REPO_URL in "${CUSTOM_PLUGIN_REPOS[@]}"; do
-    PLUGIN_PATH="${ZSH_CUSTOM}/plugins/${REPO_URL##*/}"
+    PLUGIN_NAME="${REPO_URL##*/}"
+    if [[ "$PLUGIN_NAME" == "zsh-async" ]]; then
+      # For zsh-async, the plugin's name is different from the repository name.
+      PLUGIN_NAME="async"
+    fi
+    PLUGIN_PATH="${ZSH_CUSTOM}/plugins/${plugin_name}"
+    echo $PLUGIN_PATH
     if [[ ! -d "${PLUGIN_PATH}" ]]; then
       git clone --quiet --filter=blob:none "${REPO_URL}" "${PLUGIN_PATH}"
     else

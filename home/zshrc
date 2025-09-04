@@ -63,6 +63,7 @@ plugins=(
   vi-mode
   fast-syntax-highlighting
   zsh-autosuggestions
+  async
 )
 
 ################################################################################
