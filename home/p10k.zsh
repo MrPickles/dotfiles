@@ -521,7 +521,9 @@
 
     ## jj_change
     IFS="#" local change=($(jj --ignore-working-copy --at-op=@ --no-pager log --no-graph --limit 1 -r "@" -T '
-      separate("#", change_id.shortest(4).prefix(), coalesce(change_id.shortest(4).rest(), "\0"),
+      separate("#",
+        change_id.shortest(4).prefix(),
+        coalesce(change_id.shortest(4).rest(), "\0"),
         commit_id.shortest(4).prefix(),
         coalesce(commit_id.shortest(4).rest(), "\0"),
         concat(
@@ -539,7 +541,14 @@
     local JJ_STATUS_MESSAGE=$(jj --ignore-working-copy --at-op=@ --no-pager log --no-graph --limit 1 -r "@" -T "coalesce(description.first_line(), if(!empty, '\Uf040'))")
 
     ## jj_status
-    local JJ_STATUS_CHANGES=($(jj log --ignore-working-copy --at-op=@ --no-graph --no-pager -r @ -T "diff.summary()" 2> /dev/null | awk 'BEGIN {a=0;d=0;m=0} /^A / {a++} /^D / {d++} /^M / {m++} /^R / {m++} /^C / {a++} END {print(a,d,m)}'))
+    local JJ_STATUS_CHANGES=($(jj log --ignore-working-copy --at-op=@ --no-graph --no-pager -r @ -T "diff.summary()" 2> /dev/null | awk '
+      BEGIN {a=0;d=0;m=0;r=0;c=0}
+        /^A / {a++}
+        /^D / {d++}
+        /^M / {m++}
+        /^R / {r++}
+        /^C / {c++}
+      END {print(a,d,m,r,c)}'))
 
     # Run the JJ status formatter twice. Once normally and the second time to get the greyed-out version.
     jj_status_formatter 1
@@ -548,7 +557,7 @@
 
   function jj_status_formatter() {
     if (( $1 )); then
-      local grey='%244F'
+      local grey='%246F'
       local green='%76F'
       local blue='%39F'
       local red='%196F'
@@ -572,7 +581,7 @@
     local status_color=${green}
     (( JJ_STATUS_COMMITS_AHEAD )) && status_color=${cyan}
     (( JJ_STATUS_COMMITS_BEHIND )) && status_color=${magenta}
-    (( JJ_STATUS_COMMITS_AHEAD && VCS_STATUS_COMMITS_BEHIND )) && status_color=${red}
+    (( JJ_STATUS_COMMITS_AHEAD && JJ_STATUS_COMMITS_BEHIND )) && status_color=${red}
 
     local where=${(V)JJ_STATUS_LOCAL_BRANCH}
     # If local branch name or tag is at most 32 characters long, show it in full.
@@ -585,19 +594,18 @@
     # ›42 if beyond the local bookmark
     (( JJ_STATUS_COMMITS_AFTER )) && res+="›${JJ_STATUS_COMMITS_AFTER}"
 
-
     ## jj_remote
     # ⇣42 if behind the remote.
     (( JJ_STATUS_COMMITS_BEHIND )) && res+=" ${green}⇣${JJ_STATUS_COMMITS_BEHIND}"
     (( JJ_STATUS_COMMITS_BEHIND_PLUS )) && res+="${JJ_STATUS_COMMITS_BEHIND_PLUS}"
     # ⇡42 if ahead of the remote; no leading space if also behind the remote: ⇣42⇡42.
     (( JJ_STATUS_COMMITS_AHEAD && !JJ_STATUS_COMMITS_BEHIND )) && res+=" "
-    (( JJ_STATUS_COMMITS_AHEAD  )) && res+="${green}⇡${JJ_STATUS_COMMITS_AHEAD}"
+    (( JJ_STATUS_COMMITS_AHEAD )) && res+="${green}⇡${JJ_STATUS_COMMITS_AHEAD}"
     (( JJ_STATUS_COMMITS_AHEAD_PLUS )) && res+="${JJ_STATUS_COMMITS_AHEAD_PLUS}"
 
     ## jj_change
     # 'zyxw' with the standard jj color coding for shortest name
-    res+=" ${magenta}${JJ_STATUS_CHANGE[1]}${grey}${JJ_STATUS_CHANGE[2]}"
+    res+=" ${blue}${JJ_STATUS_CHANGE[1]}${grey}${JJ_STATUS_CHANGE[2]}"
     # '💥🚧👻🔒' if the repo is in an unusual state.
     [[ -n $JJ_STATUS_ACTION ]] && res+=" ${red}${JJ_STATUS_ACTION}"
 
@@ -607,7 +615,9 @@
     ## jj_status
     (( JJ_STATUS_CHANGES[1] )) && res+=" ${green}+${JJ_STATUS_CHANGES[1]}"
     (( JJ_STATUS_CHANGES[2] )) && res+=" ${red}-${JJ_STATUS_CHANGES[2]}"
-    (( JJ_STATUS_CHANGES[3] )) && res+=" ${yellow}^${JJ_STATUS_CHANGES[3]}"
+    (( JJ_STATUS_CHANGES[3] )) && res+=" ${yellow}±${JJ_STATUS_CHANGES[3]}"
+    (( JJ_STATUS_CHANGES[4] )) && res+=" ${magenta}↻${JJ_STATUS_CHANGES[4]}"
+    (( JJ_STATUS_CHANGES[5] )) && res+=" ${cyan}⧉${JJ_STATUS_CHANGES[5]}"
 
     echo $res
   }
