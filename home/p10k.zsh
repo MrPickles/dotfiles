@@ -575,7 +575,7 @@
       local magenta='%244F'
     fi
 
-    local res
+    local res="${green}"
 
     ## jj_at
     local status_color=${green}
@@ -587,7 +587,7 @@
     # If local branch name or tag is at most 32 characters long, show it in full.
     # Otherwise show the first 12 … the last 12.
     (( $#where > 32 )) && where[13,-13]="…"
-    res+="${status_color}${where//\%/%%}"  # escape %
+    (( $#where > 0 )) && res+="${status_color} ${where//\%/%%}"
 
     # ‹42 if before the local bookmark
     (( JJ_STATUS_COMMITS_BEFORE )) && res+="‹${JJ_STATUS_COMMITS_BEFORE}"
