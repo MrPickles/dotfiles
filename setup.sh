@@ -91,8 +91,7 @@ install_omz() {
       # For zsh-async, the plugin's name is different from the repository name.
       PLUGIN_NAME="async"
     fi
-    PLUGIN_PATH="${ZSH_CUSTOM}/plugins/${plugin_name}"
-    echo $PLUGIN_PATH
+    PLUGIN_PATH="${ZSH_CUSTOM}/plugins/${PLUGIN_NAME}"
     if [[ ! -d "${PLUGIN_PATH}" ]]; then
       git clone --quiet --filter=blob:none "${REPO_URL}" "${PLUGIN_PATH}"
     else
