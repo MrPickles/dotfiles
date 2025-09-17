@@ -38,6 +38,9 @@ _prepend_to_path /usr/local/sbin
 _prepend_to_path $HOME/.local/bin
 if [[ $(uname) == "Darwin" ]]; then
   _prepend_to_path /opt/homebrew/bin
+  if _has brew; then
+    _prepend_to_path $(brew --prefix python)/libexec/bin
+  fi
 fi
 
 ################################################################################
