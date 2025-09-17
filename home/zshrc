@@ -39,6 +39,8 @@ _prepend_to_path $HOME/.local/bin
 if [[ $(uname) == "Darwin" ]]; then
   _prepend_to_path /opt/homebrew/bin
   if _has brew; then
+    # Add symlinked Python binaries to path.
+    # https://docs.brew.sh/Homebrew-and-Python
     _prepend_to_path $(brew --prefix python)/libexec/bin
   fi
 fi
