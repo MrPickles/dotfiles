@@ -605,7 +605,7 @@
 
     ## jj_change
     # 'zyxw' with the standard jj color coding for shortest name
-    res+=" ${blue}${JJ_STATUS_CHANGE[1]}${grey}${JJ_STATUS_CHANGE[2]}"
+    [[ -n $JJ_STATUS_CHANGE ]] && res+=" ${blue}${JJ_STATUS_CHANGE[1]}${grey}${JJ_STATUS_CHANGE[2]}"
     # '💥🚧👻🔒' if the repo is in an unusual state.
     [[ -n $JJ_STATUS_ACTION ]] && res+=" ${red}${JJ_STATUS_ACTION}"
 
