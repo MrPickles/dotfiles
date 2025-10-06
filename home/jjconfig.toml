@@ -1,0 +1,9 @@
+[ui]
+default-command = "log"
+diff-formatter = ":git"
+# https://jj-vcs.github.io/jj/latest/config/#processing-contents-to-be-paged
+pager = "delta"
+
+[working-copy]
+# No EOL conversion. Similar to core.autocrlf = false.
+eol-conversion = "none"
