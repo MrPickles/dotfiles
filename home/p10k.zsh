@@ -643,15 +643,22 @@
   function prompt_jj() {
     emulate -L zsh -o extended_glob
 
+    # Default to showing normal VCS prompts, not JJ.
+    p10k display "*/jj=hide"
+    p10k display "*/vcs=show"
+
+    # If we're not in a JJ repo, do nothing.
     command -v jj >/dev/null 2>&1 || return
-    if [[ -n $(jj workspace root 2>/dev/null) ]]; then
-      p10k display "*/jj=show"
-      p10k display "*/vcs=hide"
-    else
-      p10k display "*/jj=hide"
-      p10k display "*/vcs=show"
-      return
-    fi
+    jj_root=$(jj workspace root 2>/dev/null)
+    [[ -z $jj_root ]] && return
+
+    # If we're in a git submodule (nested within a JJ repo), do nothing.
+    git_root=$(git rev-parse --show-toplevel 2>/dev/null)
+    [[ ${#jj_root} -lt ${#git_root} ]] && return
+
+    # Show JJ prompts, not normal VCS.
+    p10k display "*/jj=show"
+    p10k display "*/vcs=hide"
 
     typeset -g p10k_jj_status_stale=1 p10k_jj_status_updated=
     p10k segment -f grey -c '$p10k_jj_status_stale' -e -t '$p10k_jj_status_greyed_out'
