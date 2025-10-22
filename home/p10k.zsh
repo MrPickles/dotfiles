@@ -538,7 +538,7 @@
     local JJ_STATUS_ACTION=$change[5]
 
     ## jj_desc
-    local JJ_STATUS_MESSAGE=$(jj --ignore-working-copy --at-op=@ --no-pager log --no-graph --limit 1 -r "@" -T "coalesce(description.first_line(), if(!empty, '\Uf040'))")
+    local JJ_STATUS_MESSAGE=$(jj --ignore-working-copy --at-op=@ --no-pager log --no-graph --limit 1 -r "@" -T "description.first_line()")
 
     ## jj_status
     local JJ_STATUS_CHANGES=($(jj log --ignore-working-copy --at-op=@ --no-graph --no-pager -r @ -T "diff.summary()" 2> /dev/null | awk '
@@ -610,7 +610,8 @@
     [[ -n $JJ_STATUS_ACTION ]] && res+=" ${red}${JJ_STATUS_ACTION}"
 
     ## jj_desc
-    [[ -n $JJ_STATUS_MESSAGE ]] && res+=" ${green}${JJ_STATUS_MESSAGE}"
+    # Show a symbol if the working copy has a message.
+    [[ -n $JJ_STATUS_MESSAGE ]] && res+=" ${magenta}"
  
     ## jj_status
     (( JJ_STATUS_CHANGES[1] )) && res+=" ${green}+${JJ_STATUS_CHANGES[1]}"
