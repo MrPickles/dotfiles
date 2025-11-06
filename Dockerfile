@@ -6,6 +6,7 @@ RUN apt update && apt install -y \
   build-essential \
   curl \
   fd-find \
+  fzf \
   git \
   gpg \
   ripgrep \
@@ -28,7 +29,7 @@ RUN wget https://github.com/neovim/neovim/releases/download/stable/nvim-linux-x8
   && rm nvim-linux-x86_64.appimage
 
 # Install git-delta via dpkg.
-ENV GIT_DELTA_VERSION="0.15.1"
+ENV GIT_DELTA_VERSION="0.18.2"
 ENV GIT_DELTA_DEB="git-delta-musl_${GIT_DELTA_VERSION}_amd64.deb"
 RUN wget https://github.com/dandavison/delta/releases/download/${GIT_DELTA_VERSION}/${GIT_DELTA_DEB} \
   && dpkg -i ${GIT_DELTA_DEB} \

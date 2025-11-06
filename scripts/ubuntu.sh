@@ -11,6 +11,7 @@ sudo apt install -y \
   build-essential \
   curl \
   fd-find \
+  fzf \
   git \
   gpg \
   mosh \

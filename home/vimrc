@@ -13,8 +13,6 @@ call plug#begin()
 " Let Tim Pope set sensible defaults for us.
 Plug 'tpope/vim-sensible'
 
-" Optionally manage fzf here. Neovim does the same.
-Plug 'junegunn/fzf', { 'tag': '*',  'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
 " Git-release plugins.

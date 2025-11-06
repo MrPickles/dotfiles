@@ -75,20 +75,11 @@ plugins=(
 # FZF setup
 ################################################################################
 
-# Add fzf to path. We use locally-installed versions of fzf.
-fzf_paths=(
-  "${HOME}/.local/share/nvim/lazy/fzf"
-  "${HOME}/.local/share/nvim/site/pack/packer/start/fzf"
-  "${HOME}/.vim/plugged/fzf"
-)
-for fzf_path in "${fzf_paths[@]}"; do
-  if [ -d $fzf_path ]; then
-    _prepend_to_path "${fzf_path}/bin"
-    break
-  fi
-done
-
 if _has fzf; then
+  # Set up fzf shell integration.
+  # https://github.com/junegunn/fzf?tab=readme-ov-file#setting-up-shell-integration
+  source <(fzf --zsh)
+
   if _has fd; then
     # Use fd for fzf.
     FZF_DEFAULT_COMMAND='fd --type f --follow --hidden'
@@ -205,15 +196,6 @@ bindkey "${terminfo[kend]}" end-of-line
 # This must come after OMZ. (The library overwrites this alias.)
 if _has eza; then
   alias ls="eza"
-fi
-
-# Source fzf scripts via local installation.
-# OMZ overwrites some of these scripts, so this must come afterwards.
-if _has fzf; then
-  # Source fzf key bindings and auto-completion.
-  # NOTE: This uses the ${fzf_path} variable from earlier. This is intentional.
-  source "${fzf_path}/shell/key-bindings.zsh"
-  source "${fzf_path}/shell/completion.zsh"
 fi
 
 if _has zoxide; then

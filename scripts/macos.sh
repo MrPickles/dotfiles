@@ -7,8 +7,7 @@ fi
 
 # Remove hide delay for the dock
 # https://apple.stackexchange.com/a/46222
-defaults write com.apple.Dock autohide-delay -float 0; killall Dock
-
+defaults write com.apple.Dock autohide-delay -float 0;killall Dock
 
 if [[ -z "$(command -v brew)" ]]; then
   # Install Homebrew.
@@ -19,6 +18,7 @@ else
     bat \
     eza \
     fd \
+    fzf \
     git-delta \
     jq \
     neovim \

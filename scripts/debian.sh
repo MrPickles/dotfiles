@@ -6,6 +6,7 @@
 sudo apt install -y \
   build-essential \
   curl \
+  fzf \
   git \
   gpg \
   mosh \
