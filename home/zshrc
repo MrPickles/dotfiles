@@ -76,10 +76,6 @@ plugins=(
 ################################################################################
 
 if _has fzf; then
-  # Set up fzf shell integration.
-  # https://github.com/junegunn/fzf?tab=readme-ov-file#setting-up-shell-integration
-  source <(fzf --zsh)
-
   if _has fd; then
     # Use fd for fzf.
     FZF_DEFAULT_COMMAND='fd --type f --follow --hidden'
@@ -196,6 +192,11 @@ bindkey "${terminfo[kend]}" end-of-line
 # This must come after OMZ. (The library overwrites this alias.)
 if _has eza; then
   alias ls="eza"
+fi
+
+# Sourcing OMZ overwrites some of bindings from fzf scripts.
+if _has fzf; then
+  source <(fzf --zsh)
 fi
 
 if _has zoxide; then
