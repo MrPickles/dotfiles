@@ -4,3 +4,4 @@ font-size = 14
 theme = "Builtin Solarized Dark"
 quit-after-last-window-closed = true
 confirm-close-surface = false
+macos-option-as-alt = true
