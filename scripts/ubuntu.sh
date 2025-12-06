@@ -29,8 +29,8 @@ if ! _has nvim; then
   chmod +x nvim-linux-x86_64.appimage
   ./nvim-linux-x86_64.appimage --appimage-extract
   sudo mv squashfs-root /
-  sudo ln -s /squashfs-root/AppRun /usr/bin/nvim
-  rm nvim.appimage
+  sudo ln -sf /squashfs-root/AppRun /usr/bin/nvim
+  rm nvim-linux-x86_64.appimage
 fi
 
 if ! _has delta; then
