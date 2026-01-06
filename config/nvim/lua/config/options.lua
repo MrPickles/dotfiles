@@ -8,3 +8,5 @@ vim.filetype.add({
     gitconfig = "gitconfig",
   },
 })
+
+vim.opt.conceallevel = 0
