@@ -89,7 +89,9 @@ if _has fzf; then
 
   # Show previews for files and directories.
   FZF_CTRL_T_OPTS="--preview 'cat {} | head -200'"
-  if _has batcat || _has bat; then
+  if _has batcat; then
+    FZF_CTRL_T_OPTS="--preview 'batcat --style=numbers --color=always {} | head -200'"
+  elif _has bat; then
     FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always {} | head -200'"
   fi
 
