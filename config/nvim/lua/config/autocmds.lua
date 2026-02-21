@@ -14,3 +14,6 @@ vim.api.nvim_create_autocmd("Filetype", {
     vim.opt.expandtab = false
   end,
 })
+
+-- Disable spellchecker (that was automatically enabled by LazyVim)
+vim.api.nvim_del_augroup_by_name("lazyvim_wrap_spell")
