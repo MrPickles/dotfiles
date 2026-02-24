@@ -28,6 +28,7 @@ cargo install \
   fd-find \
   git-delta \
   ripgrep \
+  tree-sitter-cli \
   zoxide
 
 # Install Neovim.

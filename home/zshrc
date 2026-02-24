@@ -146,8 +146,6 @@ export LC_CTYPE=en_US.UTF-8
 
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="bg=italic,underline"
 export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
-# Export theme for http://github.com/sharkdp/bat.
-export BAT_THEME="Solarized (dark)"
 
 # The bat executable may sometimes be called batcat on Debian/Ubuntu.
 if _has batcat; then
@@ -197,7 +195,8 @@ bindkey "${terminfo[kend]}" end-of-line
 # Alias `eza` as default `ls` command (if available).
 # This must come after OMZ. (The library overwrites this alias.)
 if _has eza; then
-  alias ls="eza"
+  alias ls="eza --icons=auto"
+  export EZA_CONFIG_DIR="$HOME/.config/eza"
 fi
 
 # Sourcing OMZ overwrites some of bindings from fzf scripts.

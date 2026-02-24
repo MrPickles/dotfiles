@@ -25,5 +25,6 @@ else
     reattach-to-user-namespace \
     ripgrep \
     tmux \
+    tree-sitter-cli \
     zoxide
 fi

@@ -32,6 +32,7 @@ These dotfiles contain the following software dependencies:
 
 * Linux, MacOS, or WSL
 * Neovim (latest stable version)
+* [tree-sitter-cli](https://github.com/tree-sitter/tree-sitter) (required for Neovim's parsing engine)
 
 ## Installation
 

@@ -1,0 +1,4 @@
+# You can run `bat --help` to get a list of all possible configuration options.
+
+# Set the theme to Solarized Dark
+--theme="Solarized (dark)"
