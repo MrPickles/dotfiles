@@ -14,6 +14,7 @@ sudo apt install -y \
   fzf \
   git \
   gpg \
+  jq \
   mosh \
   ripgrep \
   sudo \
@@ -34,9 +35,10 @@ if ! _has nvim; then
 fi
 
 if ! _has delta; then
-  wget https://github.com/dandavison/delta/releases/download/0.15.1/git-delta-musl_0.15.1_amd64.deb
-  sudo dpkg -i git-delta-musl_0.15.1_amd64.deb
-  rm git-delta-musl_0.15.1_amd64.deb
+  DELTA_VERSION=$(curl -s https://api.github.com/repos/dandavison/delta/releases/latest | jq -r .tag_name)
+  wget "https://github.com/dandavison/delta/releases/download/${DELTA_VERSION}/git-delta-musl_${DELTA_VERSION}_amd64.deb"
+  sudo dpkg -i "git-delta-musl_${DELTA_VERSION}_amd64.deb"
+  rm "git-delta-musl_${DELTA_VERSION}_amd64.deb"
 fi
 
 if ! _has eza; then
@@ -55,4 +57,11 @@ fi
 
 if ! _has zoxide; then
   curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
+fi
+
+if ! _has tree-sitter; then
+  wget "https://github.com/tree-sitter/tree-sitter/releases/latest/download/tree-sitter-linux-x64.gz"
+  gzip -d tree-sitter-linux-x64.gz
+  chmod +x tree-sitter-linux-x64
+  sudo mv tree-sitter-linux-x64 /usr/local/bin/tree-sitter
 fi

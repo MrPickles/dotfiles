@@ -9,6 +9,7 @@ RUN apt update && apt install -y \
   fzf \
   git \
   gpg \
+  jq \
   ripgrep \
   sudo \
   tmux \
@@ -29,11 +30,10 @@ RUN wget https://github.com/neovim/neovim/releases/download/stable/nvim-linux-x8
   && rm nvim-linux-x86_64.appimage
 
 # Install git-delta via dpkg.
-ENV GIT_DELTA_VERSION="0.18.2"
-ENV GIT_DELTA_DEB="git-delta-musl_${GIT_DELTA_VERSION}_amd64.deb"
-RUN wget https://github.com/dandavison/delta/releases/download/${GIT_DELTA_VERSION}/${GIT_DELTA_DEB} \
-  && dpkg -i ${GIT_DELTA_DEB} \
-  && rm ${GIT_DELTA_DEB}
+RUN export GIT_DELTA_VERSION=$(curl -s https://api.github.com/repos/dandavison/delta/releases/latest | jq -r .tag_name) \
+  && wget https://github.com/dandavison/delta/releases/download/${GIT_DELTA_VERSION}/git-delta-musl_${GIT_DELTA_VERSION}_amd64.deb \
+  && dpkg -i git-delta-musl_${GIT_DELTA_VERSION}_amd64.deb \
+  && rm git-delta-musl_${GIT_DELTA_VERSION}_amd64.deb
 
 # Install eza via apt.
 RUN mkdir -p /etc/apt/keyrings \
@@ -42,6 +42,12 @@ RUN mkdir -p /etc/apt/keyrings \
   && chmod 644 /etc/apt/keyrings/gierens.gpg /etc/apt/sources.list.d/gierens.list \
   && apt update \
   && apt install -y eza
+
+# Install tree-sitter via GitHub release.
+RUN wget https://github.com/tree-sitter/tree-sitter/releases/latest/download/tree-sitter-linux-x64.gz \
+  && gzip -d tree-sitter-linux-x64.gz \
+  && chmod +x tree-sitter-linux-x64 \
+  && mv tree-sitter-linux-x64 /usr/local/bin/tree-sitter
 
 # Create a user with sudo privileges.
 ARG USER=andy
