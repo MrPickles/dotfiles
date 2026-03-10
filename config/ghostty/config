@@ -1,7 +1,7 @@
 # https://ghostty.org/docs/config/reference
 font-family = "MesloLGS NF"
 font-size = 14
-theme = "Builtin Solarized Dark"
+theme = "iTerm2 Solarized Dark"
 quit-after-last-window-closed = true
 confirm-close-surface = false
 macos-option-as-alt = true
