@@ -201,7 +201,13 @@ fi
 
 # Sourcing OMZ overwrites some of bindings from fzf scripts.
 if _has fzf; then
-  source <(fzf --zsh)
+  local fzf_version=$(fzf --version | awk '{print $1}')
+  autoload -Uz is-at-least
+  if is-at-least 0.48.0 "$fzf_version"; then
+    source <(fzf --zsh)
+  else
+    echo "\e[33mWarning: Your fzf version ($fzf_version) is too old to support '--zsh'. Please update fzf to >= 0.48.0 to enable shell integration.\e[0m" >&2
+  fi
 fi
 
 if _has zoxide; then
