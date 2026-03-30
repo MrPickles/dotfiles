@@ -5,3 +5,7 @@ theme = "iTerm2 Solarized Dark"
 quit-after-last-window-closed = true
 confirm-close-surface = false
 macos-option-as-alt = true
+
+# Terminal bell configuration
+bell-features = audio
+bell-audio-path = fah.mp3
