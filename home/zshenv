@@ -1,0 +1,63 @@
+################################################################################
+# Generic helper functions
+################################################################################
+
+# Returns whether the given command is executable or aliased.
+_has() {
+  return $(whence $1 >/dev/null)
+}
+
+# Prepend a directory to path, if it exists.
+_prepend_to_path() {
+  if [ -d $1 ]; then
+    path=($1 $path);
+  fi
+}
+
+# Append a directory to path, if it exists and isn't already in the path.
+_append_to_path() {
+  if [ -d $1 -a -z ${path[(r)$1]} ]; then
+    path=($path $1);
+  fi
+}
+
+################################################################################
+# Modify the path
+################################################################################
+
+# Add common bin directories to path.
+_prepend_to_path /usr/local/bin
+_prepend_to_path /usr/local/sbin
+_prepend_to_path $HOME/.local/bin
+
+# Add Homebrew directories to path.
+_prepend_to_path /opt/homebrew/bin
+if _has brew; then
+  # Add symlinked Python binaries to path.
+  # https://docs.brew.sh/Homebrew-and-Python
+  _prepend_to_path $(brew --prefix python)/libexec/bin
+fi
+
+################################################################################
+# Environment variables
+################################################################################
+
+# Make sure we're using UTF-8.
+export LANG=en_US.UTF-8
+export LC_CTYPE=en_US.UTF-8
+
+# Set default editor (Neovim if available, otherwise classic Vim)
+if _has nvim; then
+  export EDITOR="nvim"
+else
+  export EDITOR="vim"
+fi
+
+# Set various config directories.
+export NVM_DIR="$HOME/.nvm"
+export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
+
+# Source local zshenv configs.
+if [[ -f ~/.zshenv.local ]]; then
+  source ~/.zshenv.local
+fi

@@ -101,6 +101,7 @@ access, it may not work.
 You can customize zsh, vim, tmux, and git for each specific machine.
 Just put any additional configurations in the following files:
 
+* `~/.zshenv.local`
 * `~/.zshrc.local`
 * `~/.vimrc.local`
 * `~/.tmux.conf.local`

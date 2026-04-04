@@ -5,45 +5,6 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-################################################################################
-# Generic helper functions
-################################################################################
-
-# Returns whether the given command is executable or aliased.
-_has() {
-  return $(whence $1 >/dev/null)
-}
-
-# Prepend a directory to path, if it exists.
-_prepend_to_path() {
-  if [ -d $1 ]; then
-    path=($1 $path);
-  fi
-}
-
-# Append a directory to path, if it exists and isn't already in the path.
-_append_to_path() {
-  if [ -d $1 -a -z ${path[(r)$1]} ]; then
-    path=($path $1);
-  fi
-}
-
-################################################################################
-# Modify the path
-################################################################################
-
-# Add common bin directories to path.
-_prepend_to_path /usr/local/bin
-_prepend_to_path /usr/local/sbin
-_prepend_to_path $HOME/.local/bin
-if [[ $(uname) == "Darwin" ]]; then
-  _prepend_to_path /opt/homebrew/bin
-  if _has brew; then
-    # Add symlinked Python binaries to path.
-    # https://docs.brew.sh/Homebrew-and-Python
-    _prepend_to_path $(brew --prefix python)/libexec/bin
-  fi
-fi
 
 ################################################################################
 # Oh-My-ZSH prerequisite setup
@@ -109,16 +70,13 @@ if _has fzf; then
 fi
 
 ################################################################################
-# Editor setup
+# Editor aliases
 ################################################################################
 
-# Set Vim as the default editor.
-export EDITOR="vim"
 # Use Neovim instead of classic Vim (if available)
 if _has nvim; then
   alias vim="nvim"
   alias vi="nvim"
-  export EDITOR="nvim"
 fi
 
 ################################################################################
@@ -140,12 +98,7 @@ fi
 # Set up other environment variables, aliases, and options
 ################################################################################
 
-# Make sure we're using UTF-8.
-export LANG=en_US.UTF-8
-export LC_CTYPE=en_US.UTF-8
-
-export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="bg=italic,underline"
-export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="bg=italic,underline"
 
 # The bat executable may sometimes be called batcat on Debian/Ubuntu.
 if _has batcat; then
@@ -155,8 +108,7 @@ if _has bat; then
   alias cat="bat"
 fi
 
-# Node Version Manager configs.
-export NVM_DIR="$HOME/.nvm"
+# Load Node Version Manager.
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
@@ -196,7 +148,6 @@ bindkey "${terminfo[kend]}" end-of-line
 # This must come after OMZ. (The library overwrites this alias.)
 if _has eza; then
   alias ls="eza --icons=auto"
-  export EZA_CONFIG_DIR="$HOME/.config/eza"
 fi
 
 # Sourcing OMZ overwrites some of bindings from fzf scripts.
