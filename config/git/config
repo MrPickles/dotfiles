@@ -17,7 +17,6 @@
 [commit]
   verbose = true
 [core]
-	excludesfile = ~/.gitignore
 	pager = delta 2> /dev/null || less
 [delta]
 	line-numbers = true
