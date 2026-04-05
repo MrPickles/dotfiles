@@ -107,8 +107,15 @@ Just put any additional configurations in the following files:
 * `~/.tmux.conf.local`
 
 Custom git configurations can be placed in `~/.gitconfig`.
-The normal git config file is not put under version control, so it's safe to put
-machine-specific tokens in it.
+The shared git config is stored in `config/git/config` and is automatically
+included by the setup script, so it's safe to put machine-specific tokens in 
+the normal `~/.gitconfig` since it's not put under version control.
+
+Jujutsu (`jj`) uses a similar strategy natively:
+The shared configuration is stored in `config/jj/config.toml`. You can securely 
+place any machine-specific or private configurations in `~/.jjconfig.toml`. 
+Unlike Git, Jujutsu natively merges both configurations automatically, so no 
+explicit `include` statements are required!
 
 ## Docker
 

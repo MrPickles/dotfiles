@@ -164,7 +164,7 @@ main() {
 
   if [[ $BUILD ]]; then
     # Link gitconfig.
-    git config --global include.path ~/.main.gitconfig
+    git config --global include.path ~/.config/git/config
 
     # Install oh-my-zsh and its custom plugins/themes.
     install_omz

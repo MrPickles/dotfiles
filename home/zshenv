@@ -54,7 +54,7 @@ else
 fi
 
 # Set ripgrep config directory (since there's no default location).
-export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
+export RIPGREP_CONFIG_PATH="$HOME/.config/ripgrep/config"
 
 # Source local zshenv configs.
 if [[ -f ~/.zshenv.local ]]; then
