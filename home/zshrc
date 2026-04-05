@@ -5,7 +5,6 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-
 ################################################################################
 # Oh-My-ZSH prerequisite setup
 ################################################################################
@@ -32,6 +31,21 @@ plugins=(
   async
 )
 
+# Conditionally add fzf-tab if fzf is installed.
+if _has fzf; then
+  plugins+=(fzf-tab)
+fi
+
+################################################################################
+# Source Oh-My-ZSH.
+################################################################################
+
+# All theme and plugin configs must come beforehand.
+# Sourcing this may have side-effects, so order matters.
+# For the most part, it seems like bindkey gets overwritten.
+# Hence they must be after the OMZ sourcing.
+source $ZSH/oh-my-zsh.sh
+
 ################################################################################
 # FZF setup
 ################################################################################
@@ -57,7 +71,6 @@ if _has fzf; then
   fi
 
   # Some basic fzf-tab configs.
-  plugins+=(fzf-tab)
   zstyle ':completion:*:descriptions' format '[%d]'
   zstyle ':fzf-tab:*' switch-group ',' '.'
 
@@ -115,16 +128,6 @@ setopt rmstarsilent # silence rm * confirmation
 # Decrease delay in entering normal mode in shell.
 # https://www.johnhawthorn.com/2012/09/vi-escape-delays/
 KEYTIMEOUT=1
-
-################################################################################
-# Source Oh-My-ZSH.
-################################################################################
-
-# All theme and plugin configs must come beforehand.
-# Sourcing this may have side-effects, so order matters.
-# For the most part, it seems like bindkey gets overwritten.
-# Hence they must be after the OMZ sourcing.
-source $ZSH/oh-my-zsh.sh
 
 ################################################################################
 # Actions with side-effects after sourcing Oh-My-ZSH
