@@ -53,8 +53,7 @@ else
   export EDITOR="vim"
 fi
 
-# Set various config directories.
-export NVM_DIR="$HOME/.nvm"
+# Set ripgrep config directory (since there's no default location).
 export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
 
 # Source local zshenv configs.

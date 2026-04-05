@@ -108,10 +108,6 @@ if _has bat; then
   alias cat="bat"
 fi
 
-# Load Node Version Manager.
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
 # Set shell options.
 setopt correct # enable spelling suggestions
 setopt rmstarsilent # silence rm * confirmation
