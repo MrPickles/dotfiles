@@ -134,9 +134,7 @@ KEYTIMEOUT=1
 
 # Set key bindings.
 bindkey -v # vi mode for shell
-autoload -Uz edit-command-line
-zle -N edit-command-line
-bindkey '^X^E' edit-command-line
+bindkey -e # enable C-x-e for shell editor
 # Key bindings for history search.
 bindkey '\e[3~' delete-char
 bindkey '^R' history-incremental-search-backward
