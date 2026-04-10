@@ -25,18 +25,27 @@ _append_to_path() {
 # Modify the path
 ################################################################################
 
-# Add common bin directories to path.
-_prepend_to_path /usr/local/bin
-_prepend_to_path /usr/local/sbin
-_prepend_to_path $HOME/.local/bin
+_setup_path() {
+  # Keep the path deduped (must use -g to apply globally from inside a function).
+  typeset -gU path
 
-# Add Homebrew directories to path.
-_prepend_to_path /opt/homebrew/bin
-if _has brew; then
-  # Add symlinked Python binaries to path.
-  # https://docs.brew.sh/Homebrew-and-Python
-  _prepend_to_path $(brew --prefix python)/libexec/bin
-fi
+  # Add common bin directories to path.
+  _prepend_to_path /usr/local/bin
+  _prepend_to_path /usr/local/sbin
+
+  # Add Homebrew directories to path.
+  _prepend_to_path /opt/homebrew/bin
+  if _has brew; then
+    # Add symlinked Python binaries to path.
+    # https://docs.brew.sh/Homebrew-and-Python
+    _prepend_to_path $(brew --prefix python)/libexec/bin
+  fi
+
+  # Add home bin directory to path.
+  _prepend_to_path $HOME/.local/bin
+}
+
+_setup_path
 
 ################################################################################
 # Environment variables
