@@ -105,10 +105,6 @@ alias tmux="TERM=screen-256color-bce tmux"
 t() {
   tmux -u new -ADs ${1:-tmux}
 }
-if [[ -z "$TMUX" ]]; then
-  # Switch to xterm if we're in a tmux session.
-  TERM="xterm-256color"
-fi
 
 ################################################################################
 # Set up other environment variables, aliases, and options
@@ -138,7 +134,9 @@ KEYTIMEOUT=1
 
 # Set key bindings.
 bindkey -v # vi mode for shell
-bindkey -e # enable C-x-e for shell editor
+autoload -Uz edit-command-line
+zle -N edit-command-line
+bindkey '^X^E' edit-command-line
 # Key bindings for history search.
 bindkey '\e[3~' delete-char
 bindkey '^R' history-incremental-search-backward
