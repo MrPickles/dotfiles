@@ -283,7 +283,11 @@ install_zoxide_from_script() {
 
 ensure_fd_compatibility() {
   if ! has_cmd fd && has_cmd fdfind; then
-    ensure_symlink "$(command -v fdfind)" "${HOME}/.local/bin/fd"
+    if [[ "${EUID}" -eq 0 ]]; then
+      ln -sfn "$(command -v fdfind)" /usr/local/bin/fd
+    else
+      ensure_symlink "$(command -v fdfind)" "${HOME}/.local/bin/fd"
+    fi
   fi
 }
 
