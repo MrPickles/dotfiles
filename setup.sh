@@ -1,101 +1,222 @@
 #!/usr/bin/env bash
 
-# Configuration script to symlink the dotfiles or clean up the symlinks.
-# The script should take a target flag stating whether "build" or "clean". The
-# first option will symlink all of the dotfiles and attempt to install
-# oh-my-zsh. Otherwise, the script will simply remove all symlinks.
+# Public setup entrypoint for this dotfiles repo.
+# By default it symlinks the dotfiles, installs the shared git include, and
+# bootstraps oh-my-zsh. Optional machine-level dependencies can also be
+# installed with --install-deps.
 
-usage="Usage: $0 [-h] [-t <build|clean|shellcheck>]"
-BUILD=true
+set -euo pipefail
 
-# Run the symlinking from the repo root.
-cd "$(dirname "$0")" || exit
+ACTION="build"
+INSTALL_DEPS=false
+TOOL_SOURCE="distro"
+NEOVIM_SOURCE="github"
 
-while getopts :ht: option; do
-  case "${option}" in
-    h)
-      echo "${usage}"
-      echo
-      echo "OPTIONS"
-      echo "-h                 Output verbose usage message"
-      echo "-t build           Set up dotfile symlinks and configure oh-my-zsh"
-      echo "-t clean           Remove all existing dotfiles symlinks"
-      echo "-t shellcheck      Lint all shell scripts"
-      exit;;
-    t)
-      if [[ "build" =~ ^${OPTARG} ]]; then
-        BUILD=true
-      elif [[ "clean" =~ ^${OPTARG} ]]; then
-        BUILD=
-      elif [[ "shellcheck" =~ ^${OPTARG} ]]; then
-        shopt -s globstar
-        shellcheck -x -- **/*.sh
-        exit $?
-      else
-        echo "${usage}" >&2
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+usage() {
+  cat <<'EOF'
+Usage: ./setup.sh [options]
+
+Default behavior:
+  Build the dotfile symlinks and install/update oh-my-zsh.
+
+Options:
+  -h, --help                  Show this message.
+  -t, --target <action>       One of: build, clean, shellcheck.
+      --build                 Alias for --target build.
+      --clean                 Alias for --target clean.
+      --shellcheck            Alias for --target shellcheck.
+      --install-deps          Install machine-level dependencies before build.
+      --tool-source <distro|cargo>
+                              Linux only. Choose how Rust-based CLI tools are installed.
+      --neovim-source <github>
+                              Override the Neovim install source for --install-deps.
+
+Examples:
+  ./setup.sh
+  ./setup.sh --install-deps
+  ./setup.sh --install-deps --tool-source cargo
+  ./setup.sh --clean
+  ./setup.sh --shellcheck
+EOF
+}
+
+parse_args() {
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      -h|--help)
+        usage
+        exit 0
+        ;;
+      -t|--target)
+        if [[ $# -lt 2 ]]; then
+          echo "Missing argument for $1" >&2
+          exit 1
+        fi
+        ACTION=$2
+        shift 2
+        ;;
+      --build)
+        ACTION="build"
+        shift
+        ;;
+      --clean)
+        ACTION="clean"
+        shift
+        ;;
+      --shellcheck)
+        ACTION="shellcheck"
+        shift
+        ;;
+      --install-deps)
+        INSTALL_DEPS=true
+        shift
+        ;;
+      --tool-source)
+        if [[ $# -lt 2 ]]; then
+          echo "Missing argument for $1" >&2
+          exit 1
+        fi
+        TOOL_SOURCE=$2
+        shift 2
+        ;;
+      --neovim-source)
+        if [[ $# -lt 2 ]]; then
+          echo "Missing argument for $1" >&2
+          exit 1
+        fi
+        NEOVIM_SOURCE=$2
+        shift 2
+        ;;
+      *)
+        echo "Unknown option: $1" >&2
+        usage >&2
         exit 1
-      fi;;
-    \?)
-      echo "Unknown option: -${OPTARG}" >&2
-      exit 1;;
-    :)
-      echo "Missing argument for -${OPTARG}" >&2
-      exit 1;;
+        ;;
+    esac
+  done
+}
+
+validate_args() {
+  case "${ACTION}" in
+    build|clean|shellcheck)
+      ;;
+    *)
+      echo "Unsupported target: ${ACTION}" >&2
+      usage >&2
+      exit 1
+      ;;
   esac
-done
 
-execute() {
-  cmd=$1
-  msg=$2
+  case "${TOOL_SOURCE}" in
+    distro|cargo)
+      ;;
+    *)
+      echo "Unsupported tool source: ${TOOL_SOURCE}" >&2
+      exit 1
+      ;;
+  esac
 
-  eval "${cmd}"
-  if [[ $? ]]; then
-    # Print output in green.
-    printf "\e[0;32m  [✔] %s\e[0m\n" "${msg}"
-  else
-    # Print output in red.
-    printf "\e[0;31m  [✖] %s\e[0m\n" "${msg}"
+  case "${NEOVIM_SOURCE}" in
+    github)
+      ;;
+    *)
+      echo "Unsupported neovim source: ${NEOVIM_SOURCE}" >&2
+      exit 1
+      ;;
+  esac
+
+  if [[ "${ACTION}" != "build" && "${INSTALL_DEPS}" == "true" ]]; then
+    echo "--install-deps can only be used with the build target." >&2
+    exit 1
   fi
 }
 
+execute() {
+  local msg=$1
+  shift
+
+  if "$@"; then
+    printf "\e[0;32m  [✔] %s\e[0m\n" "${msg}"
+    return 0
+  else
+    printf "\e[0;31m  [✖] %s\e[0m\n" "${msg}"
+    return 1
+  fi
+}
+
+install_dependencies() {
+  local os_name
+  os_name=$(uname -s)
+
+  case "${os_name}" in
+    Darwin)
+      execute "Installing macOS dependencies" "${script_dir}/scripts/macos.sh"
+      ;;
+    Linux)
+      execute \
+        "Installing Linux dependencies" \
+        "${script_dir}/scripts/linux.sh" \
+        --tool-source "${TOOL_SOURCE}" \
+        --neovim-source "${NEOVIM_SOURCE}"
+      ;;
+    *)
+      echo "Unsupported operating system: ${os_name}" >&2
+      exit 1
+      ;;
+  esac
+}
+
+run_shellcheck() {
+  shopt -s globstar
+  shellcheck -x -- **/*.sh
+}
+
 install_omz() {
-  ZSH=${HOME}/.oh-my-zsh
-  ZSH_CUSTOM="${ZSH_CUSTOM:-${ZSH}/custom}"
+  local zsh_dir
+  local zsh_custom
+  local theme_repo_url
+  local theme_path
 
-  # Clone or update Oh My Zsh.
-  if [[ ! -d "${ZSH}" ]]; then
-    git clone --quiet --filter=blob:none https://github.com/robbyrussell/oh-my-zsh "${ZSH}"
+  zsh_dir=${HOME}/.oh-my-zsh
+  zsh_custom="${ZSH_CUSTOM:-${zsh_dir}/custom}"
+
+  if [[ ! -d "${zsh_dir}" ]]; then
+    git clone --quiet --filter=blob:none https://github.com/robbyrussell/oh-my-zsh "${zsh_dir}"
   else
-    git -C "${ZSH}" pull --quiet
+    git -C "${zsh_dir}" pull --quiet
   fi
 
-  # Clone or update Powerlevel10k.
-  THEME_REPO_URL="https://github.com/romkatv/powerlevel10k"
-  THEME_PATH="${ZSH_CUSTOM}/themes/${THEME_REPO_URL##*/}"
-  if [[ ! -d "${THEME_PATH}" ]]; then
-    git clone --quiet --filter=blob:none "${THEME_REPO_URL}" "${THEME_PATH}"
+  theme_repo_url="https://github.com/romkatv/powerlevel10k"
+  theme_path="${zsh_custom}/themes/${theme_repo_url##*/}"
+  if [[ ! -d "${theme_path}" ]]; then
+    git clone --quiet --filter=blob:none "${theme_repo_url}" "${theme_path}"
   else
-    git -C "${THEME_PATH}" pull --quiet
+    git -C "${theme_path}" pull --quiet
   fi
 
-  # Install or update custom oh-my-zsh plugins.
-  CUSTOM_PLUGIN_REPOS=(
+  local plugin_repo_url
+  local plugin_name
+  local plugin_path
+  local custom_plugin_repos=(
     "https://github.com/Aloxaf/fzf-tab"
     "https://github.com/zdharma-continuum/fast-syntax-highlighting"
     "https://github.com/zsh-users/zsh-autosuggestions"
     "https://github.com/mafredri/zsh-async"
   )
-  for REPO_URL in "${CUSTOM_PLUGIN_REPOS[@]}"; do
-    PLUGIN_NAME="${REPO_URL##*/}"
-    if [[ "$PLUGIN_NAME" == "zsh-async" ]]; then
-      # For zsh-async, the plugin's name is different from the repository name.
-      PLUGIN_NAME="async"
+
+  for plugin_repo_url in "${custom_plugin_repos[@]}"; do
+    plugin_name="${plugin_repo_url##*/}"
+    if [[ "${plugin_name}" == "zsh-async" ]]; then
+      plugin_name="async"
     fi
-    PLUGIN_PATH="${ZSH_CUSTOM}/plugins/${PLUGIN_NAME}"
-    if [[ ! -d "${PLUGIN_PATH}" ]]; then
-      git clone --quiet --filter=blob:none "${REPO_URL}" "${PLUGIN_PATH}"
+
+    plugin_path="${zsh_custom}/plugins/${plugin_name}"
+    if [[ ! -d "${plugin_path}" ]]; then
+      git clone --quiet --filter=blob:none "${plugin_repo_url}" "${plugin_path}"
     else
-      git -C "${PLUGIN_PATH}" pull --quiet
+      git -C "${plugin_path}" pull --quiet
     fi
   done
 }
@@ -103,77 +224,104 @@ install_omz() {
 link_file() {
   local source=$1
   local target=$2
+  local current_target
+  local epoch
 
-  # We've already symlinked, do nothing.
-  if [[ "$(readlink "${target}")" == "${source}" ]]; then
+  current_target=$(readlink "${target}" 2>/dev/null)
+  if [[ "${current_target}" == "${source}" ]]; then
     return
   fi
 
-  # If the target location exists and it's not our target symlink, we create a backup.
   if [[ -e "${target}" ]]; then
     epoch=$(date +%s)
-    execute "mv ${target} ${target}.${epoch}.bak" "Backing up ${target} → ${target}.${epoch}.bak"
+    execute "Backing up ${target} → ${target}.${epoch}.bak" mv "${target}" "${target}.${epoch}.bak"
   fi
 
-  # Symlink the dotfile.
-  execute "ln -fs ${source} ${target}" "Linking ${target} → ${source}"
+  execute "Linking ${target} → ${source}" ln -fs "${source}" "${target}"
 }
 
 unlink_file() {
   local source=$1
   local target=$2
+  local current_target
 
-  if [ "$(readlink "${target}")" == "${source}" ]; then
-    execute "unlink ${target}" "Unlinking ${target} → ${source}"
+  current_target=$(readlink "${target}" 2>/dev/null)
+  if [[ "${current_target}" == "${source}" ]]; then
+    execute "Unlinking ${target} → ${source}" unlink "${target}"
+  fi
+}
+
+build_dotfiles() {
+  local dotfile
+  local source_file
+  local target_file
+  local config_folder
+  local source_folder
+  local target_folder
+
+  while IFS= read -r dotfile; do
+    source_file="${dotfile}"
+    target_file="${HOME}/.$(basename "${dotfile}")"
+    link_file "${source_file}" "${target_file}"
+  done < <(find "${script_dir}/home" -mindepth 1 -maxdepth 1 -type f | sort)
+
+  mkdir -p "${HOME}/.config"
+  while IFS= read -r config_folder; do
+    source_folder="${config_folder}"
+    target_folder="${HOME}/.config/$(basename "${config_folder}")"
+    link_file "${source_folder}" "${target_folder}"
+  done < <(find "${script_dir}/config" -mindepth 1 -maxdepth 1 -type d | sort)
+
+  if ! git config -f ~/.gitconfig --get-all include.path 2>/dev/null | grep -Fxq ~/.config/git/config; then
+    git config -f ~/.gitconfig --add include.path ~/.config/git/config
+  fi
+
+  install_omz
+}
+
+clean_dotfiles() {
+  local dotfile
+  local source_file
+  local target_file
+  local config_folder
+  local target_folder
+
+  while IFS= read -r dotfile; do
+    source_file="${dotfile}"
+    target_file="${HOME}/.$(basename "${dotfile}")"
+    unlink_file "${source_file}" "${target_file}"
+  done < <(find "${script_dir}/home" -mindepth 1 -maxdepth 1 -type f | sort)
+
+  while IFS= read -r config_folder; do
+    target_folder="${HOME}/.config/$(basename "${config_folder}")"
+    unlink_file "${config_folder}" "${target_folder}"
+  done < <(find "${script_dir}/config" -mindepth 1 -maxdepth 1 -type d | sort)
+
+  if [[ -f ~/.gitconfig ]]; then
+    git config -f ~/.gitconfig --fixed-value --unset-all include.path ~/.config/git/config
   fi
 }
 
 main() {
-  # Symlink (or unlink) the dotfiles.
-  # Technically, this won't work for odd filenames, e.g. those with spaces or
-  # newlines. However, we don't care in this case and would rather have broader
-  # compatibility.
-  #
-  # shellcheck disable=SC2207
-  FILES_TO_SYMLINK=($(find home -mindepth 1 -maxdepth 1 -type f))
-  for dotfile in "${FILES_TO_SYMLINK[@]}"; do
-    sourceFile="$(pwd)/${dotfile}"
-    targetFile="${HOME}/.$(basename "${dotfile}")"
+  parse_args "$@"
+  validate_args
 
-    if [[ $BUILD ]]; then
-      link_file "$sourceFile" "$targetFile"
-    else
-      unlink_file "$sourceFile" "$targetFile"
-    fi
-  done
+  cd "${script_dir}" || exit 1
 
-  # Symlink (or unlink) folders in the ~/.config directory.
-  mkdir -p "${HOME}/.config"
-  # shellcheck disable=SC2207
-  FOLDERS_TO_SYMLINK=($(find config -mindepth 1 -maxdepth 1 -type d))
-  for configFolder in "${FOLDERS_TO_SYMLINK[@]}"; do
-    sourceFolder="$(pwd)/$configFolder"
-    targetFolder="${HOME}/.config/$(basename "${configFolder}")"
-
-    if [[ $BUILD ]]; then
-      link_file "$sourceFolder" "$targetFolder"
-    else
-      unlink_file "$sourceFolder" "$targetFolder"
-    fi
-  done
-
-  if [[ $BUILD ]]; then
-    # Link gitconfig.
-    git config -f ~/.gitconfig include.path ~/.config/git/config
-
-    # Install oh-my-zsh and its custom plugins/themes.
-    install_omz
-  else
-    # Unlink gitconfig.
-    if [[ -f ~/.gitconfig ]]; then
-      git config -f ~/.gitconfig --unset include.path
-    fi
-  fi
+  case "${ACTION}" in
+    shellcheck)
+      run_shellcheck
+      ;;
+    clean)
+      clean_dotfiles
+      ;;
+    build)
+      if [[ "${INSTALL_DEPS}" == "true" ]]; then
+        install_dependencies
+      fi
+      build_dotfiles
+      ;;
+  esac
 }
 
 main "$@"

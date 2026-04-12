@@ -43,6 +43,7 @@ _setup_path() {
 
   # Add home bin directory to path.
   _prepend_to_path $HOME/.local/bin
+  _prepend_to_path $HOME/.cargo/bin
 }
 
 _setup_path

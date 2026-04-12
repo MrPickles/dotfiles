@@ -53,6 +53,13 @@ cd ~/.dotfiles
 ./setup.sh
 ```
 
+On a fresh machine, you can ask `setup.sh` to install the system-level
+dependencies first:
+
+```shell
+./setup.sh --install-deps
+```
+
 You will also likely need to manually change your shell to `zsh` if you are
 currently using a different shell.
 
@@ -61,11 +68,22 @@ chsh -s $(which zsh)
 ```
 
 For future runs, if you ever want to update custom plugins or redo the symlinks,
-you can run the setup script with the following flags:
+you can run the setup script again:
 
 ```shell
-./setup.sh -t build
+./setup.sh
 ```
+
+On Linux, `setup.sh` can also override the dependency install strategy:
+
+```shell
+./setup.sh --install-deps --tool-source distro
+./setup.sh --install-deps --tool-source cargo
+```
+
+By default, Linux uses a release-aware mix of distro packages and upstream
+artifacts where the distro version is missing or too old. Cargo remains
+available as an explicit override for the Rust-based CLI tools.
 
 ## Setting up your Local Machine
 
@@ -93,8 +111,11 @@ shell experience in general.
 * [fzf](https://github.com/junegunn/fzf)
 * [delta](https://github.com/dandavison/delta)
 
-The configuration script attempts to install these, but if you do not have sudo
-access, it may not work.
+These can be installed via `./setup.sh --install-deps`. On Linux, the shared
+installer auto-detects the distro release and prefers distro-managed packages
+when they are recent enough, falling back to upstream installs when needed.
+Cargo remains available as an override for the Rust-based CLI tools. If you do
+not have sudo access, distro-managed installs may not work.
 
 ## Customizing
 
@@ -144,7 +165,7 @@ If you wish to remove those, you will have to manually delete them.
 
 ```shell
 cd ~/.dotfiles
-./setup.sh -t clean
+./setup.sh --clean
 rm -rf ~/.oh-my-zsh # optionally remove oh-my-zsh
 chsh -s $(which bash) # optionally change shell back to bash
 ```
