@@ -2,7 +2,7 @@
 set -euo pipefail
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-# shellcheck source=./common.sh
+# shellcheck source=scripts/common.sh
 source "${script_dir}/common.sh"
 
 TOOL_SOURCE="distro"
@@ -151,7 +151,7 @@ apt_package_is_acceptable() {
 
 ensure_rustup() {
   if [[ -f "${HOME}/.cargo/env" ]]; then
-    # shellcheck disable=SC1090
+    # shellcheck disable=SC1090,SC1091
     source "${HOME}/.cargo/env"
   fi
 
@@ -160,7 +160,7 @@ ensure_rustup() {
   fi
 
   curl -fsSL https://sh.rustup.rs | sh -s -- -y
-  # shellcheck disable=SC1090
+  # shellcheck disable=SC1090,SC1091
   source "${HOME}/.cargo/env"
 }
 
