@@ -227,7 +227,12 @@ link_file() {
   local current_target
   local epoch
 
-  current_target=$(readlink "${target}" 2>/dev/null)
+  if [[ -L "${target}" ]]; then
+    current_target=$(readlink "${target}")
+  else
+    current_target=""
+  fi
+
   if [[ "${current_target}" == "${source}" ]]; then
     return
   fi
@@ -245,7 +250,12 @@ unlink_file() {
   local target=$2
   local current_target
 
-  current_target=$(readlink "${target}" 2>/dev/null)
+  if [[ -L "${target}" ]]; then
+    current_target=$(readlink "${target}")
+  else
+    current_target=""
+  fi
+
   if [[ "${current_target}" == "${source}" ]]; then
     execute "Unlinking ${target} → ${source}" unlink "${target}"
   fi
