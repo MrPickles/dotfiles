@@ -8,5 +8,6 @@ packer_compiled.lua
 # Kitty artifacts.
 kitty.conf.bak
 
-# jj artifacts.
+# Jujutsu artifacts.
 config/jj/repos
+config/jj/conf.d
