@@ -21,7 +21,7 @@ Plug 'tpope/vim-rhubarb'
 Plug 'airblade/vim-gitgutter'
 
 " Cosmetic plugins.
-Plug 'vim-airline/vim-airline', { 'tag': 'v0.11' }
+Plug 'vim-airline/vim-airline', { 'tag': 'v0.12' }
 Plug 'sheerun/vim-polyglot', { 'tag': 'v4.17.0' }
 Plug 'ryanoasis/vim-devicons'
 call plug#end()
