@@ -169,8 +169,13 @@ install_dependencies() {
 }
 
 run_shellcheck() {
-  shopt -s globstar
-  shellcheck -x -- **/*.sh
+  local shell_files=()
+
+  while IFS= read -r shell_file; do
+    shell_files+=("${shell_file}")
+  done < <(find . -type f -name '*.sh' -not -path './.git/*' | sort)
+
+  shellcheck -x -- "${shell_files[@]}"
 }
 
 install_omz() {
@@ -307,7 +312,8 @@ clean_dotfiles() {
     unlink_file "${config_folder}" "${target_folder}"
   done < <(find "${script_dir}/config" -mindepth 1 -maxdepth 1 -type d | sort)
 
-  if [[ -f ~/.gitconfig ]]; then
+  if [[ -f ~/.gitconfig ]] \
+    && git config -f ~/.gitconfig --get-all include.path 2>/dev/null | grep -Fxq ~/.config/git/config; then
     git config -f ~/.gitconfig --fixed-value --unset-all include.path ~/.config/git/config
   fi
 }

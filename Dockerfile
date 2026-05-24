@@ -1,21 +1,25 @@
 # syntax=docker/dockerfile:1
 FROM ubuntu:24.04
 
-RUN apt update && apt install -y \
+RUN apt update && apt install -y --no-install-recommends \
   ca-certificates \
   sudo \
-  zsh
+  zsh \
+  && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /tmp/dotfiles-bootstrap
 COPY scripts/common.sh ./scripts/common.sh
 COPY scripts/linux.sh ./scripts/linux.sh
-RUN chmod +x ./scripts/linux.sh && ./scripts/linux.sh --tool-source distro
+RUN chmod +x ./scripts/linux.sh \
+  && ./scripts/linux.sh --tool-source distro \
+  && rm -rf /var/lib/apt/lists/*
 
 # Create a user with sudo privileges.
 ARG USER=andy
 RUN useradd -rm -d /home/${USER} -s $(which zsh) -g root -G sudo ${USER}
 RUN chown -R ${USER} /home/${USER}
-RUN echo "${USER} ALL=(ALL:ALL) NOPASSWD: ALL" > /etc/sudoers.d/${USER}
+RUN echo "${USER} ALL=(ALL:ALL) NOPASSWD: ALL" > /etc/sudoers.d/${USER} \
+  && chmod 0440 /etc/sudoers.d/${USER}
 
 # Copy over dotfiles.
 COPY . /home/${USER}/.dotfiles

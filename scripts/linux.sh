@@ -11,6 +11,22 @@ DISTRO_ID=""
 DISTRO_VERSION_ID=""
 DISTRO_CODENAME=""
 APT_UPDATED=false
+TEMP_DIRS=()
+
+cleanup_temp_dirs() {
+  if [[ ${#TEMP_DIRS[@]} -gt 0 ]]; then
+    rm -rf "${TEMP_DIRS[@]}"
+  fi
+}
+trap cleanup_temp_dirs EXIT
+
+make_temp_dir() {
+  local tmpdir
+
+  tmpdir=$(mktemp -d)
+  TEMP_DIRS+=("${tmpdir}")
+  echo "${tmpdir}"
+}
 
 # Version floors justified by the current repo config:
 # - Neovim: repo policy. LazyVim upstream requires >= 0.11.2, but this config
@@ -40,10 +56,18 @@ parse_args() {
   while [[ $# -gt 0 ]]; do
     case "$1" in
       --tool-source)
+        if [[ $# -lt 2 ]]; then
+          echo "Missing argument for $1" >&2
+          exit 1
+        fi
         TOOL_SOURCE=$2
         shift 2
         ;;
       --neovim-source)
+        if [[ $# -lt 2 ]]; then
+          echo "Missing argument for $1" >&2
+          exit 1
+        fi
         NEOVIM_SOURCE=$2
         shift 2
         ;;
@@ -176,15 +200,13 @@ install_neovim_from_github() {
   local tmpdir
 
   arch=$(linux_arch)
-  tmpdir=$(mktemp -d)
+  tmpdir=$(make_temp_dir)
 
   curl -fsSL -o "${tmpdir}/nvim-linux-${arch}.tar.gz" \
     "https://github.com/neovim/neovim/releases/latest/download/nvim-linux-${arch}.tar.gz"
   run_as_root rm -rf "/opt/nvim-linux-${arch}"
   run_as_root tar -C /opt -xzf "${tmpdir}/nvim-linux-${arch}.tar.gz"
   run_as_root ln -sf "/opt/nvim-linux-${arch}/bin/nvim" /usr/local/bin/nvim
-
-  rm -rf "${tmpdir}"
 }
 
 install_fzf_from_github() {
@@ -212,26 +234,26 @@ install_fzf_from_github() {
   require_url "${fzf_url}" "fzf (${asset_arch})"
 
   archive_name="${fzf_url##*/}"
-  tmpdir=$(mktemp -d)
+  tmpdir=$(make_temp_dir)
   wget -O "${tmpdir}/${archive_name}" "${fzf_url}"
   tar -C "${tmpdir}" -xzf "${tmpdir}/${archive_name}"
   run_as_root install -m 0755 "${tmpdir}/fzf" /usr/local/bin/fzf
-  rm -rf "${tmpdir}"
 }
 
 install_delta_from_github() {
   local arch
   local delta_url
   local delta_package
+  local tmpdir
 
   arch=$(linux_arch)
   delta_url=$(latest_github_asset "dandavison/delta" "git-delta-musl_.*_${arch}\\.deb$")
   require_url "${delta_url}" "delta (${arch})"
 
+  tmpdir=$(make_temp_dir)
   delta_package="${delta_url##*/}"
-  wget "${delta_url}"
-  run_as_root dpkg -i "${delta_package}"
-  rm -f "${delta_package}"
+  wget -O "${tmpdir}/${delta_package}" "${delta_url}"
+  run_as_root dpkg -i "${tmpdir}/${delta_package}"
 }
 
 install_tree_sitter_from_github() {
@@ -240,6 +262,7 @@ install_tree_sitter_from_github() {
   local tree_sitter_url
   local archive_name
   local binary_name
+  local tmpdir
 
   arch=$(linux_arch)
   if [[ "${arch}" == "arm64" ]]; then
@@ -251,10 +274,11 @@ install_tree_sitter_from_github() {
   tree_sitter_url=$(latest_github_asset "tree-sitter/tree-sitter" "${pattern}")
   require_url "${tree_sitter_url}" "tree-sitter (${arch})"
 
+  tmpdir=$(make_temp_dir)
   archive_name="${tree_sitter_url##*/}"
-  wget "${tree_sitter_url}"
-  gzip -df "${archive_name}"
-  binary_name="${archive_name%.gz}"
+  wget -O "${tmpdir}/${archive_name}" "${tree_sitter_url}"
+  gzip -df "${tmpdir}/${archive_name}"
+  binary_name="${tmpdir}/${archive_name%.gz}"
   chmod +x "${binary_name}"
   run_as_root mv "${binary_name}" /usr/local/bin/tree-sitter
 }
@@ -262,7 +286,7 @@ install_tree_sitter_from_github() {
 install_eza_from_extra_repo() {
   local tmpdir
 
-  tmpdir=$(mktemp -d)
+  tmpdir=$(make_temp_dir)
   curl -fsSL https://raw.githubusercontent.com/eza-community/eza/main/deb.asc \
     -o "${tmpdir}/eza.asc"
 
@@ -272,7 +296,6 @@ install_eza_from_extra_repo() {
     | run_as_root tee /etc/apt/sources.list.d/gierens.list >/dev/null
   run_as_root chmod 644 /etc/apt/keyrings/gierens.gpg /etc/apt/sources.list.d/gierens.list
 
-  rm -rf "${tmpdir}"
   APT_UPDATED=false
   install_apt_packages eza
 }

@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+brew_bin=""
+
 if [[ $(uname -s) != "Darwin" ]]; then
   echo "This script should be run on macOS only." >&2
   exit 1
@@ -10,7 +12,17 @@ if ! command -v brew >/dev/null 2>&1; then
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
-eval "$(/opt/homebrew/bin/brew shellenv)"
+if [[ -x /opt/homebrew/bin/brew ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [[ -x /usr/local/bin/brew ]]; then
+  eval "$(/usr/local/bin/brew shellenv)"
+elif command -v brew >/dev/null 2>&1; then
+  brew_bin=$(command -v brew)
+  eval "$("${brew_bin}" shellenv)"
+else
+  echo "Unable to find Homebrew after installation." >&2
+  exit 1
+fi
 hash -r
 
 brew update
