@@ -140,23 +140,26 @@ defaults write com.apple.finder ShowMountedServersOnDesktop -bool false
 # Disable the warning when changing a file extension
 defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
 
-# Configure Finder Toolbar (Top Bar) arrangement
-defaults write com.apple.finder "NSToolbar Configuration Browser" -dict \
-    "TB Is Shown" -bool true \
-    "TB Icon Size Mode" -int 1 \
-    "TB Size Mode" -int 1 \
-    "TB Display Mode" -int 2 \
-    "TB Item Identifiers" -array \
-        "com.apple.finder.BACK" \
-        "com.apple.finder.QUIK" \
-        "NSToolbarSpaceItem" \
-        "com.apple.finder.SWCH" \
-        "com.apple.finder.ARNG" \
-        "NSToolbarSpaceItem" \
-        "com.apple.finder.INFO" \
-        "com.apple.finder.ACTN" \
-        "NSToolbarSpaceItem" \
-        "com.apple.finder.SRCH"
+# Configure Finder Toolbar (Top Bar) arrangement (requires plutil to nest array inside dictionary)
+defaults read com.apple.finder >/dev/null # Ensure the plist file exists
+plutil -replace "NSToolbar Configuration Browser" -json '{
+  "TB Is Shown": true,
+  "TB Icon Size Mode": 1,
+  "TB Size Mode": 1,
+  "TB Display Mode": 2,
+  "TB Item Identifiers": [
+    "com.apple.finder.BACK",
+    "com.apple.finder.QUIK",
+    "NSToolbarSpaceItem",
+    "com.apple.finder.SWCH",
+    "com.apple.finder.ARNG",
+    "NSToolbarSpaceItem",
+    "com.apple.finder.INFO",
+    "com.apple.finder.ACTN",
+    "NSToolbarSpaceItem",
+    "com.apple.finder.SRCH"
+  ]
+}' ~/Library/Preferences/com.apple.finder.plist
 
 # Hide the "Tags" section from the sidebar
 defaults write com.apple.finder ShowRecentTags -bool false
