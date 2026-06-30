@@ -59,14 +59,15 @@ defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 # Max out trackpad sensitivity (scaling to 3)
 defaults write NSGlobalDomain com.apple.trackpad.scaling -float 3
 
-# Show Battery Percentage in Menu Bar
-defaults write com.apple.controlcenter "NSStatusItem Visible Battery" -bool true
+# Show Battery & Percentage in Menu Bar
+defaults write com.apple.controlcenter Battery -int 18
+defaults write com.apple.controlcenter BatteryShowPercentage -bool true
 
 # Show Sound Level in Menu Bar
-defaults write com.apple.controlcenter "NSStatusItem Visible Sound" -bool true
+defaults write com.apple.controlcenter Sound -int 18
 
-# Disable Spotlight icon in Menu Bar
-defaults write com.apple.controlcenter "NSStatusItem Visible Spotlight" -bool false
+# Hide Spotlight icon in Menu Bar
+defaults write com.apple.Spotlight MenuItemHidden -bool true
 
 # Disable auto-correct, auto-capitalization, period substitution, and smart quotes/dashes
 defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false
@@ -80,6 +81,9 @@ defaults write NSGlobalDomain AppleMenuBarVisibleInFullscreen -bool true
 
 # Clear all text replacements
 defaults write NSGlobalDomain NSUserDictionaryReplacementItems -array
+
+# Apply Global Preferences and Menu Bar changes immediately
+killall cfprefsd ControlCenter SystemUIServer Spotlight 2>/dev/null || true
 
 # ----------------------------------------------------
 # Dock & Spaces Preferences
