@@ -75,7 +75,8 @@ defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
 defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
 
 # Automatically hide and show the menu bar -> Never
-defaults write NSGlobalDomain _HIHideMenuBar -bool false
+defaults write NSGlobalDomain AppleMenuBarVisibleOnDesktop -bool true
+defaults write NSGlobalDomain AppleMenuBarVisibleInFullscreen -bool true
 
 # Clear all text replacements
 defaults write NSGlobalDomain NSUserDictionaryReplacementItems -array
@@ -91,8 +92,6 @@ defaults write com.apple.dock autohide -bool true
 # https://apple.stackexchange.com/a/46222
 defaults write com.apple.dock autohide-delay -float 0
 
-# Remove Dock autohide animation delay (instant slide-in)
-defaults write com.apple.dock autohide-time-modifier -float 0
 
 # Scale effect instead of genie effect
 defaults write com.apple.dock mineffect -string "scale"
