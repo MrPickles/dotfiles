@@ -50,6 +50,15 @@ defaults write NSGlobalDomain AppleShowScrollBars -string "Always"
 # Click scroll bar to jump where clicked
 defaults write NSGlobalDomain AppleScrollerPagingBehavior -int 1
 
+# Enable tap to click (trackpad and bluetooth trackpad)
+defaults write com.apple.AppleMultitouchTrackpad Clicking -bool true
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
+defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+
+# Max out trackpad sensitivity (scaling to 3)
+defaults write NSGlobalDomain com.apple.trackpad.scaling -float 3
+
 # Show Battery Percentage in Menu Bar
 defaults write com.apple.controlcenter "NSStatusItem Visible Battery" -bool true
 
@@ -64,6 +73,12 @@ defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false
 defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool false
 defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
 defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
+
+# Automatically hide and show the menu bar -> Never
+defaults write NSGlobalDomain _HIHideMenuBar -bool false
+
+# Clear all text replacements
+defaults write NSGlobalDomain NSUserDictionaryReplacementItems -array
 
 # ----------------------------------------------------
 # Dock & Spaces Preferences
