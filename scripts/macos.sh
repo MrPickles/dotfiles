@@ -115,6 +115,21 @@ defaults write com.apple.dock wvous-br-modifier -int 0
 killall Dock
 
 # ----------------------------------------------------
+# Window Manager / Snapping Preferences (macOS Sequoia)
+# ----------------------------------------------------
+# Disable window snapping/tiling (drag to screen edges)
+defaults write com.apple.WindowManager EnableTilingByEdgeDrag -bool false
+
+# Disable window filling (drag to menu bar)
+defaults write com.apple.WindowManager EnableTopTilingByEdgeDrag -bool false
+
+# Disable option key shortcut to tile while dragging
+defaults write com.apple.WindowManager EnableTilingOptionAccelerator -bool false
+
+# Disable margins around tiled windows
+defaults write com.apple.WindowManager EnableTiledWindowMargins -bool false
+
+# ----------------------------------------------------
 # Finder Preferences
 # ----------------------------------------------------
 
