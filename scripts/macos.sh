@@ -56,8 +56,9 @@ defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool
 defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 
-# Max out trackpad sensitivity (scaling to 3)
+# Max out trackpad and mouse sensitivity (scaling to 3)
 defaults write NSGlobalDomain com.apple.trackpad.scaling -float 3
+defaults write NSGlobalDomain com.apple.mouse.scaling -float 3
 
 # Show Battery & Percentage in Menu Bar
 defaults write com.apple.controlcenter Battery -int 18
