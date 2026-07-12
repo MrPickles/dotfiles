@@ -85,6 +85,24 @@ By default, Linux uses a release-aware mix of distro packages and upstream
 artifacts where the distro version is missing or too old. Cargo remains
 available as an explicit override for the Rust-based CLI tools.
 
+### Neovim language servers
+
+LazyVim uses [Mason][] to install language servers and formatter/linter tools.
+Mason installs each tool through that tool's native package ecosystem, so some
+Neovim features depend on extra system runtimes beyond Neovim itself.
+
+For example, the Python LazyVim extra enables Pyright and Ruff by default:
+
+- Pyright is distributed as an npm package, so Mason needs `node` and `npm` to
+  install `pyright-langserver`.
+- Ruff is distributed on PyPI, so Mason creates a private Python virtualenv for
+  it. On Debian and Ubuntu, that requires the `python3-venv` package; plain
+  `python3` is not enough.
+
+If Mason cannot install one of these tools, Neovim may still work when the
+command is already available globally on `PATH`, but fresh-machine setup is more
+reliable when the underlying runtimes are installed first.
+
 ## Setting up your Local Machine
 
 Your local machine will require configurations that need to be done at most
@@ -176,3 +194,4 @@ chsh -s $(which bash) # optionally change shell back to bash
 [powerlevel10k]: https://github.com/romkatv/powerlevel10k
 [docker-hub]: https://hub.docker.com/r/liuandrewk/dotfiles
 [kitty]: https://sw.kovidgoyal.net/kitty/
+[Mason]: https://github.com/mason-org/mason.nvim
