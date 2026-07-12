@@ -56,7 +56,7 @@ source $ZSH/oh-my-zsh.sh
 if _has fzf; then
   if _has fd; then
     # Use fd for fzf.
-    FZF_DEFAULT_COMMAND='fd --type f --follow --hidden'
+    FZF_DEFAULT_COMMAND='fd --type f --follow --hidden --exclude .git'
     FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
     # Use fd for fzf directory search.
     FZF_ALT_C_COMMAND='fd --type d --color never'
