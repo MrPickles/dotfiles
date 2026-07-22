@@ -10,3 +10,4 @@ vim.filetype.add({
 })
 
 vim.opt.conceallevel = 0
+vim.opt.relativenumber = false
