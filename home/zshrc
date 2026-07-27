@@ -126,7 +126,7 @@ setopt rmstarsilent # silence rm * confirmation
 
 # Decrease delay in entering normal mode in shell.
 # https://www.johnhawthorn.com/2012/09/vi-escape-delays/
-KEYTIMEOUT=1
+KEYTIMEOUT=10
 
 ################################################################################
 # Actions with side-effects after sourcing Oh-My-ZSH
