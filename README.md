@@ -74,6 +74,14 @@ you can run the setup script again:
 ./setup.sh
 ```
 
+On systems with Homebrew, the setup also installs a `brew sync` command that
+updates Homebrew, upgrades installed packages without a confirmation prompt,
+and removes stale package versions and cached artifacts:
+
+```shell
+brew sync
+```
+
 On Linux, `setup.sh` can also override the dependency install strategy:
 
 ```shell

@@ -173,7 +173,11 @@ run_shellcheck() {
 
   while IFS= read -r shell_file; do
     shell_files+=("${shell_file}")
-  done < <(find . -type f -name '*.sh' -not -path './.git/*' | sort)
+  done < <(
+    find . -type f \( -name '*.sh' -o -path './bin/brew-*' \) \
+      -not -path './.git/*' \
+      | sort
+  )
 
   shellcheck -x -- "${shell_files[@]}"
 }
@@ -270,6 +274,9 @@ build_dotfiles() {
   local dotfile
   local source_file
   local target_file
+  local command_file
+  local source_command
+  local target_command
   local config_folder
   local source_folder
   local target_folder
@@ -279,6 +286,13 @@ build_dotfiles() {
     target_file="${HOME}/.$(basename "${dotfile}")"
     link_file "${source_file}" "${target_file}"
   done < <(find "${script_dir}/home" -mindepth 1 -maxdepth 1 -type f | sort)
+
+  mkdir -p "${HOME}/.local/bin"
+  while IFS= read -r command_file; do
+    source_command="${command_file}"
+    target_command="${HOME}/.local/bin/$(basename "${command_file}")"
+    link_file "${source_command}" "${target_command}"
+  done < <(find "${script_dir}/bin" -mindepth 1 -maxdepth 1 -type f | sort)
 
   mkdir -p "${HOME}/.config"
   while IFS= read -r config_folder; do
@@ -298,6 +312,8 @@ clean_dotfiles() {
   local dotfile
   local source_file
   local target_file
+  local command_file
+  local target_command
   local config_folder
   local target_folder
 
@@ -306,6 +322,11 @@ clean_dotfiles() {
     target_file="${HOME}/.$(basename "${dotfile}")"
     unlink_file "${source_file}" "${target_file}"
   done < <(find "${script_dir}/home" -mindepth 1 -maxdepth 1 -type f | sort)
+
+  while IFS= read -r command_file; do
+    target_command="${HOME}/.local/bin/$(basename "${command_file}")"
+    unlink_file "${command_file}" "${target_command}"
+  done < <(find "${script_dir}/bin" -mindepth 1 -maxdepth 1 -type f | sort)
 
   while IFS= read -r config_folder; do
     target_folder="${HOME}/.config/$(basename "${config_folder}")"

@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+#:  * `sync`
+#:    Update Homebrew, upgrade installed packages, and remove stale artifacts.
+set -euo pipefail
+
+brew update
+brew upgrade --yes
+brew cleanup
