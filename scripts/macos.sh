@@ -2,6 +2,7 @@
 set -euo pipefail
 
 brew_bin=""
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 if [[ $(uname -s) != "Darwin" ]]; then
   echo "This script should be run on macOS only." >&2
@@ -26,19 +27,7 @@ fi
 hash -r
 
 brew update
-brew install \
-  bat \
-  eza \
-  fd \
-  fzf \
-  git-delta \
-  jq \
-  neovim \
-  reattach-to-user-namespace \
-  ripgrep \
-  tmux \
-  tree-sitter-cli \
-  zoxide
+brew bundle --file="${script_dir}/../Brewfile"
 
 # ----------------------------------------------------
 # Global System Preferences
