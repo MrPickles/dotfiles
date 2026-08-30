@@ -29,7 +29,6 @@ if OS.mac? && !mdm_enrolled
   cask "1password"
   cask "aldente"
   cask "alfred"
-  cask "chatgpt" # Codex desktop app
   cask "codex" # Codex CLI
   cask "discord"
   cask "dropbox"
