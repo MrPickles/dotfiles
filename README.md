@@ -123,15 +123,15 @@ Specifically, these relate to fonts and the color scheme.
 - Currently, I use `MesloLGS NF` as my regular font.
   Follow the [Powerlevel10k font instructions][p10k-fonts] to install the proper
   fonts.
-- Ghostty, Kitty, bat, eza, delta, fzf, tmux, and Powerlevel10k use Tokyo
-  Night Storm. Neovim follows the terminal (Storm or Day). Fallback Vim and
+- Ghostty, Kitty, and tmux use Tokyo Night Storm. Neovim, bat, eza, delta,
+  fzf, and Powerlevel10k follow the terminal (Storm or Day). Fallback Vim and
   zsh syntax highlighting keep the terminal palette.
 - Setup rebuilds bat's theme cache (also used by delta). If bat is installed later
   or its themes are updated, run `bat cache --build` (`batcat` on some Linux systems).
 - After changing themes, reload the terminal configuration and open a new shell.
   Restart Neovim to load the selected colorscheme. Reload tmux with `prefix r`.
 
-Vendored Storm extras are copies from
+Vendored Storm and Day extras are copies from
 [folke/tokyonight.nvim][tokyonight] at
 `5da1b76e64daf4c5d410f06bcb6b9cb640da7dfd`, matching the revision in
 `config/nvim/lazy-lock.json` when they were imported. Each file notes its
@@ -143,15 +143,19 @@ plugin is updated by Lazy. The extras are Apache-2.0; this repo remains MIT.
 | --- | --- |
 | `config/ghostty/themes/tokyonight-storm` | `extras/ghostty/tokyonight_storm` |
 | `config/kitty/current-theme.conf` | `extras/kitty/tokyonight_storm.conf` |
-| `config/eza/theme.yml` | `extras/eza/tokyonight_storm.yml` |
+| `config/eza/storm/theme.yml` | `extras/eza/tokyonight_storm.yml` |
+| `config/eza/day/theme.yml` | `extras/eza/tokyonight_day.yml` |
 | `config/bat/themes/tokyonight_storm.tmTheme` | `extras/sublime/tokyonight_storm.tmTheme` |
+| `config/bat/themes/tokyonight_day.tmTheme` | `extras/sublime/tokyonight_day.tmTheme` |
 | `config/tmux/tokyonight_storm.tmux` | `extras/tmux/tokyonight_storm.tmux` |
 
-fzf has no theme directory, so only its `--color` options live in `home/zshrc`
-(shared with fzf-tab). Delta's Storm chrome is inlined in `config/git/config`.
-Powerlevel10k is recolored from a named Storm palette whose hex values match
-`extras/lua/tokyonight_storm.lua`. To refresh, copy the same paths from one
-reviewed revision, replace the fzf array and delta styles, update this table,
+Interactive shells query the terminal background (OSC 11) and set
+`DOTFILES_COLOR_MODE` (`light` or `dark`; override by exporting it first).
+Inside tmux the query is skipped and the mode stays dark.
+That selects bat's theme, eza's config dir, delta's feature, fzf colors, and
+the Powerlevel10k palette. fzf `--color` options live in `home/zshrc`. Delta
+features are in `config/git/config`. To refresh, copy the same paths from one
+reviewed revision, replace the fzf arrays and delta styles, update this table,
 and run `bat cache --build`.
 
 ### Other optional tools

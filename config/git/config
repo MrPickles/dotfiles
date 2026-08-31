@@ -21,8 +21,10 @@
 [delta]
 	line-numbers = true
 	navigate = true
-	syntax-theme = tokyonight_storm
+	features = tokyonight-storm
+[delta "tokyonight-storm"]
 	# Vendored from https://github.com/folke/tokyonight.nvim/blob/5da1b76e64daf4c5d410f06bcb6b9cb640da7dfd/extras/delta/tokyonight_storm.gitconfig
+	syntax-theme = tokyonight_storm
 	minus-style = syntax "#52313f"
 	minus-non-emph-style = syntax "#52313f"
 	minus-emph-style = syntax "#763842"
@@ -34,6 +36,20 @@
 	plus-empty-line-marker-style = syntax "#2b485a"
 	line-numbers-plus-style = "#449dab"
 	line-numbers-zero-style = "#3b4261"
+[delta "tokyonight-day"]
+	# Vendored from https://github.com/folke/tokyonight.nvim/blob/5da1b76e64daf4c5d410f06bcb6b9cb640da7dfd/extras/delta/tokyonight_day.gitconfig
+	syntax-theme = tokyonight_day
+	minus-style = syntax "#dababe"
+	minus-non-emph-style = syntax "#dababe"
+	minus-emph-style = syntax "#d59a9d"
+	minus-empty-line-marker-style = syntax "#dababe"
+	line-numbers-minus-style = "#c47981"
+	plus-style = syntax "#b7ced5"
+	plus-non-emph-style = syntax "#b7ced5"
+	plus-emph-style = syntax "#95bec7"
+	plus-empty-line-marker-style = syntax "#b7ced5"
+	line-numbers-plus-style = "#4197a4"
+	line-numbers-zero-style = "#a8aecb"
 [diff]
 	algorithm = histogram
 	colorMoved = plain
