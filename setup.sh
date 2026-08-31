@@ -305,6 +305,13 @@ build_dotfiles() {
     git config -f ~/.gitconfig --add include.path ~/.config/git/config
   fi
 
+  # Custom bat themes must be compiled locally; delta also reads this cache.
+  if command -v bat >/dev/null 2>&1; then
+    execute "Rebuilding bat theme cache" bat cache --build
+  elif command -v batcat >/dev/null 2>&1; then
+    execute "Rebuilding bat theme cache" batcat cache --build
+  fi
+
   install_omz
 }
 

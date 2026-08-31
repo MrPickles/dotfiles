@@ -15,15 +15,27 @@
 [column]
 	ui = auto
 [commit]
-  verbose = true
+	verbose = true
 [core]
 	pager = delta 2> /dev/null || less
 [delta]
 	line-numbers = true
 	navigate = true
-	syntax-theme = Solarized (dark)
+	syntax-theme = tokyonight_storm
+	# Vendored from https://github.com/folke/tokyonight.nvim/blob/5da1b76e64daf4c5d410f06bcb6b9cb640da7dfd/extras/delta/tokyonight_storm.gitconfig
+	minus-style = syntax "#52313f"
+	minus-non-emph-style = syntax "#52313f"
+	minus-emph-style = syntax "#763842"
+	minus-empty-line-marker-style = syntax "#52313f"
+	line-numbers-minus-style = "#914c54"
+	plus-style = syntax "#2b485a"
+	plus-non-emph-style = syntax "#2b485a"
+	plus-emph-style = syntax "#316172"
+	plus-empty-line-marker-style = syntax "#2b485a"
+	line-numbers-plus-style = "#449dab"
+	line-numbers-zero-style = "#3b4261"
 [diff]
-  algorithm = histogram
+	algorithm = histogram
 	colorMoved = plain
 	mnemonicPrefix = true
 	renames = true
@@ -40,7 +52,7 @@
 [interactive]
 	diffFilter = delta --color-only
 [merge]
-  conflictstyle = zdiff3
+	conflictstyle = zdiff3
 [pull]
 	ff = only
 [push]

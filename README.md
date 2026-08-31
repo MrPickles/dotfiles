@@ -9,7 +9,8 @@ curl https://raw.githubusercontent.com/MrPickles/dotfiles/master/scripts/dotfile
 ![Screenshot of my dotfiles](.github/screenshot.png)
 
 These dotfiles are intended for use with zsh, [oh-my-zsh][], and the
-[solarized][] colorscheme.
+[Tokyo Night][tokyonight] colorscheme (Storm variant).
+The screenshot above predates this change.
 The configuration uses powerline-based status bars for vim and tmux and
 [Powerlevel10k][powerlevel10k] as its zsh theme.
 
@@ -122,8 +123,36 @@ Specifically, these relate to fonts and the color scheme.
 - Currently, I use `MesloLGS NF` as my regular font.
   Follow the [Powerlevel10k font instructions][p10k-fonts] to install the proper
   fonts.
-- I use [Solarized Dark][solarized].
-  Different terminals have different configuration steps needed.
+- Ghostty, Kitty, bat, eza, delta, fzf, tmux, and Powerlevel10k use Tokyo
+  Night Storm. Neovim follows the terminal (Storm or Day). Fallback Vim and
+  zsh syntax highlighting keep the terminal palette.
+- Setup rebuilds bat's theme cache (also used by delta). If bat is installed later
+  or its themes are updated, run `bat cache --build` (`batcat` on some Linux systems).
+- After changing themes, reload the terminal configuration and open a new shell.
+  Restart Neovim to load the selected colorscheme. Reload tmux with `prefix r`.
+
+Vendored Storm extras are copies from
+[folke/tokyonight.nvim][tokyonight] at
+`5da1b76e64daf4c5d410f06bcb6b9cb640da7dfd`, matching the revision in
+`config/nvim/lazy-lock.json` when they were imported. Each file notes its
+upstream path; palette values are otherwise unchanged. They are not an automatic
+update path; keep theme refreshes separate from routine upgrades. Neovim's
+plugin is updated by Lazy. The extras are Apache-2.0; this repo remains MIT.
+
+| Local file | Upstream extra |
+| --- | --- |
+| `config/ghostty/themes/tokyonight-storm` | `extras/ghostty/tokyonight_storm` |
+| `config/kitty/current-theme.conf` | `extras/kitty/tokyonight_storm.conf` |
+| `config/eza/theme.yml` | `extras/eza/tokyonight_storm.yml` |
+| `config/bat/themes/tokyonight_storm.tmTheme` | `extras/sublime/tokyonight_storm.tmTheme` |
+| `config/tmux/tokyonight_storm.tmux` | `extras/tmux/tokyonight_storm.tmux` |
+
+fzf has no theme directory, so only its `--color` options live in `home/zshrc`
+(shared with fzf-tab). Delta's Storm chrome is inlined in `config/git/config`.
+Powerlevel10k is recolored from a named Storm palette whose hex values match
+`extras/lua/tokyonight_storm.lua`. To refresh, copy the same paths from one
+reviewed revision, replace the fzf array and delta styles, update this table,
+and run `bat cache --build`.
 
 ### Other optional tools
 
@@ -196,7 +225,7 @@ rm -rf ~/.oh-my-zsh # optionally remove oh-my-zsh
 chsh -s $(which bash) # optionally change shell back to bash
 ```
 
-[solarized]: http://ethanschoonover.com/solarized
+[tokyonight]: https://github.com/folke/tokyonight.nvim
 [oh-my-zsh]: https://github.com/robbyrussell/oh-my-zsh
 [p10k-fonts]: https://github.com/romkatv/powerlevel10k/#meslo-nerd-font-patched-for-powerlevel10k
 [powerlevel10k]: https://github.com/romkatv/powerlevel10k

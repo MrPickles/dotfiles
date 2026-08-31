@@ -1,4 +1,4 @@
 # You can run `bat --help` to get a list of all possible configuration options.
 
-# Set the theme to Solarized Dark
---theme="Solarized (dark)"
+# Imported Tokyo Night (Storm); run `bat cache --build` after updating themes.
+--theme="tokyonight_storm"
