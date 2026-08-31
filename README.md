@@ -9,7 +9,7 @@ curl https://raw.githubusercontent.com/MrPickles/dotfiles/master/scripts/dotfile
 ![Screenshot of my dotfiles](.github/screenshot.png)
 
 These dotfiles are intended for use with zsh, [oh-my-zsh][], and the
-[Tokyo Night][tokyonight] colorscheme (Storm variant).
+[Tokyo Night][tokyonight] colorscheme.
 The screenshot above predates this change.
 The configuration uses powerline-based status bars for vim and tmux and
 [Powerlevel10k][powerlevel10k] as its zsh theme.
