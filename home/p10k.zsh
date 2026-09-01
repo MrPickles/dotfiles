@@ -543,12 +543,49 @@
   # jj_status  | counts of added, removed, modified  | +1 -4 ^2
   # jj_op      | the current jj operation ID         | b44825e56a5a
 
+  # Additional workspaces store a relative path in .jj/repo instead of a directory.
+  function .dotfiles_jj_repo_dir() {
+    emulate -L zsh
+    local repo=$1/.jj/repo
+    if [[ -d $repo ]]; then
+      print -r -- $repo
+      return 0
+    fi
+    [[ -f $repo ]] || return 1
+    local target
+    # Pointer file often has no trailing newline; `read` then returns 1.
+    IFS= read -r target < $repo
+    [[ -n $target ]] || return 1
+    [[ $target == /* ]] || target=${repo:A:h}/$target
+    print -r -- ${target:A}
+  }
+
+  function .dotfiles_jj_op_head() {
+    emulate -L zsh
+    local repo heads
+    repo=$(.dotfiles_jj_repo_dir $1) || return
+    heads=$repo/op_heads/heads
+    [[ -d $heads ]] && print -r -- $heads/*(N:t)
+  }
+
+  typeset -gA p10k_jj_skip_snapshot
+  typeset -g p10k_jj_query_key p10k_jj_pending_root
+
   function jj_status_query() {
     emulate -L zsh
+    # $1 = workspace root, $2 = 1 if Watchman snapshots this workspace,
+    # $3 = op head from the previous successful query (may be empty).
     cd "$1"
+    if (( ! $2 )); then
+      jj util snapshot >/dev/null 2>&1
+    fi
 
-    ## jj_add
-    jj --at-operation=@ debug snapshot
+    local op_head
+    op_head=$(.dotfiles_jj_op_head $1)
+    if [[ -n $3 && $op_head == $3 ]]; then
+      print -r -- __P10K_JJ_UNCHANGED__
+      return 0
+    fi
 
     ## jj_at
     local branch=$(jj --ignore-working-copy --at-op=@ --no-pager log --no-graph --limit 1 -r "
@@ -582,36 +619,40 @@
       local JJ_STATUS_COMMITS_BEHIND_PLUS=$counts[5]
     fi
 
-    ## jj_change
-    IFS="#" local change=($(jj --ignore-working-copy --at-op=@ --no-pager log --no-graph --limit 1 -r "@" -T '
-      separate("#",
-        change_id.shortest(4).prefix(),
-        coalesce(change_id.shortest(4).rest(), "\0"),
-        commit_id.shortest(4).prefix(),
-        coalesce(commit_id.shortest(4).rest(), "\0"),
+    ## jj_change + jj_desc + jj_status (one `jj log -r @`)
+    local raw
+    local -a at_info
+    raw=$(
+      jj --ignore-working-copy --at-op=@ --no-pager log --no-graph --limit 1 -r @ -T '
         concat(
-          if(conflict, "💥"),
-          if(divergent, "🚧"),
-          if(hidden, "👻"),
-          if(immutable, "🔒"),
-        ),
-      )'))
-    local JJ_STATUS_CHANGE=($change[1] $change[2])
-    local JJ_STATUS_COMMIT=($change[3] $change[4])
-    local JJ_STATUS_ACTION=$change[5]
-
-    ## jj_desc
-    local JJ_STATUS_MESSAGE=$(jj --ignore-working-copy --at-op=@ --no-pager log --no-graph --limit 1 -r "@" -T "description.first_line()")
-
-    ## jj_status
-    local JJ_STATUS_CHANGES=($(jj log --ignore-working-copy --at-op=@ --no-graph --no-pager -r @ -T "diff.summary()" 2> /dev/null | awk '
-      BEGIN {a=0;d=0;m=0;r=0;c=0}
-        /^A / {a++}
-        /^D / {d++}
-        /^M / {m++}
-        /^R / {r++}
-        /^C / {c++}
-      END {print(a,d,m,r,c)}'))
+          change_id.shortest(4).prefix() ++ "#" ++ coalesce(change_id.shortest(4).rest(), "") ++ "\n",
+          commit_id.shortest(4).prefix() ++ "#" ++ coalesce(commit_id.shortest(4).rest(), "") ++ "\n",
+          concat(
+            if(conflict, "💥"),
+            if(divergent, "🚧"),
+            if(hidden, "👻"),
+            if(immutable, "🔒"),
+          ) ++ "\n",
+          coalesce(description.first_line(), "") ++ "\n",
+          diff.summary(),
+        )' 2>/dev/null
+    )
+    at_info=("${(@f)raw}")
+    local -a JJ_STATUS_CHANGE=(${(s:#:)at_info[1]})
+    local -a JJ_STATUS_COMMIT=(${(s:#:)at_info[2]})
+    local JJ_STATUS_ACTION=$at_info[3]
+    local JJ_STATUS_MESSAGE=$at_info[4]
+    local -a JJ_STATUS_CHANGES=(0 0 0 0 0)
+    local line
+    for line in ${at_info[5,-1]}; do
+      case $line in
+        'A '*) (( JJ_STATUS_CHANGES[1]++ ));;
+        'D '*) (( JJ_STATUS_CHANGES[2]++ ));;
+        'M '*) (( JJ_STATUS_CHANGES[3]++ ));;
+        'R '*) (( JJ_STATUS_CHANGES[4]++ ));;
+        'C '*) (( JJ_STATUS_CHANGES[5]++ ));;
+      esac
+    done
 
     # Run the JJ status formatter twice. Once normally and the second time to get the greyed-out version.
     jj_status_formatter 1
@@ -692,9 +733,12 @@
 
     if [[ $2 -ne 0 ]]; then
       typeset -g p10k_jj_status=
-    else
+    elif [[ $p10k_jj_statuses[1] != __P10K_JJ_UNCHANGED__ ]]; then
       typeset -g p10k_jj_status="$p10k_jj_statuses[1]"
       typeset -g p10k_jj_status_greyed_out="$p10k_jj_statuses[2]"
+    fi
+    if [[ $2 -eq 0 && -n $p10k_jj_pending_root ]]; then
+      typeset -g p10k_jj_query_key="${p10k_jj_pending_root}"$'\0'"$(.dotfiles_jj_op_head $p10k_jj_pending_root)"
     fi
     typeset -g p10k_jj_status_stale= p10k_jj_status_updated=1
     p10k display -r
@@ -711,23 +755,56 @@
     p10k display "*/jj=hide"
     p10k display "*/vcs=show"
 
-    # If we're not in a JJ repo, do nothing.
-    command -v jj >/dev/null 2>&1 || return
-    jj_root=$(jj workspace root 2>/dev/null)
-    [[ -z $jj_root ]] && return
+    # Walk for `.jj` instead of spawning `jj workspace root`.
+    local dir=${PWD:A} jj_root git_root
+    while true; do
+      if [[ -d $dir/.jj ]]; then
+        jj_root=$dir
+        break
+      fi
+      [[ $dir == / ]] && return
+      dir=${dir:h}
+    done
+    (( $+commands[jj] )) || return
 
-    # If we're in a git submodule (nested within a JJ repo), do nothing.
-    git_root=$(git rev-parse --show-toplevel 2>/dev/null)
-    [[ ${#jj_root} -lt ${#git_root} ]] && return
+    # Git submodule nested in a JJ workspace: prefer the git prompt.
+    dir=${PWD:A}
+    while true; do
+      if [[ -e $dir/.git ]]; then
+        git_root=$dir
+        break
+      fi
+      [[ $dir == / ]] && break
+      dir=${dir:h}
+    done
+    [[ -n $git_root && ${#jj_root} -lt ${#git_root} ]] && return
 
-    # Show JJ prompts, not normal VCS.
+    if (( ! $+p10k_jj_skip_snapshot[$jj_root] )); then
+      local skip_snap
+      skip_snap=$(jj --ignore-working-copy -R $jj_root config get fsmonitor.watchman.register-snapshot-trigger 2>/dev/null) || skip_snap=false
+      [[ $skip_snap == true ]] && p10k_jj_skip_snapshot[$jj_root]=1 || p10k_jj_skip_snapshot[$jj_root]=0
+    fi
+
+    local op_head key last_op=
+    op_head=$(.dotfiles_jj_op_head $jj_root)
+    key="${jj_root}"$'\0'"${op_head}"
+
     p10k display "*/jj=show"
     p10k display "*/vcs=hide"
+    typeset -g p10k_jj_pending_root=$jj_root
 
-    typeset -g p10k_jj_status_stale=1 p10k_jj_status_updated=
-    p10k segment -f "${TOKYONIGHT[comment]}" -c '$p10k_jj_status_stale' -e -t '$p10k_jj_status_greyed_out'
-    p10k segment -c '$p10k_jj_status_updated' -e -t '$p10k_jj_status'
-    async_job jj_status_worker jj_status_query $PWD
+    if [[ -n $p10k_jj_status && $p10k_jj_query_key == $key ]]; then
+      typeset -g p10k_jj_status_stale= p10k_jj_status_updated=1
+      p10k segment -c '$p10k_jj_status_updated' -e -t '$p10k_jj_status'
+      # Watchman trigger: background snapshot already ran; nothing to do.
+      (( p10k_jj_skip_snapshot[$jj_root] )) && return
+      last_op=$op_head
+    else
+      typeset -g p10k_jj_status_stale=1 p10k_jj_status_updated=
+      p10k segment -f "${TOKYONIGHT[comment]}" -c '$p10k_jj_status_stale' -e -t '$p10k_jj_status_greyed_out'
+      p10k segment -c '$p10k_jj_status_updated' -e -t '$p10k_jj_status'
+    fi
+    async_job jj_status_worker jj_status_query $jj_root $p10k_jj_skip_snapshot[$jj_root] $last_op
   }
 
   # Don't count the number of unstaged, untracked and conflicted files in Git repositories with

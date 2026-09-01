@@ -35,11 +35,11 @@ _setup_path() {
 
   # Add Homebrew directories to path.
   _prepend_to_path /opt/homebrew/bin
-  if _has brew; then
-    # Add symlinked Python binaries to path.
-    # https://docs.brew.sh/Homebrew-and-Python
-    _prepend_to_path "$(brew --prefix python)/libexec/bin"
-  fi
+  # Homebrew unversioned Python. Keg symlink; don't spawn `brew --prefix`.
+  # https://docs.brew.sh/Homebrew-and-Python
+  _prepend_to_path /opt/homebrew/opt/python/libexec/bin
+  _prepend_to_path /usr/local/opt/python/libexec/bin
+  _prepend_to_path /home/linuxbrew/.linuxbrew/opt/python/libexec/bin
 
   # Add home bin directory to path.
   _prepend_to_path "$HOME/.local/bin"

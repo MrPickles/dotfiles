@@ -24,12 +24,13 @@ _dotfiles_detect_color_mode() {
   saved=$(command stty -g </dev/tty 2>/dev/null) || return
   # emulate -L runs this EXIT trap on return, so the tty is restored on every path.
   trap 'command stty "$saved" </dev/tty 2>/dev/null; trap - EXIT INT TERM HUP' EXIT INT TERM HUP
-  # Keep ISIG so Ctrl-C still restores the tty. time 2 = 0.2s with no input.
-  command stty -echo -icanon min 0 time 2 </dev/tty 2>/dev/null || return
+  # Keep ISIG so Ctrl-C still restores the tty. time 1 = 100ms (dd fallback);
+  # sysread below uses 50ms.
+  command stty -echo -icanon min 0 time 1 </dev/tty 2>/dev/null || return
 
   printf '%s' $'\e]11;?\a' >/dev/tty
   if zmodload zsh/system 2>/dev/null && (( $+builtins[sysread] )); then
-    sysread -t 0.2 -s 256 buf </dev/tty
+    sysread -t 0.05 -s 256 buf </dev/tty
   else
     buf=$(command dd bs=256 count=1 </dev/tty 2>/dev/null)
   fi
@@ -71,7 +72,7 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# Re-apply path modifications (from ~/.zshenv)
+# Re-apply after macOS /etc/zprofile `path_helper`, which reorders PATH on login shells.
 _setup_path
 
 ################################################################################
@@ -80,7 +81,10 @@ _setup_path
 
 # Set OMZ installation location.
 ZSH=$HOME/.oh-my-zsh
-DISABLE_UPDATE_PROMPT=true
+# Update OMZ via ./setup.sh, not a random interactive shell.
+DISABLE_AUTO_UPDATE=true
+# Skip fpath permission audit (compaudit). Single-user machine.
+ZSH_DISABLE_COMPFIX=true
 # Set zsh theme to be powerlevel10k with patched fontawesome symbols.
 POWERLEVEL9K_MODE='nerdfont-v3'
 ZSH_THEME='powerlevel10k/powerlevel10k'
@@ -262,14 +266,9 @@ if _has eza; then
 fi
 
 # Sourcing OMZ overwrites some of bindings from fzf scripts.
+# setup.sh requires fzf >= 0.48, which is when `--zsh` was added.
 if _has fzf; then
-  local fzf_version=$(fzf --version | awk '{print $1}')
-  autoload -Uz is-at-least
-  if is-at-least 0.48.0 "$fzf_version"; then
-    source <(fzf --zsh)
-  else
-    echo "\e[33mWarning: Your fzf version ($fzf_version) is too old to support '--zsh'. Please update fzf to >= 0.48.0 to enable shell integration.\e[0m" >&2
-  fi
+  source <(fzf --zsh)
 fi
 
 if _has zoxide; then
