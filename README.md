@@ -8,7 +8,7 @@ curl https://raw.githubusercontent.com/MrPickles/dotfiles/master/scripts/dotfile
 
 ![Screenshot of my dotfiles](.github/screenshot.png)
 
-They are meant for zsh, [oh-my-zsh][], and [Tokyo Night][tokyonight], with
+They use zsh, [oh-my-zsh][], and [Tokyo Night][tokyonight], with
 [Powerlevel10k][powerlevel10k] as the prompt.
 
 ## Try it out in Docker
@@ -31,12 +31,14 @@ look wrong. Everything else should work as-is.
 
 ## Installation
 
+Run this command:
+
 ```shell
 curl https://raw.githubusercontent.com/MrPickles/dotfiles/master/scripts/dotfiles.sh | bash
 ```
 
 That clones the repo if needed, fetches oh-my-zsh, and symlinks into your home
-directory. Same thing by hand:
+directory. You can also clone the repository:
 
 ```shell
 git clone --filter=blob:none git@github.com:MrPickles/dotfiles.git ~/.dotfiles
@@ -55,18 +57,18 @@ symlinks.
 
 ## Fresh machine
 
+The setup script can also install various system dependencies.
+
 `--install-deps` is opinionated and meant for a blank computer. It installs
 packages (and, on macOS, system defaults) and then does the usual `./setup.sh`
 link step.
 
 ```shell
-git clone --filter=blob:none git@github.com:MrPickles/dotfiles.git ~/.dotfiles
-cd ~/.dotfiles
 ./setup.sh --install-deps
 ```
 
-On macOS, `--install-deps` runs `scripts/macos.sh`: Homebrew if needed, the
-Brewfile, then Finder/Dock/trackpad defaults.
+On macOS, `--install-deps` runs `scripts/macos.sh`, which installs Homebrew and
+tools managed by the `Brewfile`, along with Finder/Dock/trackpad defaults.
 
 On Linux it runs `scripts/linux.sh`. You can choose how Rust CLI tools are
 installed:
@@ -78,8 +80,8 @@ installed:
 
 ## Fonts and colors
 
-Install [MesloLGS NF][p10k-fonts] (the Powerlevel10k-recommended nerd font) and
-select it in your terminal.
+The terminal prompts require Nerd Fonts of some sort.
+The font recommended by Powerlevel10k is [MesloLGS NF][p10k-fonts].
 
 If bat (or delta, which uses bat's themes) looks unthemed, rebuild the cache:
 
