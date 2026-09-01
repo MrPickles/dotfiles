@@ -61,6 +61,9 @@ export BAT_THEME="tokyonight_${DOTFILES_TOKYONIGHT_STYLE}"
 export EZA_CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/eza/${DOTFILES_TOKYONIGHT_STYLE}"
 export DELTA_FEATURES="tokyonight-${DOTFILES_TOKYONIGHT_STYLE}"
 
+# Zsh only emits P10k's hex colors as truecolor when COLORTERM is set.
+[[ -n ${COLORTERM:-} ]] || export COLORTERM=truecolor
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
