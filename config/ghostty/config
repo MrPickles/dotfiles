@@ -5,6 +5,3 @@ theme = "tokyonight-storm"
 quit-after-last-window-closed = true
 confirm-close-surface = false
 macos-option-as-alt = true
-
-# Terminal bell configuration
-bell-features = visual
