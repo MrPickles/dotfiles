@@ -74,6 +74,8 @@ ZSH_THEME='powerlevel10k/powerlevel10k'
 # OMZ messes with the ls colors by default. Let's not have it do that.
 DISABLE_LS_COLORS=true
 export LS_COLORS=
+# Advertise truecolor support when the terminal does not set COLORTERM.
+[[ -n ${COLORTERM:-} ]] || export COLORTERM=truecolor
 
 # These are the default OMZ plugins that we'll install.
 plugins=(
@@ -211,9 +213,6 @@ t() {
 ################################################################################
 
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="bg=italic,underline"
-
-# Advertise truecolor support when the terminal does not set COLORTERM.
-[[ -n ${COLORTERM:-} ]] || export COLORTERM=truecolor
 
 # Match delta's theme to the terminal.
 export DELTA_FEATURES="tokyonight-${DOTFILES_TOKYONIGHT_STYLE}"
