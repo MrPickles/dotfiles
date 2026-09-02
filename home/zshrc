@@ -20,7 +20,7 @@
   [[ -o interactive ]] || return
   # This tmux setup is always dark; avoid unreliable OSC passthrough.
   [[ -z ${TMUX:-} ]] || return
-  [[ $TERM != dumb ]] || return
+  [[ $TERM != (dumb|linux|vt[0-9]*|sun*) ]] || return
   [[ -e /dev/tty && -r /dev/tty && -w /dev/tty ]] || return
   zmodload zsh/system 2>/dev/null && (( $+builtins[sysread] )) || return
 
@@ -32,7 +32,7 @@
   command stty -echo -icanon min 0 time 1 </dev/tty 2>/dev/null || return
 
   printf '%s' $'\e]11;?\a' >/dev/tty
-  sysread -t 0.05 -s 256 buf </dev/tty
+  sysread -t 0.25 -s 256 buf </dev/tty
   command stty "$saved" </dev/tty 2>/dev/null
   trap - EXIT INT TERM HUP
 
@@ -244,9 +244,21 @@ bindkey -e # enable C-x-e for shell editor
 # Key bindings for history search.
 bindkey '\e[3~' delete-char
 bindkey '^R' history-incremental-search-backward
-# Explicity bind home and end keys (in case of terminal compatibility issues)
-bindkey "${terminfo[khome]}" beginning-of-line
-bindkey "${terminfo[kend]}" end-of-line
+# Explicitly bind home and end keys (in case of terminal compatibility issues)
+[[ -n ${terminfo[khome]:-} ]] && bindkey "${terminfo[khome]}" beginning-of-line
+[[ -n ${terminfo[kend]:-} ]] && bindkey "${terminfo[kend]}" end-of-line
+
+# Discard late-arriving OSC 11 background query responses so they don't leak into the prompt
+_discard_osc11() {
+  local char
+  while read -s -k 1 -t 0.05 char; do
+    [[ $char == $'\a' || $char == $'\\' ]] && break
+  done
+}
+zle -N _discard_osc11
+bindkey -M emacs $'\e]11;' _discard_osc11 2>/dev/null || true
+bindkey -M viins $'\e]11;' _discard_osc11 2>/dev/null || true
+bindkey -M vicmd $'\e]11;' _discard_osc11 2>/dev/null || true
 
 # Alias `eza` as default `ls` command (if available).
 # This must come after OMZ. (The library overwrites this alias.)
