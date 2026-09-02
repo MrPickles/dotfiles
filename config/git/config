@@ -61,6 +61,9 @@
 	pruneTags = true
 [format]
 	pretty = %C(auto)%h%Creset -%C(auto)%d%Creset %s %C(blue)<%an> %Cgreen(%cr)%Creset
+[ghq]
+	root = ~/Developer
+	user = MrPickles
 [help]
 	autocorrect = prompt
 [init]
