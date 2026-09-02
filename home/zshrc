@@ -2,38 +2,37 @@
 # Terminal color mode (light vs dark)
 ################################################################################
 
-# Sets DOTFILES_COLOR_MODE from the terminal background (OSC 11).
-# Override by exporting DOTFILES_COLOR_MODE=light or dark beforehand.
-_dotfiles_detect_color_mode() {
+# Default to Tokyo Night Storm; switch to Day when the terminal is light.
+() {
   emulate -L zsh
   setopt extendedglob
 
-  if [[ ${DOTFILES_COLOR_MODE:-} == light || ${DOTFILES_COLOR_MODE:-} == dark ]]; then
+  typeset -g DOTFILES_TOKYONIGHT_STYLE=storm
+  typeset -g DOTFILES_INSTANT_PROMPT=verbose
+
+  # Codex is intentionally light and does not use P10k's shared instant-prompt cache.
+  if [[ ${CODEX_SHELL:-} == 1 ]]; then
+    typeset -g DOTFILES_TOKYONIGHT_STYLE=day
+    typeset -g DOTFILES_INSTANT_PROMPT=off
     return
   fi
 
-  typeset -g DOTFILES_COLOR_MODE=dark
-
   [[ -o interactive ]] || return
-  # tmux: skip OSC 11 (passthrough is slow/unreliable; this tmux is always dark).
+  # This tmux setup is always dark; avoid unreliable OSC passthrough.
   [[ -z ${TMUX:-} ]] || return
   [[ $TERM != dumb ]] || return
   [[ -e /dev/tty && -r /dev/tty && -w /dev/tty ]] || return
+  zmodload zsh/system 2>/dev/null && (( $+builtins[sysread] )) || return
 
   local saved buf
   saved=$(command stty -g </dev/tty 2>/dev/null) || return
-  # emulate -L runs this EXIT trap on return, so the tty is restored on every path.
+  # Restore the tty on every exit path.
   trap 'command stty "$saved" </dev/tty 2>/dev/null; trap - EXIT INT TERM HUP' EXIT INT TERM HUP
-  # Keep ISIG so Ctrl-C still restores the tty. time 1 = 100ms (dd fallback);
-  # sysread below uses 50ms.
+  # Keep signals enabled while preparing the tty for a bounded read.
   command stty -echo -icanon min 0 time 1 </dev/tty 2>/dev/null || return
 
   printf '%s' $'\e]11;?\a' >/dev/tty
-  if zmodload zsh/system 2>/dev/null && (( $+builtins[sysread] )); then
-    sysread -t 0.05 -s 256 buf </dev/tty
-  else
-    buf=$(command dd bs=256 count=1 </dev/tty 2>/dev/null)
-  fi
+  sysread -t 0.05 -s 256 buf </dev/tty
   command stty "$saved" </dev/tty 2>/dev/null
   trap - EXIT INT TERM HUP
 
@@ -43,32 +42,16 @@ _dotfiles_detect_color_mode() {
   (( ${#g} == 1 )) && g=$g$g
   (( ${#b} == 1 )) && b=$b$b
   typeset -i R=16#${r[1,2]} G=16#${g[1,2]} B=16#${b[1,2]}
-  # Relative luminance vs 0.5, scaled by 10000 * 255.
+  # Classify backgrounds above 0.5 relative luminance as light.
   (( 2126 * R + 7152 * G + 722 * B > 1275000 )) || return
-  typeset -g DOTFILES_COLOR_MODE=light
-}
-
-_dotfiles_detect_color_mode
-unset -f _dotfiles_detect_color_mode
-export DOTFILES_COLOR_MODE
-if [[ $DOTFILES_COLOR_MODE == light ]]; then
   typeset -g DOTFILES_TOKYONIGHT_STYLE=day
-else
-  typeset -g DOTFILES_TOKYONIGHT_STYLE=storm
-fi
-export DOTFILES_TOKYONIGHT_STYLE
-
-export BAT_THEME="tokyonight_${DOTFILES_TOKYONIGHT_STYLE}"
-export EZA_CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/eza/${DOTFILES_TOKYONIGHT_STYLE}"
-export DELTA_FEATURES="tokyonight-${DOTFILES_TOKYONIGHT_STYLE}"
-
-# Zsh only emits P10k's hex colors as truecolor when COLORTERM is set.
-[[ -n ${COLORTERM:-} ]] || export COLORTERM=truecolor
+}
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+if [[ ${DOTFILES_INSTANT_PROMPT:-verbose} != off &&
+      -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
@@ -229,7 +212,14 @@ t() {
 
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="bg=italic,underline"
 
+# Advertise truecolor support when the terminal does not set COLORTERM.
+[[ -n ${COLORTERM:-} ]] || export COLORTERM=truecolor
+
+# Match delta's theme to the terminal.
+export DELTA_FEATURES="tokyonight-${DOTFILES_TOKYONIGHT_STYLE}"
+
 # The bat executable may sometimes be called batcat on Debian/Ubuntu.
+export BAT_THEME="tokyonight_${DOTFILES_TOKYONIGHT_STYLE}"
 if _has batcat; then
   alias bat="batcat"
 fi
@@ -261,6 +251,7 @@ bindkey "${terminfo[kend]}" end-of-line
 
 # Alias `eza` as default `ls` command (if available).
 # This must come after OMZ. (The library overwrites this alias.)
+export EZA_CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/eza/${DOTFILES_TOKYONIGHT_STYLE}"
 if _has eza; then
   alias ls="eza --icons=auto"
 fi
