@@ -27,3 +27,6 @@ Temporary Items
 
 # Agent settings
 **/.claude/settings.local.json
+
+# Watchman configs
+.watchmanconfig
