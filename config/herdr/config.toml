@@ -10,7 +10,10 @@ name = "terminal"
 prompt_new_tab_name = false
 
 [ui.toast]
-# Ask Ghostty to show a desktop notification (OSC 9 / OSC 777).
+# OSC 9/777 to Ghostty. Herdr skips the active tab. Ghostty posts as itself,
+# so Focus/DND must allow Ghostty; macOS Ghostty notification sound is
+# separate from [ui.sound]. Ghostty also silences banners while its window
+# is focused unless the OS alert style is Persistent.
 delivery = "terminal"
 
 [ui.sound]
