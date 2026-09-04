@@ -2,4 +2,5 @@
 font-family = "MesloLGS NF"
 font-size = 14
 theme = "tokyonight-storm"
+confirm-close-surface = false
 macos-option-as-alt = true
