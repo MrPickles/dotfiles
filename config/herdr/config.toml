@@ -8,3 +8,10 @@ name = "terminal"
 [ui]
 # Create tabs immediately; rename later with prefix+shift+t.
 prompt_new_tab_name = false
+
+[ui.toast]
+# Ask Ghostty to show a desktop notification (OSC 9 / OSC 777).
+delivery = "terminal"
+
+[ui.sound]
+enabled = false
