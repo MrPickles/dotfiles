@@ -1,0 +1,8 @@
+# https://hunk.dev/docs/configure/configuration/
+theme = "tokyo-night"
+transparent_background = true
+agent_notes = true
+prompt_save_view_preferences = false
+
+[vcs]
+watch = true

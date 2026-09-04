@@ -11,3 +11,12 @@ kitty.conf.bak
 # Jujutsu artifacts.
 config/jj/repos
 config/jj/conf.d
+
+# Herdr runtime files (logs, sockets, session state).
+config/herdr/*
+!config/herdr/config.toml
+
+# Hunk runtime files.
+config/hunk/*
+!config/hunk/config.toml
+
