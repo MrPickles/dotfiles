@@ -169,9 +169,7 @@ if _has fzf; then
 
   # Show previews for files and directories.
   FZF_CTRL_T_OPTS="--preview 'cat {} | head -200'"
-  if _has batcat; then
-    FZF_CTRL_T_OPTS="--preview 'batcat --style=numbers --color=always {} | head -200'"
-  elif _has bat; then
+  if _has bat; then
     FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always {} | head -200'"
   fi
 
@@ -217,11 +215,7 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="bg=italic,underline"
 # Match delta's theme to the terminal.
 export DELTA_FEATURES="tokyonight-${DOTFILES_TOKYONIGHT_STYLE}"
 
-# The bat executable may sometimes be called batcat on Debian/Ubuntu.
 export BAT_THEME="tokyonight_${DOTFILES_TOKYONIGHT_STYLE}"
-if _has batcat; then
-  alias bat="batcat"
-fi
 if _has bat; then
   alias cat="bat"
 fi

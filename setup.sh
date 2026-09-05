@@ -9,10 +9,10 @@ set -euo pipefail
 
 ACTION="build"
 INSTALL_DEPS=false
-TOOL_SOURCE="distro"
-NEOVIM_SOURCE="github"
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=scripts/common.sh
+source "${script_dir}/scripts/common.sh"
 
 usage() {
   cat <<'EOF'
@@ -28,15 +28,10 @@ Options:
       --clean                 Alias for --target clean.
       --shellcheck            Alias for --target shellcheck.
       --install-deps          Install machine-level dependencies before build.
-      --tool-source <distro|cargo>
-                              Linux only. Choose how Rust-based CLI tools are installed.
-      --neovim-source <github>
-                              Override the Neovim install source for --install-deps.
 
 Examples:
   ./setup.sh
   ./setup.sh --install-deps
-  ./setup.sh --install-deps --tool-source cargo
   ./setup.sh --clean
   ./setup.sh --shellcheck
 EOF
@@ -73,22 +68,6 @@ parse_args() {
         INSTALL_DEPS=true
         shift
         ;;
-      --tool-source)
-        if [[ $# -lt 2 ]]; then
-          echo "Missing argument for $1" >&2
-          exit 1
-        fi
-        TOOL_SOURCE=$2
-        shift 2
-        ;;
-      --neovim-source)
-        if [[ $# -lt 2 ]]; then
-          echo "Missing argument for $1" >&2
-          exit 1
-        fi
-        NEOVIM_SOURCE=$2
-        shift 2
-        ;;
       *)
         echo "Unknown option: $1" >&2
         usage >&2
@@ -105,24 +84,6 @@ validate_args() {
     *)
       echo "Unsupported target: ${ACTION}" >&2
       usage >&2
-      exit 1
-      ;;
-  esac
-
-  case "${TOOL_SOURCE}" in
-    distro|cargo)
-      ;;
-    *)
-      echo "Unsupported tool source: ${TOOL_SOURCE}" >&2
-      exit 1
-      ;;
-  esac
-
-  case "${NEOVIM_SOURCE}" in
-    github)
-      ;;
-    *)
-      echo "Unsupported neovim source: ${NEOVIM_SOURCE}" >&2
       exit 1
       ;;
   esac
@@ -155,11 +116,7 @@ install_dependencies() {
       execute "Installing macOS dependencies" "${script_dir}/scripts/macos.sh"
       ;;
     Linux)
-      execute \
-        "Installing Linux dependencies" \
-        "${script_dir}/scripts/linux.sh" \
-        --tool-source "${TOOL_SOURCE}" \
-        --neovim-source "${NEOVIM_SOURCE}"
+      execute "Installing Linux dependencies" "${script_dir}/scripts/linux.sh"
       ;;
     *)
       echo "Unsupported operating system: ${os_name}" >&2
@@ -308,8 +265,6 @@ build_dotfiles() {
   # Custom bat themes must be compiled locally; delta also reads this cache.
   if command -v bat >/dev/null 2>&1; then
     execute "Rebuilding bat theme cache" bat cache --build
-  elif command -v batcat >/dev/null 2>&1; then
-    execute "Rebuilding bat theme cache" batcat cache --build
   fi
 
   install_omz
@@ -363,6 +318,8 @@ main() {
       if [[ "${INSTALL_DEPS}" == "true" ]]; then
         install_dependencies
       fi
+      # Pick up Homebrew even when this bash process did not install it.
+      eval_brew_shellenv || true
       build_dotfiles
       ;;
   esac

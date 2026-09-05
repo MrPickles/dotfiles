@@ -1,11 +1,9 @@
 #!/usr/bin/env bash
 
+DOTFILES_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
 has_cmd() {
   command -v "$1" >/dev/null 2>&1
-}
-
-version_gte() {
-  dpkg --compare-versions "$1" ge "$2"
 }
 
 linux_release_field() {
@@ -18,56 +16,56 @@ linux_release_field() {
   awk -F= -v key="${key}" '$1 == key { gsub(/"/, "", $2); print $2 }' /etc/os-release
 }
 
-linux_arch() {
-  case "$(uname -m)" in
-    x86_64|amd64)
-      echo "x86_64"
-      ;;
-    aarch64|arm64)
-      echo "arm64"
-      ;;
-    *)
-      echo "Unsupported architecture: $(uname -m)" >&2
-      exit 1
-      ;;
-  esac
+run_as_root() {
+  # sudo env_reset drops the caller's DEBIAN_FRONTEND; pass it on the command.
+  local frontend="${DEBIAN_FRONTEND:-noninteractive}"
+
+  if [[ "${EUID}" -eq 0 ]]; then
+    env DEBIAN_FRONTEND="${frontend}" "$@"
+  else
+    sudo DEBIAN_FRONTEND="${frontend}" "$@"
+  fi
 }
 
-latest_github_asset() {
-  local repo=$1
-  local pattern=$2
+eval_brew_shellenv() {
+  local brew_bin=""
 
-  curl -fsSL "https://api.github.com/repos/${repo}/releases/latest" \
-    | jq -r --arg pattern "${pattern}" '
-        .assets[]
-        | select(.name | test($pattern))
-        | .browser_download_url
-      ' \
-    | head -n1
+  if [[ -x /opt/homebrew/bin/brew ]]; then
+    brew_bin=/opt/homebrew/bin/brew
+  elif [[ -x /home/linuxbrew/.linuxbrew/bin/brew ]]; then
+    brew_bin=/home/linuxbrew/.linuxbrew/bin/brew
+  elif [[ -x /usr/local/bin/brew ]]; then
+    brew_bin=/usr/local/bin/brew
+  elif has_cmd brew; then
+    brew_bin=$(command -v brew)
+  else
+    return 1
+  fi
+
+  eval "$("${brew_bin}" shellenv bash)"
 }
 
-require_url() {
-  local url=$1
-  local description=$2
-
-  if [[ -z "${url}" ]]; then
-    echo "Unable to find a download URL for ${description}." >&2
+ensure_homebrew() {
+  if [[ "${EUID}" -eq 0 ]]; then
+    echo "Homebrew must be installed as a non-root user with sudo." >&2
     exit 1
   fi
-}
 
-run_as_root() {
-  if [[ "${EUID}" -eq 0 ]]; then
-    "$@"
-  else
-    sudo "$@"
+  if eval_brew_shellenv; then
+    hash -r
+    return
   fi
+
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+  if ! eval_brew_shellenv; then
+    echo "Unable to find Homebrew after installation." >&2
+    exit 1
+  fi
+  hash -r
 }
 
-ensure_symlink() {
-  local target=$1
-  local link_path=$2
-
-  mkdir -p "$(dirname "${link_path}")"
-  ln -sfn "${target}" "${link_path}"
+install_brewfile() {
+  brew update
+  brew bundle install --file="${DOTFILES_ROOT}/Brewfile"
 }

@@ -33,8 +33,11 @@ _setup_path() {
   _prepend_to_path /usr/local/bin
   _prepend_to_path /usr/local/sbin
 
-  # Add Homebrew directories to path.
+  # Add Homebrew directories to path. Hardcoded prefixes so zshenv does not spawn `brew`.
   _prepend_to_path /opt/homebrew/bin
+  _prepend_to_path /opt/homebrew/sbin
+  _prepend_to_path /home/linuxbrew/.linuxbrew/bin
+  _prepend_to_path /home/linuxbrew/.linuxbrew/sbin
   # Homebrew unversioned Python. Keg symlink; don't spawn `brew --prefix`.
   # https://docs.brew.sh/Homebrew-and-Python
   _prepend_to_path /opt/homebrew/opt/python/libexec/bin
@@ -43,7 +46,6 @@ _setup_path() {
 
   # Add home bin directory to path.
   _prepend_to_path "$HOME/.local/bin"
-  _prepend_to_path "$HOME/.cargo/bin"
 }
 
 _setup_path

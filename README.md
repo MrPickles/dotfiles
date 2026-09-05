@@ -68,15 +68,13 @@ link step.
 ```
 
 On macOS, `--install-deps` runs `scripts/macos.sh`, which installs Homebrew and
-tools managed by the `Brewfile`, along with Finder/Dock/trackpad defaults.
+the `Brewfile`, along with Finder/Dock/trackpad defaults.
 
-On Linux it runs `scripts/linux.sh`. You can choose how Rust CLI tools are
-installed:
-
-```shell
-./setup.sh --install-deps --tool-source distro
-./setup.sh --install-deps --tool-source cargo
-```
+On Linux it runs `scripts/linux.sh`, which installs a small apt bootstrap
+(compiler toolchain, curl, git, zsh, vim) and then the same Homebrew `Brewfile`.
+CLI tools are managed by brew on both operating systems. Casks and Mac App Store
+apps stay macOS-only. Homebrew's Linux bottles target Ubuntu 24.04+ (glibc
+2.39); older Debian/Ubuntu still work, but the first install is slower.
 
 ## Fonts and colors
 
@@ -86,7 +84,7 @@ The font recommended by Powerlevel10k is [MesloLGS NF][p10k-fonts].
 If bat (or delta, which uses bat's themes) looks unthemed, rebuild the cache:
 
 ```shell
-bat cache --build   # batcat cache --build on some Linux systems
+bat cache --build
 ```
 
 ## Optional tools
