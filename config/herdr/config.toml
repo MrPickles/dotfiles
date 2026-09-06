@@ -8,6 +8,17 @@ name = "terminal"
 [ui]
 # Create tabs immediately; rename later with prefix+shift+t.
 prompt_new_tab_name = false
+# Agent panel as an attention queue: blocked, unseen done, working, then idle.
+agent_panel_sort = "priority"
+
+[keys]
+previous_workspace = "prefix+{"
+next_workspace = "prefix+}"
+previous_agent = "prefix+,"
+next_agent = "prefix+."
+# Navigate mode (prefix+w): keep arrows, add { / } to match prefix workspace keys.
+navigate_workspace_up = ["up", "{"]
+navigate_workspace_down = ["down", "}"]
 
 [ui.toast]
 # OSC 9/777 to Ghostty. Herdr skips the active tab. Ghostty posts as itself,
