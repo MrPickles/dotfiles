@@ -195,6 +195,13 @@ if _has nvim; then
   alias vi="nvim"
 fi
 
+# OSC 52 clipboard copy when macOS pbcopy is absent (Linux, SSH).
+if ! _has pbcopy; then
+  pbcopy() {
+    printf '\033]52;c;%s\033\\' "$(base64 -w0)" >/dev/tty
+  }
+fi
+
 ################################################################################
 # Tmux setup
 ################################################################################
