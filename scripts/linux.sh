@@ -26,8 +26,6 @@ install_bootstrap_packages() {
 }
 
 main() {
-  parse_args "$@"
-
   if [[ $(uname -s) != "Linux" ]]; then
     echo "This script should be run on Linux only." >&2
     exit 1
