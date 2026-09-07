@@ -73,8 +73,8 @@ install_bootstrap_packages() {
     zsh
   )
 
-  run_as_root apt-get update
-  run_as_root apt-get install -y --no-install-recommends "${packages[@]}"
+  sudo apt-get update
+  sudo apt-get install -y --no-install-recommends "${packages[@]}"
 }
 
 main() {

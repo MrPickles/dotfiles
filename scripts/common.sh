@@ -16,16 +16,6 @@ linux_release_field() {
   awk -F= -v key="${key}" '$1 == key { gsub(/"/, "", $2); print $2 }' /etc/os-release
 }
 
-run_as_root() {
-  # sudo env_reset drops the caller's DEBIAN_FRONTEND; pass it on the command.
-  local frontend="${DEBIAN_FRONTEND:-noninteractive}"
-
-  if [[ "${EUID}" -eq 0 ]]; then
-    env DEBIAN_FRONTEND="${frontend}" "$@"
-  else
-    sudo DEBIAN_FRONTEND="${frontend}" "$@"
-  fi
-}
 
 eval_brew_shellenv() {
   local brew_bin=""
