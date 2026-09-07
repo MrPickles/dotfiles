@@ -5,58 +5,6 @@ script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=scripts/common.sh
 source "${script_dir}/common.sh"
 
-DISTRO_ID=""
-DISTRO_VERSION_ID=""
-DISTRO_CODENAME=""
-
-usage() {
-  cat <<'EOF'
-Usage: linux.sh
-
-Installs apt bootstrap packages, Homebrew, and the shared Brewfile tools.
-EOF
-}
-
-parse_args() {
-  while [[ $# -gt 0 ]]; do
-    case "$1" in
-      -h|--help)
-        usage
-        exit 0
-        ;;
-      *)
-        echo "Unknown argument: $1" >&2
-        usage >&2
-        exit 1
-        ;;
-    esac
-  done
-}
-
-detect_linux_release() {
-  DISTRO_ID=$(linux_release_field ID)
-  DISTRO_VERSION_ID=$(linux_release_field VERSION_ID)
-  DISTRO_CODENAME=$(linux_release_field VERSION_CODENAME)
-
-  case "${DISTRO_ID}" in
-    ubuntu|debian)
-      ;;
-    *)
-      echo "Unsupported Linux distribution: ${DISTRO_ID:-unknown}" >&2
-      exit 1
-      ;;
-  esac
-}
-
-release_label() {
-  if [[ -n "${DISTRO_CODENAME}" ]]; then
-    echo "${DISTRO_ID} ${DISTRO_CODENAME}"
-  elif [[ -n "${DISTRO_VERSION_ID}" ]]; then
-    echo "${DISTRO_ID} ${DISTRO_VERSION_ID}"
-  else
-    echo "${DISTRO_ID}"
-  fi
-}
 
 install_bootstrap_packages() {
   # Compiler toolchain plus the host tools Homebrew's Linux installer expects.
@@ -90,9 +38,12 @@ main() {
     exit 1
   fi
 
-  detect_linux_release
+  if ! has_cmd apt-get; then
+    echo "This script requires Debian or Ubuntu (apt-get not found)." >&2
+    exit 1
+  fi
 
-  echo "Installing Linux dependencies for $(release_label) via Homebrew"
+  echo "Installing Linux dependencies via Homebrew"
 
   install_bootstrap_packages
   ensure_homebrew

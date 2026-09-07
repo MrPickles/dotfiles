@@ -6,33 +6,25 @@ has_cmd() {
   command -v "$1" >/dev/null 2>&1
 }
 
-linux_release_field() {
-  local key=$1
-
-  if [[ ! -r /etc/os-release ]]; then
-    return 1
-  fi
-
-  awk -F= -v key="${key}" '$1 == key { gsub(/"/, "", $2); print $2 }' /etc/os-release
-}
-
-
 eval_brew_shellenv() {
-  local brew_bin=""
+  for bin in \
+    "${HOME}/.linuxbrew/bin/brew" \
+    /home/linuxbrew/.linuxbrew/bin/brew \
+    /opt/homebrew/bin/brew \
+    /usr/local/bin/brew
+  do
+    if [[ -x "${bin}" ]]; then
+      eval "$("${bin}" shellenv bash)"
+      return 0
+    fi
+  done
 
-  if [[ -x /opt/homebrew/bin/brew ]]; then
-    brew_bin=/opt/homebrew/bin/brew
-  elif [[ -x /home/linuxbrew/.linuxbrew/bin/brew ]]; then
-    brew_bin=/home/linuxbrew/.linuxbrew/bin/brew
-  elif [[ -x /usr/local/bin/brew ]]; then
-    brew_bin=/usr/local/bin/brew
-  elif has_cmd brew; then
-    brew_bin=$(command -v brew)
-  else
-    return 1
+  if has_cmd brew; then
+    eval "$(brew shellenv bash)"
+    return 0
   fi
 
-  eval "$("${brew_bin}" shellenv bash)"
+  return 1
 }
 
 ensure_homebrew() {

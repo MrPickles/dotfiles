@@ -80,7 +80,6 @@ export LS_COLORS=
 # These are the default OMZ plugins that we'll install.
 plugins=(
   git
-  brew
   history-substring-search
   colored-man-pages
   vi-mode

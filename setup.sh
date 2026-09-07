@@ -149,7 +149,7 @@ install_omz() {
   zsh_custom="${ZSH_CUSTOM:-${zsh_dir}/custom}"
 
   if [[ ! -d "${zsh_dir}" ]]; then
-    git clone --quiet --filter=blob:none https://github.com/robbyrussell/oh-my-zsh "${zsh_dir}"
+    git clone --quiet --filter=blob:none https://github.com/ohmyzsh/ohmyzsh "${zsh_dir}"
   else
     git -C "${zsh_dir}" pull --quiet
   fi
