@@ -19,6 +19,9 @@ next_agent = "prefix+."
 # Navigate mode (prefix+w): keep arrows, add { / } to match prefix workspace keys.
 navigate_workspace_up = ["up", "{"]
 navigate_workspace_down = ["down", "}"]
+# Tmux aliases: % is split-window -h (side by side), " is split-window -v (stacked).
+split_vertical = ["prefix+v", "prefix+%"]
+split_horizontal = ["prefix+minus", "prefix+\""]
 
 [ui.toast]
 # OSC 9/777 to Ghostty. Herdr skips the active tab. Ghostty posts as itself,
