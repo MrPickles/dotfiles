@@ -267,15 +267,34 @@ if _has eza; then
   alias ls="eza --icons=auto"
 fi
 
+# Cache and source shell initialization output from CLI tools (e.g. fzf, zoxide).
+# Re-evaluates only when the binary is updated or the cache is missing.
+_cache_source() {
+  (( $+commands[$1] )) || return 1
+
+  local name=${1:t}
+  local bin=$commands[$1]
+  local bin_real=${bin:A}
+  local cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/dotfiles"
+  local cache_file="$cache_dir/${name}.zsh"
+
+  if [[ ! -s "$cache_file" || "$bin" -nt "$cache_file" || "$bin_real" -nt "$cache_file" ]]; then
+    [[ -d "$cache_dir" ]] || mkdir -p "$cache_dir"
+    if "$@" >| "$cache_file" 2>/dev/null; then
+      zcompile -R "$cache_file" 2>/dev/null
+    else
+      rm -f "$cache_file" "${cache_file}.zwc"
+      return 1
+    fi
+  fi
+
+  source "$cache_file"
+}
+
 # Sourcing OMZ overwrites some of bindings from fzf scripts.
 # setup.sh requires fzf >= 0.48, which is when `--zsh` was added.
-if _has fzf; then
-  source <(fzf --zsh)
-fi
-
-if _has zoxide; then
-  eval "$(zoxide init --cmd cd zsh)"
-fi
+_cache_source fzf --zsh
+_cache_source zoxide init --cmd cd zsh
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
