@@ -2,11 +2,11 @@
 # Terminal color mode (light vs dark)
 ################################################################################
 
-typeset -g DOTFILES_TOKYONIGHT_STYLE=storm
+export DOTFILES_TOKYONIGHT_STYLE=storm
 
 # Codex and Cider use Tokyo Night Day; disable instant prompt to avoid cache flash.
 if [[ ${CODEX_SHELL:-} == 1 || ${TERM_PROGRAM:-} == "cider" || -n ${CIDER_SHELL_INTEGRATION:-} ]]; then
-  typeset -g DOTFILES_TOKYONIGHT_STYLE=day
+  export DOTFILES_TOKYONIGHT_STYLE=day
   typeset -g DOTFILES_INSTANT_PROMPT=off
 fi
 
