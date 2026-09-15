@@ -2,50 +2,13 @@
 # Terminal color mode (light vs dark)
 ################################################################################
 
-# Default to Tokyo Night Storm; switch to Day when the terminal is light.
-() {
-  emulate -L zsh
-  setopt extendedglob
+typeset -g DOTFILES_TOKYONIGHT_STYLE=storm
 
-  typeset -g DOTFILES_TOKYONIGHT_STYLE=storm
-  typeset -g DOTFILES_INSTANT_PROMPT=verbose
-
-  # Codex is intentionally light and does not use P10k's shared instant-prompt cache.
-  if [[ ${CODEX_SHELL:-} == 1 ]]; then
-    typeset -g DOTFILES_TOKYONIGHT_STYLE=day
-    typeset -g DOTFILES_INSTANT_PROMPT=off
-    return
-  fi
-
-  [[ -o interactive ]] || return
-  # This tmux setup is always dark; avoid unreliable OSC passthrough.
-  [[ -z ${TMUX:-} ]] || return
-  [[ $TERM != (dumb|linux|vt[0-9]*|sun*) ]] || return
-  [[ -e /dev/tty && -r /dev/tty && -w /dev/tty ]] || return
-  zmodload zsh/system 2>/dev/null && (( $+builtins[sysread] )) || return
-
-  local saved buf
-  saved=$(command stty -g </dev/tty 2>/dev/null) || return
-  # Restore the tty on every exit path.
-  trap 'command stty "$saved" </dev/tty 2>/dev/null; trap - EXIT INT TERM HUP' EXIT INT TERM HUP
-  # Keep signals enabled while preparing the tty for a bounded read.
-  command stty -echo -icanon min 0 time 1 </dev/tty 2>/dev/null || return
-
-  printf '%s' $'\e]11;?\a' >/dev/tty
-  sysread -t 0.25 -s 256 buf </dev/tty
-  command stty "$saved" </dev/tty 2>/dev/null
-  trap - EXIT INT TERM HUP
-
-  [[ ${(L)buf} == (#b)*rgb:([0-9a-f]##)/([0-9a-f]##)/([0-9a-f]##)* ]] || return
-  local r=$match[1] g=$match[2] b=$match[3]
-  (( ${#r} == 1 )) && r=$r$r
-  (( ${#g} == 1 )) && g=$g$g
-  (( ${#b} == 1 )) && b=$b$b
-  typeset -i R=16#${r[1,2]} G=16#${g[1,2]} B=16#${b[1,2]}
-  # Classify backgrounds above 0.5 relative luminance as light.
-  (( 2126 * R + 7152 * G + 722 * B > 1275000 )) || return
+# Codex and Cider use Tokyo Night Day; disable instant prompt to avoid cache flash.
+if [[ ${CODEX_SHELL:-} == 1 || ${TERM_PROGRAM:-} == "cider" || -n ${CIDER_SHELL_INTEGRATION:-} ]]; then
   typeset -g DOTFILES_TOKYONIGHT_STYLE=day
-}
+  typeset -g DOTFILES_INSTANT_PROMPT=off
+fi
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
@@ -247,18 +210,6 @@ bindkey '^R' history-incremental-search-backward
 # Explicitly bind home and end keys (in case of terminal compatibility issues)
 [[ -n ${terminfo[khome]:-} ]] && bindkey "${terminfo[khome]}" beginning-of-line
 [[ -n ${terminfo[kend]:-} ]] && bindkey "${terminfo[kend]}" end-of-line
-
-# Discard late-arriving OSC 11 background query responses so they don't leak into the prompt
-_discard_osc11() {
-  local char
-  while read -s -k 1 -t 0.05 char; do
-    [[ $char == $'\a' || $char == $'\\' ]] && break
-  done
-}
-zle -N _discard_osc11
-bindkey -M emacs $'\e]11;' _discard_osc11 2>/dev/null || true
-bindkey -M viins $'\e]11;' _discard_osc11 2>/dev/null || true
-bindkey -M vicmd $'\e]11;' _discard_osc11 2>/dev/null || true
 
 # Alias `eza` as default `ls` command (if available).
 # This must come after OMZ. (The library overwrites this alias.)
