@@ -37,6 +37,7 @@ if OS.mac? && !mdm_enrolled
   cask "ghostty"
   cask "google-chrome"
   cask "iina"
+  cask "mimestream"
   cask "notion-calendar"
   cask "obsidian"
   cask "signal"
@@ -46,7 +47,6 @@ if OS.mac? && !mdm_enrolled
   cask "vorssaint"
 
   # Mac App Store
-  mas "Spark Classic - Email App", id: 1176895641
   mas "WeChat", id: 836500024
   mas "WhatsApp Messenger", id: 310633997
 end
