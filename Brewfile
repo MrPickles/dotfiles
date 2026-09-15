@@ -11,7 +11,6 @@ brew "jj"
 brew "jq"
 brew "mosh"
 brew "neovim"
-brew "reattach-to-user-namespace" if OS.mac?
 brew "ripgrep"
 brew "shellcheck"
 brew "tmux"
