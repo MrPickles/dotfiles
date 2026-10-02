@@ -73,14 +73,14 @@ source $ZSH/oh-my-zsh.sh
 if _has fzf; then
   if _has fd; then
     # Use fd for fzf.
-    FZF_DEFAULT_COMMAND='fd --type f --follow --hidden --exclude .git'
+    export FZF_DEFAULT_COMMAND='fd --type f --follow --hidden --exclude .git'
     FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
     # Use fd for fzf directory search.
     FZF_ALT_C_COMMAND='fd --type d --color never'
   fi
 
   # Bind alt-j/k/d/u to moving the preview window for fzf.
-  FZF_DEFAULT_OPTS="--bind alt-k:preview-up,alt-j:preview-down,alt-u:preview-page-up,alt-d:preview-page-down"
+  export FZF_DEFAULT_OPTS="--bind alt-k:preview-up,alt-j:preview-down,alt-u:preview-page-up,alt-d:preview-page-down"
 
   # Color options only; layout and bindings stay local.
   # Storm: https://github.com/folke/tokyonight.nvim/blob/5da1b76e64daf4c5d410f06bcb6b9cb640da7dfd/extras/fzf/tokyonight_storm.sh

@@ -11,7 +11,7 @@
 vim.api.nvim_create_autocmd("Filetype", {
   pattern = { "go", "make" },
   callback = function()
-    vim.opt.expandtab = false
+    vim.opt_local.expandtab = false
   end,
 })
 
