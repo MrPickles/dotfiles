@@ -6,7 +6,9 @@ export DOTFILES_TOKYONIGHT_STYLE=storm
 
 # Codex and Cider use Tokyo Night Day; disable instant prompt to avoid cache flash.
 # Remote Codex SSH sessions expose CODEX_REMOTE_PAYLOAD instead of CODEX_SHELL.
+# Codex cloud workspaces expose CODEX_ENVIRONMENT_ID.
 if [[ ${CODEX_SHELL:-} == 1 || -n ${CODEX_REMOTE_PAYLOAD:-} ||
+      -n ${CODEX_ENVIRONMENT_ID:-} ||
       ${TERM_PROGRAM:-} == "cider" || -n ${CIDER_SHELL_INTEGRATION:-} ]]; then
   export DOTFILES_TOKYONIGHT_STYLE=day
   typeset -g DOTFILES_INSTANT_PROMPT=off
