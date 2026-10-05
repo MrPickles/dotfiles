@@ -17,7 +17,7 @@
 [commit]
 	verbose = true
 [core]
-	pager = delta
+	pager = "if command -v delta >/dev/null 2>&1; then delta; else less -R; fi"
 [delta]
 	line-numbers = true
 	navigate = true
@@ -64,7 +64,7 @@
 [init]
 	defaultBranch = main
 [interactive]
-	diffFilter = delta --color-only
+	diffFilter = "if command -v delta >/dev/null 2>&1; then delta --color-only; else cat; fi"
 [merge]
 	conflictstyle = zdiff3
 [pull]
