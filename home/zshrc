@@ -12,13 +12,6 @@ if [[ ${CODEX_SHELL:-} == 1 || -n ${CODEX_REMOTE_PAYLOAD:-} ||
       ${TERM_PROGRAM:-} == "cider" || -n ${CIDER_SHELL_INTEGRATION:-} ]]; then
   export DOTFILES_TOKYONIGHT_STYLE=day
   typeset -g DOTFILES_INSTANT_PROMPT=off
-elif [[ -n ${REX_BLOCK:-} ]]; then
-  typeset -g DOTFILES_INSTANT_PROMPT=off
-  # Rex follows system appearance; other platforms default to dark for now.
-  if [[ $OSTYPE == darwin* &&
-        $(/usr/bin/defaults read -g AppleInterfaceStyle 2>/dev/null) != Dark ]]; then
-    export DOTFILES_TOKYONIGHT_STYLE=day
-  fi
 fi
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
