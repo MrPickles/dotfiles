@@ -30,6 +30,7 @@ if OS.mac? && !mdm_enrolled
   cask "1password"
   cask "aldente"
   cask "alfred"
+  cask "claude-code" # Claude Code CLI
   cask "codex" # Codex CLI
   cask "discord"
   cask "dropbox"
