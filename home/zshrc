@@ -4,12 +4,12 @@
 
 export DOTFILES_TOKYONIGHT_STYLE=storm
 
-# Codex, Cider, and Claude Code's desktop terminal use Tokyo Night Day; disable
+# Codex, T3 Code, Cider, and Claude Code's desktop terminal use Tokyo Night Day; disable
 # instant prompt to avoid cache flash.
 # Remote Codex SSH sessions expose CODEX_REMOTE_PAYLOAD instead of CODEX_SHELL.
 # Codex cloud workspaces expose CODEX_ENVIRONMENT_ID.
 if [[ ${CODEX_SHELL:-} == 1 || -n ${CODEX_REMOTE_PAYLOAD:-} ||
-      -n ${CODEX_ENVIRONMENT_ID:-} ||
+      -n ${CODEX_ENVIRONMENT_ID:-} || -n ${T3CODE_PROJECT_ROOT:-} ||
       ${TERM_PROGRAM:-} == "cider" || -n ${CIDER_SHELL_INTEGRATION:-} ||
       ${TERM_PROGRAM:-} == "claude-desktop" ]]; then
   export DOTFILES_TOKYONIGHT_STYLE=day
