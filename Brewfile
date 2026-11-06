@@ -42,7 +42,6 @@ if OS.mac? && !mdm_enrolled
   cask "obsidian"
   cask "signal"
   cask "spotify"
-  cask "t3-code"
   cask "tailscale-app"
   cask "todoist-app"
   cask "vorssaint"
