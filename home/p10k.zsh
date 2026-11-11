@@ -669,6 +669,16 @@
 
   typeset -g POWERLEVEL9K_DISABLE_HOT_RELOAD=true
 
+  # Hide the right prompt (and the gap/frame leading to it) on narrow terminals,
+  # e.g. phone screens. Override the threshold with DOTFILES_P10K_RIGHT_MIN_COLUMNS.
+  function p10k-on-pre-prompt() {
+    if (( COLUMNS < ${DOTFILES_P10K_RIGHT_MIN_COLUMNS:-80} )); then
+      p10k display '1/right'=hide '1/gap'=hide '1/right_frame'=hide '2/right_frame'=hide
+    else
+      p10k display '1/right'=show '1/gap'=show '1/right_frame'=show '2/right_frame'=show
+    fi
+  }
+
   # If p10k is already loaded, reload configuration.
   (( ! $+functions[p10k] )) || p10k reload
 }
