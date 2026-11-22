@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -euo pipefail
 
 # Determine font directory based on OS
@@ -31,7 +31,7 @@ for url in "${URLS[@]}"; do
 done
 
 # Refresh font cache on Linux
-if [ "$(uname)" = "Linux" ]; then
+if [[ "$(uname)" == "Linux" ]] && command -v fc-cache >/dev/null 2>&1; then
   echo "Refreshing font cache..."
   fc-cache -f "$FONT_DIR"
 fi

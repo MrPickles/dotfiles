@@ -26,6 +26,9 @@ mdm_enrolled = OS.mac? && IO.popen(
 ).include?("MDM enrollment: Yes")
 
 if OS.mac? && !mdm_enrolled
+  # Required for `mas` entries below.
+  brew "mas"
+
   # Casks
   cask "1password"
   cask "aldente"

@@ -33,7 +33,6 @@ set smartcase
 set mouse=a
 set hlsearch
 set background=dark
-syntax on
 syntax enable
 
 if executable('fzf')
@@ -44,7 +43,7 @@ if executable('fzf')
     \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 endif
 
-if executable('fd')
+if executable('fd') && empty($FZF_DEFAULT_COMMAND)
   " Use fd for fzf searches.
   let $FZF_DEFAULT_COMMAND = 'fd --type f'
 endif

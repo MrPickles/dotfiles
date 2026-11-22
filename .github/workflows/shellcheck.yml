@@ -9,8 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v2
-      - name: Run shellcheck of .sh files
-        run: |
-          shopt -s globstar
-          shellcheck -x -- **/*.sh
+        uses: actions/checkout@v6
+      - name: Run shellcheck
+        run: ./setup.sh --shellcheck

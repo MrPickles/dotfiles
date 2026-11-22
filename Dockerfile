@@ -25,6 +25,8 @@ COPY --chown=${USER}:${USER} Brewfile ./
 USER ${USER}
 RUN chmod +x ./scripts/linux.sh \
   && ./scripts/linux.sh \
+  && brew cleanup --prune=all \
+  && rm -rf "$(brew --cache)" /tmp/dotfiles-bootstrap \
   && sudo rm -rf /var/lib/apt/lists/*
 
 USER root

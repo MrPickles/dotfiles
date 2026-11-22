@@ -50,6 +50,7 @@ defaults write com.apple.controlcenter Sound -int 18
 defaults write com.apple.Spotlight MenuItemHidden -bool true
 
 # Disable auto-correct, auto-capitalization, period substitution, and smart quotes/dashes
+defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
 defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false
 defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool false
 defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
@@ -92,7 +93,7 @@ defaults write com.apple.dock wvous-tr-modifier -int 0
 defaults write com.apple.dock wvous-br-corner -int 1
 defaults write com.apple.dock wvous-br-modifier -int 0
 
-killall Dock
+killall Dock 2>/dev/null || true
 
 # ----------------------------------------------------
 # Window Manager / Snapping Preferences (macOS Sequoia)
@@ -139,7 +140,6 @@ defaults write com.apple.finder ShowMountedServersOnDesktop -bool false
 defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
 
 # Configure Finder Toolbar (Top Bar) arrangement (requires plutil to nest array inside dictionary)
-defaults read com.apple.finder >/dev/null # Ensure the plist file exists
 plutil -replace "NSToolbar Configuration Browser" -json '{
   "TB Is Shown": true,
   "TB Icon Size Mode": 1,
@@ -163,4 +163,4 @@ plutil -replace "NSToolbar Configuration Browser" -json '{
 defaults write com.apple.finder ShowRecentTags -bool false
 defaults write com.apple.finder SidebarTagsSctionDisclosedState -bool false
 
-killall Finder
+killall Finder 2>/dev/null || true

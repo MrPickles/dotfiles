@@ -3,7 +3,7 @@
 These are my personal dotfiles.
 
 ```
-curl https://raw.githubusercontent.com/MrPickles/dotfiles/master/scripts/dotfiles.sh | bash
+curl -fsSL https://raw.githubusercontent.com/MrPickles/dotfiles/master/scripts/dotfiles.sh | bash
 ```
 
 ![Screenshot of my dotfiles](.github/screenshot.png)
@@ -34,7 +34,7 @@ look wrong. Everything else should work as-is.
 Run this command:
 
 ```shell
-curl https://raw.githubusercontent.com/MrPickles/dotfiles/master/scripts/dotfiles.sh | bash
+curl -fsSL https://raw.githubusercontent.com/MrPickles/dotfiles/master/scripts/dotfiles.sh | bash
 ```
 
 That clones the repo if needed, fetches oh-my-zsh, and symlinks into your home
@@ -79,7 +79,12 @@ apps stay macOS-only. Homebrew's Linux bottles target Ubuntu 24.04+ (glibc
 ## Fonts and colors
 
 The terminal prompts require Nerd Fonts of some sort.
-The font recommended by Powerlevel10k is [MesloLGS NF][p10k-fonts].
+The font recommended by Powerlevel10k is [MesloLGS NF][p10k-fonts], which can
+be installed with:
+
+```shell
+./scripts/install_fonts.sh
+```
 
 If bat (or delta, which uses bat's themes) looks unthemed, rebuild the cache:
 

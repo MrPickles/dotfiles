@@ -109,7 +109,7 @@
     newline                 # \n
   )
 
-  typeset -g POWERLEVEL9K_MODE=nerdfont-complete
+  typeset -g POWERLEVEL9K_MODE=nerdfont-v3
   typeset -g POWERLEVEL9K_ICON_PADDING=none
 
   typeset -g POWERLEVEL9K_ICON_BEFORE_CONTENT=
@@ -349,11 +349,23 @@
     if [[ -n $branch ]]; then
       [[ $branch =~ "\*$" ]] && branch=${branch::-1}
 
-      local JJ_STATUS_COMMITS_AFTER=$(jj --ignore-working-copy --at-op=@ --no-pager log --no-graph -r "$branch..@ & (~empty() | merges())" -T '"n"' 2> /dev/null | wc -c | tr -d ' ')
-      local JJ_STATUS_COMMITS_BEFORE=$(jj --ignore-working-copy --at-op=@ --no-pager log --no-graph -r "@..$branch & (~empty() | merges())" -T '"n"' 2> /dev/null | wc -c | tr -d ' ')
+      # Quote symbol(s) for jj revsets so bookmarks with `-` or `/` parse safely.
+      local branch_rev
+      if [[ $branch == *@* ]]; then
+        local b_name=${branch%@*} b_remote=${branch##*@}
+        b_name=${b_name//\\/\\\\}; b_name=${b_name//\"/\\\"}
+        b_remote=${b_remote//\\/\\\\}; b_remote=${b_remote//\"/\\\"}
+        branch_rev="\"${b_name}\"@\"${b_remote}\""
+      else
+        local b_name=${branch//\\/\\\\}; b_name=${b_name//\"/\\\"}
+        branch_rev="\"${b_name}\""
+      fi
+
+      local JJ_STATUS_COMMITS_AFTER=$(jj --ignore-working-copy --at-op=@ --no-pager log --no-graph -r "${branch_rev}..@ & (~empty() | merges())" -T '"n"' 2> /dev/null | wc -c | tr -d ' ')
+      local JJ_STATUS_COMMITS_BEFORE=$(jj --ignore-working-copy --at-op=@ --no-pager log --no-graph -r "@..${branch_rev} & (~empty() | merges())" -T '"n"' 2> /dev/null | wc -c | tr -d ' ')
 
       ## jj_remote
-      local counts=($(jj --ignore-working-copy --at-op=@ --no-pager bookmark list -r $branch -T '
+      local counts=($(jj --ignore-working-copy --at-op=@ --no-pager bookmark list -r "$branch_rev" -T '
         if(remote,
           separate(" ",
             name ++ "@" ++ remote,
@@ -363,7 +375,7 @@
             if(tracking_behind_count.exact(), "0", "+"),
           ) ++ "\n"
         )
-      '))
+      ' 2>/dev/null))
       local JJ_STATUS_LOCAL_BRANCH=$branch
       local JJ_STATUS_COMMITS_AHEAD=$counts[2]
       local JJ_STATUS_COMMITS_BEHIND=$counts[3]
@@ -476,7 +488,7 @@
     (( JJ_STATUS_CHANGES[4] )) && res+=" ${magenta}↻${JJ_STATUS_CHANGES[4]}"
     (( JJ_STATUS_CHANGES[5] )) && res+=" ${cyan}⧉${JJ_STATUS_CHANGES[5]}"
 
-    echo $res
+    print -r -- "$res"
   }
 
   function jj_status_callback() {

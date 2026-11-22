@@ -20,3 +20,6 @@ config/herdr/*
 config/hunk/*
 !config/hunk/config.toml
 
+# Tooling caches.
+.ruff_cache/
+

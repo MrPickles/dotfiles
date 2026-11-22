@@ -10,3 +10,12 @@ Dockerfile
 # Non-critical repo files
 LICENSE
 README.md
+
+# Local runtime state and tool caches inside symlinked config directories
+.ruff_cache
+config/jj/repos
+config/jj/conf.d
+config/herdr/*
+!config/herdr/config.toml
+config/hunk/*
+!config/hunk/config.toml

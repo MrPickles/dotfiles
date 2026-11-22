@@ -37,8 +37,7 @@ ZSH=$HOME/.oh-my-zsh
 DISABLE_AUTO_UPDATE=true
 # Skip fpath permission audit (compaudit). Single-user machine.
 ZSH_DISABLE_COMPFIX=true
-# Set zsh theme to be powerlevel10k with patched fontawesome symbols.
-POWERLEVEL9K_MODE='nerdfont-v3'
+# Set zsh theme to be powerlevel10k (mode is configured in ~/.p10k.zsh).
 ZSH_THEME='powerlevel10k/powerlevel10k'
 # OMZ messes with the ls colors by default. Let's not have it do that.
 DISABLE_LS_COLORS=true
@@ -47,13 +46,12 @@ export LS_COLORS=
 [[ -n ${COLORTERM:-} ]] || export COLORTERM=truecolor
 
 # These are the default OMZ plugins that we'll install.
+# fzf-tab must load before widget-wrapping plugins; fast-syntax-highlighting must load last.
 plugins=(
   git
   history-substring-search
   colored-man-pages
   vi-mode
-  fast-syntax-highlighting
-  zsh-autosuggestions
   async
 )
 
@@ -61,6 +59,11 @@ plugins=(
 if _has fzf; then
   plugins+=(fzf-tab)
 fi
+
+plugins+=(
+  zsh-autosuggestions
+  fast-syntax-highlighting
+)
 
 ################################################################################
 # Source Oh-My-ZSH.
@@ -174,8 +177,6 @@ fi
 # Tmux setup
 ################################################################################
 
-# Use 256 color for tmux.
-alias tmux="TERM=screen-256color-bce tmux"
 # Attempt to take over existing sessions before creating a new tmux session.
 t() {
   tmux -u new -ADs ${1:-tmux}
@@ -185,7 +186,11 @@ t() {
 # Set up other environment variables, aliases, and options
 ################################################################################
 
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="bg=italic,underline"
+if [[ $DOTFILES_TOKYONIGHT_STYLE == day ]]; then
+  ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#848cb5,italic,underline"
+else
+  ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#565f89,italic,underline"
+fi
 
 # Match delta's theme to the terminal.
 export DELTA_FEATURES="tokyonight-${DOTFILES_TOKYONIGHT_STYLE}"
@@ -209,7 +214,10 @@ KEYTIMEOUT=10
 
 # Set key bindings.
 bindkey -v # vi mode for shell
-bindkey -e # enable C-x-e for shell editor
+# Keep C-x C-e available in vi insert mode (in addition to `v` in normal mode).
+autoload -Uz edit-command-line
+zle -N edit-command-line
+bindkey -M viins '^X^E' edit-command-line
 # Key bindings for history search.
 bindkey '\e[3~' delete-char
 bindkey '^R' history-incremental-search-backward
@@ -225,7 +233,7 @@ if _has eza; then
 fi
 
 # Cache and source shell initialization output from CLI tools (e.g. fzf, zoxide).
-# Re-evaluates only when the binary is updated or the cache is missing.
+# Re-evaluates only when the binary, arguments, or cache are out of date.
 _cache_source() {
   (( $+commands[$1] )) || return 1
 
@@ -234,13 +242,21 @@ _cache_source() {
   local bin_real=${bin:A}
   local cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/dotfiles"
   local cache_file="$cache_dir/${name}.zsh"
+  local args_header="# cmd: $*"
+  local current_header=""
 
-  if [[ ! -s "$cache_file" || "$bin" -nt "$cache_file" || "$bin_real" -nt "$cache_file" ]]; then
+  [[ -r "$cache_file" ]] && IFS= read -r current_header < "$cache_file"
+
+  if [[ ! -s "$cache_file" || "$current_header" != "$args_header" || "$bin" -nt "$cache_file" || "$bin_real" -nt "$cache_file" ]]; then
     [[ -d "$cache_dir" ]] || mkdir -p "$cache_dir"
-    if "$@" >| "$cache_file" 2>/dev/null; then
-      zcompile -R "$cache_file" 2>/dev/null
+    local tmp_file="${cache_file}.$$"
+    if { print -r -- "$args_header" && "$@"; } >| "$tmp_file" 2>/dev/null; then
+      mv -f "$tmp_file" "$cache_file"
+      zcompile -R "${cache_file}.$$.zwc" "$cache_file" 2>/dev/null \
+        && mv -f "${cache_file}.$$.zwc" "${cache_file}.zwc" \
+        || rm -f "${cache_file}.$$.zwc"
     else
-      rm -f "$cache_file" "${cache_file}.zwc"
+      rm -f "$tmp_file" "$cache_file" "${cache_file}.zwc"
       return 1
     fi
   fi
