@@ -26,8 +26,8 @@ USER ${USER}
 RUN chmod +x ./scripts/linux.sh \
   && ./scripts/linux.sh \
   && brew cleanup --prune=all \
-  && rm -rf "$(brew --cache)" /tmp/dotfiles-bootstrap \
-  && sudo rm -rf /var/lib/apt/lists/*
+  && rm -rf "$(brew --cache)" \
+  && sudo rm -rf /tmp/dotfiles-bootstrap /var/lib/apt/lists/*
 
 USER root
 COPY --chown=${USER}:${USER} . /home/${USER}/.dotfiles
