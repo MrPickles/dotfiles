@@ -26,9 +26,6 @@ mdm_enrolled = OS.mac? && IO.popen(
 ).include?("MDM enrollment: Yes")
 
 if OS.mac? && !mdm_enrolled
-  # Required for `mas` entries below.
-  brew "mas"
-
   # Casks
   cask "1password"
   cask "aldente"
@@ -45,11 +42,9 @@ if OS.mac? && !mdm_enrolled
   cask "obsidian"
   cask "signal"
   cask "spotify"
+  cask "t3-code"
   cask "tailscale-app"
   cask "todoist-app"
   cask "vorssaint"
-
-  # Mac App Store
-  mas "WeChat", id: 836500024
-  mas "WhatsApp Messenger", id: 310633997
+  cask "whatsapp"
 end

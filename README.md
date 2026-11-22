@@ -72,9 +72,9 @@ the `Brewfile`, along with Finder/Dock/trackpad defaults.
 
 On Linux it runs `scripts/linux.sh`, which installs a small apt bootstrap
 (compiler toolchain, curl, git, zsh, vim) and then the same Homebrew `Brewfile`.
-CLI tools are managed by brew on both operating systems. Casks and Mac App Store
-apps stay macOS-only. Homebrew's Linux bottles target Ubuntu 24.04+ (glibc
-2.39); older Debian/Ubuntu still work, but the first install is slower.
+CLI tools are managed by brew on both operating systems. Casks stay macOS-only.
+Homebrew's Linux bottles target Ubuntu 24.04+ (glibc 2.39); older Debian/Ubuntu
+still work, but the first install is slower.
 
 ## Fonts and colors
 
