@@ -3,4 +3,6 @@ font-family = "MesloLGS NF"
 font-size = 14
 theme = "tokyonight-storm"
 confirm-close-surface = false
-macos-option-as-alt = true
+mouse-hide-while-typing = true
+macos-option-as-alt = left
+macos-non-native-fullscreen = visible-menu

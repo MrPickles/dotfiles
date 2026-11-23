@@ -1,3 +1,16 @@
+[aliases]
+# Move the closest bookmark to the parent commit before pushing.
+tug = ["bookmark", "move", "--from", "closest_bookmark(@-)", "--to", "@-"]
+# Rebase the current stack onto trunk.
+retrunk = ["rebase", "-d", "trunk()"]
+
+[revset-aliases]
+"closest_bookmark(to)" = "heads(::to & bookmarks())"
+"fork_history(to, from)" = "fork_point(to | from)..@"
+
+[template-aliases]
+"format_timestamp(timestamp)" = "timestamp.ago()"
+
 [ui]
 default-command = "log"
 diff-formatter = ":git"

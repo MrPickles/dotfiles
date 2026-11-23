@@ -1,8 +1,10 @@
 [alias]
 	br = branch
 	ci = commit
+	cleanup = "!git branch --merged | grep -Ev '^(\\*|\\+)' | sed 's/^[[:space:]]*//' | grep -Ev '^(main|master|develop)$' | while IFS= read -r branch; do [ -n \"$branch\" ] && git branch -d \"$branch\"; done"
 	co = checkout
 	di = diff
+	root = rev-parse --show-toplevel
 	st = status
 [apply]
 	whitespace = nowarn

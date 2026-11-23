@@ -1,0 +1,10 @@
+# Show tab-completion options on first <Tab> instead of waiting for a second press.
+set show-all-if-ambiguous on
+
+# Case-insensitive tab-completion.
+set completion-ignore-case on
+
+$if Bash
+  # Expand history expressions like !! when pressing Space.
+  Space: magic-space
+$endif

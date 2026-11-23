@@ -50,10 +50,14 @@ export LS_COLORS=
 plugins=(
   git
   history-substring-search
-  colored-man-pages
   vi-mode
   async
 )
+
+# Fall back to colored-man-pages only when bat is unavailable (bat handles MANPAGER below).
+if ! _has bat; then
+  plugins+=(colored-man-pages)
+fi
 
 # Conditionally add fzf-tab if fzf is installed.
 if _has fzf; then
@@ -198,6 +202,9 @@ export DELTA_FEATURES="tokyonight-${DOTFILES_TOKYONIGHT_STYLE}"
 export BAT_THEME="tokyonight_${DOTFILES_TOKYONIGHT_STYLE}"
 if _has bat; then
   alias cat="bat"
+  # Use bat for man pages (strips ANSI/overstrike escapes from both BSD and GNU groff).
+  # https://github.com/sharkdp/bat#man
+  export MANPAGER="sh -c 'awk '\''{ gsub(/\x1B\[[0-9;]*m/, \"\", \$0); gsub(/.\x08/, \"\", \$0); print }'\'' | bat -p -l man'"
 fi
 
 # Set shell options.

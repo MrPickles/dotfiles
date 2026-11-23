@@ -75,6 +75,9 @@ else
   export EDITOR="vim"
 fi
 
+# Set default pager (quit if one screen, smart-case search, raw ANSI colors, keep output).
+export PAGER="less -FiRX"
+
 # Set ripgrep config directory (since there's no default location).
 export RIPGREP_CONFIG_PATH="$HOME/.config/ripgrep/config"
 
