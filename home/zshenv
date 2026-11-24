@@ -81,6 +81,10 @@ export PAGER="less -FiRX"
 # Set ripgrep config directory (since there's no default location).
 export RIPGREP_CONFIG_PATH="$HOME/.config/ripgrep/config"
 
+# Disable T3 Code product telemetry and OpenTelemetry tracing.
+export T3CODE_TELEMETRY_ENABLED=false
+export T3CODE_OTEL_SDK_DISABLED=true
+
 # Source local zshenv configs.
 if [[ -f ~/.zshenv.local ]]; then
   source ~/.zshenv.local
